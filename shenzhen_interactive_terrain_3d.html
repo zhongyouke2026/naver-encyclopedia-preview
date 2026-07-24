@@ -670,6 +670,123 @@
     .tab-content.active {
       display: block;
     }
+
+    /* History Tab styles */
+    .history-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      max-height: 350px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+    
+    .history-list::-webkit-scrollbar {
+      width: 4px;
+    }
+    .history-list::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 99px;
+    }
+    
+    .history-card {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      padding: 12px 14px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+    
+    .history-card:hover {
+      background: rgba(88, 166, 255, 0.06);
+      border-color: rgba(88, 166, 255, 0.25);
+      transform: translateY(-2px);
+    }
+    
+    .history-card.active {
+      background: rgba(88, 166, 255, 0.1);
+      border-color: var(--accent);
+      box-shadow: 0 0 10px rgba(88, 166, 255, 0.15);
+    }
+    
+    .history-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+    
+    .history-card-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      color: #fff;
+    }
+    
+    .history-card-year {
+      font-family: 'Outfit', sans-serif;
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--accent);
+      background: rgba(88, 166, 255, 0.15);
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+    
+    .history-card-desc {
+      font-size: 11.5px;
+      line-height: 1.5;
+      color: var(--sub);
+    }
+    
+    /* Pure CSS Tooltip Dictionary */
+    .history-tooltip {
+      position: relative;
+      text-decoration: underline dashed rgba(88, 166, 255, 0.6);
+      cursor: help;
+      color: #fff;
+      font-weight: 500;
+    }
+    
+    .history-tooltip::after {
+      content: attr(data-tip);
+      position: absolute;
+      bottom: 130%;
+      left: 50%;
+      transform: translateX(-50%) scale(0.9);
+      width: 200px;
+      background: rgba(10, 20, 38, 0.98);
+      border: 1px solid rgba(88, 166, 255, 0.3);
+      color: var(--text);
+      padding: 8px 10px;
+      border-radius: 6px;
+      font-size: 10px;
+      line-height: 1.4;
+      white-space: normal;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.6);
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 1000;
+      text-align: left;
+      font-weight: 400;
+    }
+    
+    .history-tooltip:hover::after {
+      opacity: 1;
+      transform: translateX(-50%) scale(1) translateY(-4px);
+    }
+
+    /* History labels styling */
+    .label.history-label {
+      background: rgba(24, 16, 8, 0.88) !important;
+      border: 1px solid #f39c12 !important;
+    }
+    .label.history-label::before {
+      background: #f39c12 !important;
+      box-shadow: 0 0 8px #f39c12 !important;
+    }
     
     /* Climate Panel details */
     .climate-stats {
@@ -793,6 +910,7 @@
         <div class="panel-tabs">
           <button class="tab-btn active" id="tabBtnLegend">범례</button>
           <button class="tab-btn" id="tabBtnClimate">기후 정보</button>
+          <button class="tab-btn" id="tabBtnHistory">역사 랜드마크</button>
         </div>
         
         <div class="tab-content active" id="tabContentLegend">
@@ -842,6 +960,15 @@
                 <div class="climate-desc">연중 온난다습한 아열대 계절풍 기후</div>
               </div>
             </div>
+          </div>
+        </div>
+
+        <div class="tab-content" id="tabContentHistory">
+          <div style="font-size: 11px; color: var(--sub); margin-bottom: 12px; line-height: 1.45;">
+            주요 유적지를 클릭하면 3D 지도상의 거점으로 카메라가 즉시 이동합니다. 밑줄 표시된 단어 위에 마우스를 올리면 쉬운 설명이 나타납니다.
+          </div>
+          <div class="history-list" id="historyList">
+            <!-- Populated dynamically via JS -->
           </div>
         </div>
       </div>
@@ -904,6 +1031,71 @@
     let currentYear = 2026;
     const skyscrapersGroup = new THREE.Group();
     const subwaysGroup = new THREE.Group();
+
+    // History variables
+    let currentTab = 'legend';
+    let activeHistoryLandmarkId = null;
+    const historyPinsGroup = new THREE.Group();
+    const silkRoadGroup = new THREE.Group();
+    const shipsGroup = new THREE.Group();
+
+    // Historical Landmarks Dataset
+    const HISTORICAL_LANDMARKS_DATA = [
+      {
+        id: "nantou_admin",
+        title: "동진 바오안현 치소",
+        year: "331년",
+        desc: "선전 최초의 행정 중심지(<span class='history-tooltip' data-tip='치소(治所): 현(县)이나 군(郡)의 관청이 위치한 중심 행정지'>치소</span>)인 바오안현이 동진 함화 6년에 설립되었습니다. 오늘날 난산구 난터우 고성 자리에 청사가 입지하여 선전 역사의 실질적 시초가 되었습니다.",
+        x: -62.5,
+        z: 20.9,
+        camDist: 35
+      },
+      {
+        id: "dapeng_soseong",
+        title: "다펑소성 (대붕소성)",
+        year: "1394년",
+        desc: "명나라 홍무 27년에 해적과 <span class='history-tooltip' data-tip='왜구(倭寇): 13~16세기 중국과 한국 연안을 습격하던 일본 해적 무리'>왜구</span>의 침입을 막기 위해 축조된 대표적인 수비 <span class='history-tooltip' data-tip='소성(所城): 조선시대 읍성처럼 군사 방어를 위해 쌓은 성벽으로 지탱되는 요새 도시'>소성</span>(성곽)입니다. 오늘날 선전시의 별칭인 '붕성(鵬城)'이 이 성의 이름에서 유래되었습니다.",
+        x: 79.5,
+        z: 15.2,
+        camDist: 40
+      },
+      {
+        id: "nantou_soseong",
+        title: "난터우소성 (신안고성)",
+        year: "1394년",
+        desc: "동관소성으로 처음 쌓아 올려진 명나라의 대표적인 군사 성곽입니다. 왜구 방어와 해상 무역로를 단속하는 행정·군사 요충지 역할을 하였으며, 1573년 신안현으로 분리 승격되면서 다시 중심지가 되었습니다.",
+        x: -63.5,
+        z: 19.5,
+        camDist: 35
+      },
+      {
+        id: "tuen_mun_battle",
+        title: "툰먼 해전 해역",
+        year: "1554년",
+        desc: "명나라 함대가 선전 난터우 허우하이만(심천만)에서 홍콩 청산에 이르는 툰먼 해역을 무단 점거하고 있던 포르투갈 함대와 무력 충돌하여 격퇴시킨 역사적인 해상 전투지입니다.",
+        x: -75.0,
+        z: 42.0,
+        camDist: 45
+      }
+    ];
+
+    // Maritime Silk Road Route (approx coordinates for Pearl River Estuary out to sea)
+    const SILK_ROAD_DATA = [
+      {
+        name: "해상 실크로드 선전 루트",
+        points: [
+          [-88.0, -10.0], // Pearl River Estuary (North-West)
+          [-78.0, 10.0],
+          [-66.8, 7.2],   // Shekou
+          [-60.0, 25.0],  // South of Nanshan
+          [-45.0, 35.0],
+          [-10.0, 42.0],  // South of Futian/Luohu
+          [22.0, 32.0],   // Yantian Port area
+          [55.0, 48.0],   // Towards Mirs Bay / East Sea
+          [85.0, 52.0]
+        ]
+      }
+    ];
     
     // Skyscrapers Dataset
     const SKYSCRAPERS_DATA = [
@@ -1161,6 +1353,9 @@
       scene.add(peakPinsGroup);
       scene.add(skyscrapersGroup);
       scene.add(subwaysGroup);
+      scene.add(historyPinsGroup);
+      scene.add(silkRoadGroup);
+      scene.add(shipsGroup);
 
       // Create Terrain
       buildTerrain();
@@ -1174,6 +1369,9 @@
       // Create Skyscrapers and Subways
       buildSkyscrapers();
       buildSubways();
+
+      // Create History Layers
+      buildHistoryLayers();
 
       // Setup UI chips
       setupChips();
@@ -1349,6 +1547,12 @@
             const dimColor = styleMode === 'physical' ? new THREE.Color('#02060c') : new THREE.Color('#040710');
             baseColor.lerp(dimColor, 0.84);
           }
+        }
+
+        // Apply history mode dimming to make neon lines and yellow pins pop out
+        if (currentTab === 'history') {
+          const historyDimColor = isWater ? new THREE.Color('#010204') : new THREE.Color('#040812');
+          baseColor.lerp(historyDimColor, 0.72);
         }
 
         col.setXYZ(i, baseColor.r, baseColor.g, baseColor.b);
@@ -1568,6 +1772,239 @@
           pos.needsUpdate = true;
         }
       });
+    }
+
+    // 8c. Build and Update History Layers
+    let silkRoadCurve = null;
+
+    function buildHistoryLayers() {
+      // 1. Build Historical Landmark Pins
+      HISTORICAL_LANDMARKS_DATA.forEach((data) => {
+        const group = new THREE.Group();
+        group.userData = { id: data.id, title: data.title };
+
+        // Diamond/pyramid indicator pointing down
+        const pyramidGeom = new THREE.ConeGeometry(1.2, 2.5, 4);
+        const pyramidMat = new THREE.MeshStandardMaterial({
+          color: 0xf39c12,
+          emissive: 0xe67e22,
+          roughness: 0.2,
+          metalness: 0.8,
+          emissiveIntensity: 0.8
+        });
+        const pyramid = new THREE.Mesh(pyramidGeom, pyramidMat);
+        pyramid.rotation.x = Math.PI; // point down
+        pyramid.position.y = 1.4;
+        pyramid.name = "pyramid";
+        group.add(pyramid);
+
+        // Ground glowing ring
+        const ringGeom = new THREE.RingGeometry(1.3, 1.8, 16);
+        const ringMat = new THREE.MeshBasicMaterial({
+          color: 0xf39c12,
+          transparent: true,
+          opacity: 0.75,
+          side: THREE.DoubleSide
+        });
+        const ring = new THREE.Mesh(ringGeom, ringMat);
+        ring.rotation.x = -Math.PI / 2;
+        ring.position.y = 0.1;
+        ring.name = "ring";
+        group.add(ring);
+
+        // Ground anchor line
+        const lineGeom = new THREE.BufferGeometry().setFromPoints([
+          new THREE.Vector3(0, 0, 0),
+          new THREE.Vector3(0, 2.5, 0)
+        ]);
+        const lineMat = new THREE.LineBasicMaterial({ color: 0xf39c12, transparent: true, opacity: 0.5 });
+        const line = new THREE.Line(lineGeom, lineMat);
+        group.add(line);
+
+        historyPinsGroup.add(group);
+
+        // Create HTML Label
+        const label = document.createElement('div');
+        label.className = 'label history-label';
+        label.textContent = `🏛️ ${data.title}`;
+        label.id = `lbl-hist-${data.id}`;
+        labelsLayer.appendChild(label);
+        data._label = label;
+      });
+
+      // 2. Build Silk Road Neon Line
+      SILK_ROAD_DATA.forEach((road) => {
+        const pts = [];
+        road.points.forEach(([x, z]) => {
+          // slight float above water
+          const h = 0.6;
+          pts.push(new THREE.Vector3(x, h, z));
+        });
+
+        silkRoadCurve = new THREE.CatmullRomCurve3(pts);
+        const curvePoints = silkRoadCurve.getPoints(100);
+        const geom = new THREE.BufferGeometry().setFromPoints(curvePoints);
+        
+        const mat = new THREE.LineBasicMaterial({
+          color: 0xf39c12,
+          transparent: true,
+          opacity: 0.8,
+          linewidth: 3
+        });
+
+        const line = new THREE.Line(geom, mat);
+        silkRoadGroup.add(line);
+      });
+
+      // 3. Build Merchant Ships
+      for (let i = 0; i < 3; i++) {
+        // glowing boat indicator
+        const shipGeom = new THREE.ConeGeometry(0.7, 1.8, 5);
+        const shipMat = new THREE.MeshBasicMaterial({ color: 0xf1c40f });
+        const ship = new THREE.Mesh(shipGeom, shipMat);
+        ship.rotation.x = Math.PI / 2; // lie along direction of path
+        
+        // distribute ships along the line
+        ship.userData = {
+          progress: i * 0.33,
+          speed: 0.0008 + Math.random() * 0.0006
+        };
+        
+        shipsGroup.add(ship);
+      }
+
+      // Initial UI populating
+      setupHistoryUI();
+    }
+
+    function updateHistoryLayers() {
+      const isHistoryActive = (currentTab === 'history');
+      
+      // Update pins visibility and heights
+      historyPinsGroup.visible = isHistoryActive;
+      historyPinsGroup.children.forEach((group) => {
+        const landmark = HISTORICAL_LANDMARKS_DATA.find(h => h.id === group.userData.id);
+        const y = getElevation(landmark.x, landmark.z) * scaleY * exaggeration;
+        group.position.set(landmark.x, y, landmark.z);
+
+        // Highlight selected landmark pin
+        const pyramid = group.getObjectByName("pyramid");
+        const ring = group.getObjectByName("ring");
+        const isSelected = (activeHistoryLandmarkId === landmark.id);
+        
+        if (isSelected) {
+          pyramid.scale.set(1.4, 1.4, 1.4);
+          pyramid.material.color.setHex(0xff3333);
+          pyramid.material.emissive.setHex(0xc0392b);
+          // Animate pulsing ring
+          const t = Date.now() * 0.006;
+          const s = 1.2 + Math.sin(t) * 0.35;
+          ring.scale.set(s, s, 1);
+        } else {
+          pyramid.scale.set(1.0, 1.0, 1.0);
+          pyramid.material.color.setHex(0xf39c12);
+          pyramid.material.emissive.setHex(0xe67e22);
+          // Gently pulsing ring
+          const t = Date.now() * 0.003;
+          const s = 1.0 + Math.sin(t) * 0.2;
+          ring.scale.set(s, s, 1);
+        }
+      });
+
+      // Update Silk Road lines & ships visibility
+      silkRoadGroup.visible = isHistoryActive;
+      shipsGroup.visible = isHistoryActive;
+
+      // Animate Merchant Ships along the curves
+      if (isHistoryActive && silkRoadCurve) {
+        shipsGroup.children.forEach((ship) => {
+          ship.userData.progress += ship.userData.speed;
+          if (ship.userData.progress > 1.0) {
+            ship.userData.progress = 0.0;
+          }
+
+          // Get position and tangent along the curve
+          const progress = ship.userData.progress;
+          const pos = silkRoadCurve.getPointAt(progress);
+          const tangent = silkRoadCurve.getTangentAt(progress);
+
+          // Apply elevation offset
+          ship.position.copy(pos);
+          ship.position.y += 0.4; // float above line
+
+          // Point ship in direction of movement
+          const target = pos.clone().add(tangent);
+          ship.lookAt(target);
+        });
+      }
+
+      // Toggle visibility of modern components
+      // If history mode is active, make modern skyscrapers translucent and hide modern subways
+      const targetOpacity = isHistoryActive ? 0.15 : 0.7;
+      skyscrapersGroup.children.forEach((group) => {
+        const body = group.getObjectByName("body");
+        const edges = group.getObjectByName("edges");
+        if (body) {
+          body.material.opacity += (targetOpacity - body.material.opacity) * 0.08;
+          body.material.transparent = true;
+        }
+        if (edges) {
+          edges.material.opacity = isHistoryActive ? 0.05 : 0.5;
+        }
+      });
+      // Hide subways when history is active
+      subwaysGroup.children.forEach((line) => {
+        const targetOp = isHistoryActive ? 0.0 : (currentYear >= line.userData.year ? 0.95 : 0.0);
+        line.material.opacity += (targetOp - line.material.opacity) * 0.08;
+        line.visible = (line.material.opacity > 0.02);
+      });
+    }
+
+    function setupHistoryUI() {
+      const historyList = document.getElementById('historyList');
+      if (!historyList) return;
+
+      historyList.innerHTML = '';
+      HISTORICAL_LANDMARKS_DATA.forEach((data) => {
+        const card = document.createElement('div');
+        card.className = `history-card${activeHistoryLandmarkId === data.id ? ' active' : ''}`;
+        card.dataset.id = data.id;
+
+        card.innerHTML = `
+          <div class="history-card-header">
+            <span class="history-card-title">${data.title}</span>
+            <span class="history-card-year">${data.year}</span>
+          </div>
+          <div class="history-card-desc">${data.desc}</div>
+        `;
+
+        card.addEventListener('click', () => {
+          focusHistoryLandmark(data.id);
+        });
+
+        historyList.appendChild(card);
+      });
+    }
+
+    function focusHistoryLandmark(id) {
+      activeHistoryLandmarkId = id;
+      
+      // Update UI active card
+      const cards = document.querySelectorAll('.history-card');
+      cards.forEach(card => {
+        card.classList.toggle('active', card.dataset.id === id);
+      });
+
+      updateHistoryLayers();
+
+      // Camera smooth zoom-in
+      const landmark = HISTORICAL_LANDMARKS_DATA.find(h => h.id === id);
+      const y = getElevation(landmark.x, landmark.z) * scaleY * exaggeration;
+      targetControlsTarget.set(landmark.x, y + 2, landmark.z);
+      
+      // position camera looking down at the landmark
+      targetCameraPos.set(landmark.x - landmark.camDist * 0.5, y + landmark.camDist * 0.7, landmark.z + landmark.camDist * 0.5);
+      isTransitioning = true;
     }
 
     // 9. Build Pins & Indicators for Districts & Peaks
@@ -1989,32 +2426,61 @@
       controls.addEventListener('start', () => {
         isTransitioning = false;
       });
-
-      // Tab switching events for right panel (Legend vs Climate)
+      // Tab switching events for right panel (Legend vs Climate vs History)
       const tabBtnLegend = document.getElementById('tabBtnLegend');
       const tabBtnClimate = document.getElementById('tabBtnClimate');
+      const tabBtnHistory = document.getElementById('tabBtnHistory');
       const tabContentLegend = document.getElementById('tabContentLegend');
       const tabContentClimate = document.getElementById('tabContentClimate');
+      const tabContentHistory = document.getElementById('tabContentHistory');
 
       tabBtnLegend.addEventListener('click', () => {
+        currentTab = 'legend';
         tabBtnLegend.classList.add('active');
         tabBtnClimate.classList.remove('active');
+        tabBtnHistory.classList.remove('active');
         tabContentLegend.classList.add('active');
         tabContentClimate.classList.remove('active');
+        tabContentHistory.classList.remove('active');
+        updateHistoryLayers();
+        updateColors();
+        updateBoundaries();
+        updatePins();
       });
 
       tabBtnClimate.addEventListener('click', () => {
+        currentTab = 'climate';
         tabBtnClimate.classList.add('active');
         tabBtnLegend.classList.remove('active');
+        tabBtnHistory.classList.remove('active');
         tabContentClimate.classList.add('active');
         tabContentLegend.classList.remove('active');
+        tabContentHistory.classList.remove('active');
+        updateHistoryLayers();
+        updateColors();
+        updateBoundaries();
+        updatePins();
       });
-    }
+
+      tabBtnHistory.addEventListener('click', () => {
+        currentTab = 'history';
+        tabBtnHistory.classList.add('active');
+        tabBtnLegend.classList.remove('active');
+        tabBtnClimate.classList.remove('active');
+        tabContentHistory.classList.add('active');
+        tabContentLegend.classList.remove('active');
+        tabContentClimate.classList.remove('active');
+        updateHistoryLayers();
+        updateColors();
+        updateBoundaries();
+        updatePins();
+      });
 
     // 15. HTML Labels Alignment positioning
     function positionLabels() {
       const rect = canvas.getBoundingClientRect();
       const tempV = new THREE.Vector3();
+      const isHistoryActive = (currentTab === 'history');
 
       // District Labels
       districts.forEach((dist) => {
@@ -2030,7 +2496,7 @@
         const y = (-tempV.y * 0.5 + 0.5) * rect.height;
 
         const inFrame = x > -30 && x < rect.width + 30 && y > -15 && y < rect.height + 15;
-        const isDistVisible = showBorders && (focusedDistrictId === 'all' || focusedDistrictId === dist.id);
+        const isDistVisible = !isHistoryActive && showBorders && (focusedDistrictId === 'all' || focusedDistrictId === dist.id);
 
         dist._label.style.left = `${x}px`;
         dist._label.style.top = `${y}px`;
@@ -2060,10 +2526,35 @@
         peak._label.style.left = `${x}px`;
         peak._label.style.top = `${y}px`;
 
-        if (showPeaks && visible && inFrame) {
+        if (!isHistoryActive && showPeaks && visible && inFrame) {
           peak._label.classList.remove('hidden');
         } else {
           peak._label.classList.add('hidden');
+        }
+      });
+
+      // History Labels
+      HISTORICAL_LANDMARKS_DATA.forEach((landmark) => {
+        const marker = historyPinsGroup.children.find(g => g.userData.id === landmark.id);
+        if (!marker || !landmark._label) return;
+
+        tempV.copy(marker.position);
+        tempV.y += 2.5; // elevate slightly above marker
+        tempV.project(camera);
+
+        const visible = tempV.z < 1 && tempV.z > -1;
+        const x = (tempV.x * 0.5 + 0.5) * rect.width;
+        const y = (-tempV.y * 0.5 + 0.5) * rect.height;
+
+        const inFrame = x > -30 && x < rect.width + 30 && y > -15 && y < rect.height + 15;
+
+        landmark._label.style.left = `${x}px`;
+        landmark._label.style.top = `${y}px`;
+
+        if (isHistoryActive && visible && inFrame) {
+          landmark._label.classList.remove('hidden');
+        } else {
+          landmark._label.classList.add('hidden');
         }
       });
     }
@@ -2116,6 +2607,9 @@
       // Update Skyscrapers & Subways smooth heights/scaling animations
       updateSkyscrapers();
       updateSubways();
+      
+      // Update History Layers animations
+      updateHistoryLayers();
 
       renderer.render(scene, camera);
     }
