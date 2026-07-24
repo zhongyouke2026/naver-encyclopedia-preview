@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="ko"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1024">
+<title>이우시 [义乌市, Yiwu] - 중국 도시 정보 사전</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Malgun Gothic','맑은 고딕','Apple SD Gothic Neo',sans-serif; color:#222; background:#fff; line-height:1.8; }
+
+  /* 상단 서비스 바 */
+  .topbar { border-bottom:1px solid #e4e6ea; background:#fff; }
+  .topbar .inner { max-width:944px; margin:0 auto; padding:14px 20px; display:flex; align-items:center; gap:10px; }
+  .logo { font-size:21px; font-weight:800; letter-spacing:-0.5px; }
+  .logo .brand { color:#03c75a; }
+  .logo .svc { color:#222; }
+  .searchbox { flex:1; max-width:420px; border:2px solid #03c75a; border-radius:4px; padding:7px 12px; color:#999; font-size:14px; background:#fff; }
+
+  .wrap { max-width:944px; margin:0 auto; padding:28px 20px 60px; }
+
+  /* 브레드크럼 */
+  .breadcrumb { font-size:12.5px; color:#888; margin-bottom:18px; }
+  .breadcrumb b { color:#555; font-weight:600; }
+
+  /* 표제어 */
+  .headword { border-bottom:2px solid #222; padding-bottom:18px; margin-bottom:22px; }
+  .headword h1 { font-size:34px; font-weight:800; letter-spacing:-1px; display:inline; }
+  .headword .origin { font-size:20px; color:#777; font-weight:400; margin-left:8px; }
+  .headword .src-badge { display:inline-block; margin-left:12px; font-size:12px; color:#03c75a; border:1px solid #03c75a; border-radius:12px; padding:1px 10px; vertical-align:middle; font-weight:600; }
+  .headword .pron { font-size:13.5px; color:#888; margin-top:8px; }
+
+  /* 요약 */
+  .summary { background:#f5f6f8; border-radius:6px; padding:20px 24px; margin-bottom:26px; font-size:15.5px; }
+  .summary .lbl { font-weight:800; font-size:14px; color:#03c75a; margin-right:10px; }
+
+  /* 본문 2단: 본문 + 프로필 */
+  .layout { display:flex; gap:28px; align-items:flex-start; }
+  .main { flex:1; min-width:0; }
+
+  /* 프로필(인포박스) */
+  .profile { width:300px; flex-shrink:0; border:1px solid #e4e6ea; border-radius:6px; overflow:hidden; font-size:13px; position:sticky; top:14px; }
+  .profile .pf-title { background:#f8f9fa; font-weight:800; font-size:14px; padding:10px 14px; border-bottom:1px solid #e4e6ea; text-align:center; }
+  .profile .img-placeholder { background:#eceef1; color:#98a0aa; height:180px; display:flex; align-items:center; justify-content:center; font-size:12.5px; border-bottom:1px solid #e4e6ea; text-align:center; padding:0 10px;}
+  .profile table { width:100%; border-collapse:collapse; }
+  .profile th { background:#f8f9fa; width:88px; font-weight:600; color:#555; padding:7px 10px; border-bottom:1px solid #eef0f2; text-align:left; vertical-align:top; font-size:12.5px;}
+  .profile td { padding:7px 10px; border-bottom:1px solid #eef0f2; color:#333; }
+  .profile tr:last-child th, .profile tr:last-child td { border-bottom:none; }
+
+  /* 목차 */
+  .toc { border:1px solid #e4e6ea; border-radius:6px; padding:16px 20px; margin-bottom:30px; font-size:13.5px; background:#fff; }
+  .toc .toc-t { font-weight:800; font-size:14px; margin-bottom:8px; }
+  .toc ol { list-style:none; column-count:2; column-gap:30px; }
+  .toc li { margin:3px 0; }
+  .toc a { color:#3d5a80; text-decoration:none; }
+  .toc a:hover { text-decoration:underline; }
+  .toc .num { color:#03c75a; font-weight:700; margin-right:6px; }
+
+  /* 본문 섹션 */
+  section { margin-bottom:34px; }
+  section h2 { font-size:21px; font-weight:800; letter-spacing:-0.5px; padding-bottom:8px; border-bottom:1px solid #e4e6ea; margin-bottom:14px; scroll-margin-top:14px; }
+  section h3 { font-size:15.5px; font-weight:700; color:#0b7a3e; margin:16px 0 6px; }
+  section h4 { font-size:14px; font-weight:700; color:#444; margin:12px 0 4px; }
+  section p { font-size:15px; margin-bottom:12px; }
+  section ul.plain { margin:6px 0 12px 18px; font-size:14.5px; }
+  section ul.plain li { margin:3px 0; }
+
+  /* 본문 표 */
+  table.data { width:100%; border-collapse:collapse; font-size:13.5px; margin:10px 0 16px; table-layout:auto; }
+  table.data th { background:#f2f8f4; color:#1a5c38; font-weight:700; padding:8px 10px; border:1px solid #dfe5e1; word-break:keep-all; overflow-wrap:normal; }
+  table.data td { padding:7px 10px; border:1px solid #e7eae8; vertical-align:top; word-break:keep-all; overflow-wrap:normal; }
+  table.data tr:nth-child(even) td { background:#fafcfb; }
+
+  .img-block { background:#eceef1; color:#98a0aa; border-radius:6px; height:220px; display:flex; align-items:center; justify-content:center; font-size:13px; margin:12px 0; text-align:center; padding:0 12px; }
+  .caption { font-size:12.5px; color:#888; margin-top:-6px; margin-bottom:14px; }
+
+  .check { color:#c0392b; font-weight:700; }
+  .yr { color:#888; font-size:0.9em; }
+  .note-box { background:#fbfaf4; border:1px solid #ece7d4; border-radius:6px; padding:12px 16px; font-size:13px; color:#6b6350; margin:10px 0 16px; }
+
+  /* 하단 출처 */
+  .cite-box { border-top:2px solid #222; margin-top:44px; padding-top:16px; font-size:13px; color:#555; }
+  .cite-box .naver-cite { background:#f5f6f8; border-radius:6px; padding:14px 18px; margin-bottom:14px; font-size:13.5px; }
+  .cite-box .naver-cite b { color:#03c75a; }
+  .cite-box ol { margin-left:20px; }
+  .cite-box li { margin:2px 0; }
+
+  .demo-note { text-align:center; font-size:11.5px; color:#b6bcc4; margin-top:30px; }
+
+  /* 편집 툴바 */
+  .toolbar { position:fixed; right:18px; bottom:18px; z-index:99; display:flex; gap:8px; align-items:center; }
+  .toolbar button { border:none; border-radius:24px; padding:11px 18px; font-size:13.5px; font-weight:700; cursor:pointer; box-shadow:0 2px 10px rgba(0,0,0,.18); font-family:inherit; }
+  .btn-edit { background:#03c75a; color:#fff; }
+  .btn-edit.on { background:#e6a700; }
+  .btn-save { background:#2b6cb0; color:#fff; }
+  .btn-print { background:#333; color:#fff; }
+  .save-hint { background:rgba(43,108,176,.95); color:#fff; font-size:12px; padding:8px 12px; border-radius:8px; box-shadow:0 2px 10px rgba(0,0,0,.18); max-width:230px; display:none; }
+  body.editing .main, body.editing .profile, body.editing .summary, body.editing .headword, body.editing .cite-box { outline:1px dashed #e6a700; outline-offset:4px; }
+
+  /* 인쇄(PDF) */
+  @media print {
+    .topbar, .toolbar, .demo-note, .save-hint { display:none !important; }
+    .wrap { padding:0; max-width:100%; }
+    body { font-size:12px; }
+    .layout { display:block; }
+    .profile { width:100%; margin-bottom:16px; position:static; }
+    .profile .img-placeholder, .img-block { height:110px; }
+    section { page-break-inside:avoid; }
+    a { color:inherit; text-decoration:none; }
+  }
+</style>
+</head>
+<body class="">
+
+<div class="topbar">
+  <div class="inner">
+    <div class="logo"><span class="brand">중국도시</span><span class="svc"> 정보사전</span></div>
+    <div class="searchbox">사전 전체 검색</div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <div class="breadcrumb">지식백과 &nbsp;›&nbsp; 지역 &nbsp;›&nbsp; 중국 &nbsp;›&nbsp; 저장성(浙江省) &nbsp;›&nbsp; <b>진화시(金华市)</b></div>
+
+  <div class="headword">
+    <h1>이우시</h1><span class="origin">[ 义乌市 , Yiwu ]</span><span class="src-badge">중국 도시 정보 사전</span>
+    <div class="pron">중국어 발음 <b>Yìwū Shì(이우스)</b> &nbsp;|&nbsp; 옛 이름 <b>처우저우(稠州)·우상(乌伤)</b> &nbsp;|&nbsp; 차량 번호 <b>저G(浙G)</b></div>
+  </div>
+
+  <div class="summary">
+    <span class="lbl">요약</span>중국 저장성(浙江省) 진화시(金华市)가 대관하는 현급시(县级市). 저장성 중부·진화시 중부 북측에 있으며 저장성의 지리적 중심이 경내에 있다. 면적 1,103㎢, 2024년 말 상주인구 191.8만 명으로 8개 가도(街道)와 6개 진(镇)을 관할한다. 시정부는 셴첸가 21호에 있다. 신석기시대(약 9,000년 전)부터 선민이 거주했고 기원전 222년 우상현(乌伤县)이 설치되었으며, 당 무덕 7년(624) '이우현(义乌县)'이 되었고 1988년 5월 25일 현급시로 승격했다. '소상품의 도시(小商品之都)'로 불리는 세계 최대 소상품 도매시장(이우 중국국제상무성)의 소재지이자, 전자상거래·택배업이 발달한 중국 현역경제 100강의 대표 도시이다.
+  </div>
+
+  <div class="layout">
+    <div class="main">
+
+      <div class="toc">
+        <div class="toc-t">목차</div>
+        <ol>
+          <li><span class="num">1.</span><a href="#s1">명칭</a></li>
+          <li><span class="num">2.</span><a href="#s2">역사</a></li>
+          <li><span class="num">3.</span><a href="#s3">자연지리</a></li>
+          <li><span class="num">4.</span><a href="#s4">자연자원</a></li>
+          <li><span class="num">5.</span><a href="#s5">행정구역</a></li>
+          <li><span class="num">6.</span><a href="#s6">정치</a></li>
+          <li><span class="num">7.</span><a href="#s7">경제</a></li>
+          <li><span class="num">8.</span><a href="#s8">사회·문화</a></li>
+          <li><span class="num">9.</span><a href="#s9">교통</a></li>
+          <li><span class="num">10.</span><a href="#s10">대외교류</a></li>
+          <li><span class="num">11.</span><a href="#s11">인문·풍습</a></li>
+          <li><span class="num">12.</span><a href="#s12">인구·민족·방언</a></li>
+          <li><span class="num">13.</span><a href="#s13">종교</a></li>
+          <li><span class="num">14.</span><a href="#s14">풍경명승</a></li>
+          <li><span class="num">15.</span><a href="#s15">주요 영예·종합 통계</a></li>
+          <li><span class="num">16.</span><a href="#s16">저명 인물</a></li>
+        
+        
+        </ol>
+      </div>
+
+      <section id="s1">
+        <h2>1. 명칭</h2>
+        <p>이우의 옛 이름은 '처우저우(稠州)'로, 옛 현성 북쪽 20리 황벽산(黄蘖山) 아래에 처우옌(稠岩)이 있어 붙은 이름이다. '이우(义乌)'라는 이름은 당 무덕 7년(624) 우상현(乌伤县)을 이우현으로 개명한 데서 시작되었으며, 그 뜻은 우상(乌伤)·우샤오(乌孝)와 통한다.</p>
+        <p>'우상(乌伤)'의 유래에는 세 가지 설이 있다. 첫째, 진(秦)대에 옌우(颜乌)가 부모를 지극히 봉양하다가 아버지가 죽자 흙을 져 무덤을 쌓았는데, 까마귀 떼가 흙을 물어 도우며 상처를 입어(乌伤) '우상현'이라 했다는 설이다. 둘째, 고대 월(越)나라 때 '우상(乌上, 해가 뜨는 곳)'이라 했는데, 진시황이 백월을 평정한 뒤 월나라의 해가 다시 뜨지 못하게 하려고 '우상(乌伤, 월의 해가 이미 상함)'으로 고쳤다는 설이다. 셋째, '우상'이 고대 월어 지명으로 그 뜻이 분명치 않다는 설이다.</p>
+      </section>
+
+      <section id="s2">
+        <h2>2. 역사</h2>
+        <p>신석기시대(약 9,000년 전)부터 이우 경내에 선민이 거주했으며, 차오터우(桥头) 유적에서 출토된 이른 시기의 벼농사 유존은 선민이 이우 일대에서 야생 벼를 순화했음을 보여 준다.</p>
+
+        <h3>선진(先秦)에서 남북조까지</h3>
+        <p>춘추시대에는 월(越)나라에 속했고, 전국 진 소양왕 원년(기원전 306) 월이 초(楚)에 병합되어 초에 속했다. 진왕정 25년(기원전 222) 우상현(乌伤县)을 두어 회계군에 속하게 했다. 신(新) 왕망 시건국 원년(9) 우상현을 우샤오현(乌孝县)으로 고쳤다가 후한 건무 초(약 25)에 우상현으로 회복했다. 삼국 오 보정 원년(266) 회계군 서부를 나누어 동양군(东阳郡)을 두면서 우상현이 동양군에 속했고, 남조 진 천가 3년(562) 동양군이 진화군(金华郡)으로 개칭되었다.</p>
+
+        <h3>수·당에서 명·청까지</h3>
+        <p>당 무덕 4년(621) 동양군을 무주(婺州)로 고치면서 우상현을 나누어 처우저우(稠州)를 두었고, 무덕 6년(623) 처우저우를 우샤오·화촨(华川) 두 현으로 나누었다가, 무덕 7년(624) 처우저우를 폐하고 두 현을 합쳐 '이우현(义乌县)'이라 하여 무주에 속하게 했다. 당 천보 13년(754) 이우현 북쪽과 란시·푸양 일부를 떼어 푸양현(浦阳县, 오늘날 푸장현)을 두었다. 오대십국·양송대에는 무주에 속했고, 원대에는 무주로(婺州路)에 속했다. 원 지정 20년(1360) 닝웨부가 진화부(金华府)로 바뀌면서 진화부에 속했으며 명·청대에도 소속 관계가 변하지 않았다.</p>
+
+        <h3>중화민국·중화인민공화국</h3>
+        <p>민국 초 부(府) 건제를 폐지해 이우가 성 직속이 되었고, 1914년 진화도, 1935년 진화 전구에 속했다. 1959년 말 푸장현이 이우현에 병합되었다가 1968년 5월 옛 푸장현 구역이 분리되었다. 1988년 5월 25일 이우현을 철회하고 현급 이우시를 설립하여 진화시가 대관하게 되었다.</p>
+      </section>
+
+      <section id="s3">
+        <h2>3. 자연지리</h2>
+        <h3>위치·경역</h3>
+        <p>이우시는 저장성 중부, 진화시 동북부에 위치하며 좌표는 동경 119°49′~120°17′, 북위 29°02′13″~29°33′40″로, 저장성의 지리적 중심이 경내에 있다. 동으로 둥양시, 남으로 융캉시·우이현, 서로 진둥구·란시시, 서북으로 푸장현, 북·동북으로 사오싱 주지시와 접한다. 남북 58.15km, 동서 44.41km, 면적 1,103㎢로 서울(약 605㎢)의 약 1.8배에 해당한다.</p>
+        <div class="img-block">이미지 자리 — 이우시 행정구역도</div>
+        <div class="caption">이우시 위치. 저장성의 지리적 중심이 경내에 있다.</div>
+
+        <h3>지질·지형</h3>
+        <p>장산–사오싱 충돌 접합대 중부에 위치하며, 펀수이탕–다천 단열대가 북동 방향으로 시역을 가로지른다. 만백악기에 남북 방향 인장력을 받아 이우 분지가 형성되었다. 진취(金衢) 분지 동연에 자리한 전형적 구릉 지역으로, 지형은 가장자리가 솟고 가운데가 꺼진 형태이며 동·남·북 삼면이 산으로 둘러싸이고 중서부는 낮다. 지모는 구릉(34.40%)·평원(23.73%)·중저산(23.48%)·강지(18.39%)로 나뉘며, 최고봉은 츠안진의 다한젠(大寒尖, 925.6m), 최저점은 다천진 와야오터우(41.9m)이다.</p>
+
+        <h3>기후</h3>
+        <p>아열대 계절풍 기후로 분지 기후 특징을 띠어 사계절이 분명하고 온난 습윤하며 광조가 충분하고 강우가 풍부하다. 봄·여름에 비가 많고 가을·겨울은 건조하다. 연평균 기온 약 17℃(7월 29.3℃, 1월 4.2℃), 연평균 무상기 약 243일, 연평균 일조 1,910.7시간, 연평균 강수량 1,352.4mm로 강우가 5~9월(6월 최다)에 집중된다.</p>
+
+        <h3>수문·수리·토양</h3>
+        <p>경내 하도는 첸탕장 유역에 속하며 유역면적 1,104.53㎢이다. 주요 하도로 성급 하천인 <b>이우장(义乌江)</b> 1개(총연장 38.39km, 유역면적 812.9㎢)가 있으며 하천 총연장 1,325.07km, 하망 밀도 1.2km/㎢이다. 2022년 2월 기준 수고·산당 79곳이 있고, 옌커우(岩口) 수고가 최대(고용량 3,140만 ㎥)이다. 토양은 중국 남방 홍양(红壤) 지역에 속해 5개 토류·9개 아류로 나뉘며 홍양토류가 약 53.51%로 이우 분지 중부에 분포한다. 주요 자연재해는 홍수·가뭄·우박·강풍·한파·폭설 등으로, 1922년 음력 6~7월의 '임술 수재(壬戌水灾)'가 가장 심각해 현성 대부분이 침수되었다.</p>
+      </section>
+
+      <section id="s4">
+        <h2>4. 자연자원</h2>
+        <h3>토지·광산·수자원</h3>
+        <p>토지 유형은 임지 위주로, 2019년 12월 기준 임지 55,387.52㏊, 경지 16,821.04㏊, 원지 4,730.31㏊ 등이다. 2020년 말 기준 발견된 광산은 20종으로 금·은·구리·몰리브덴 등 금속 6종, 형석·중정석 등 2종, 석묵·석고·화강암 등 비금속 8종, 석탄·지열·우라늄 등 에너지 3종, 광천수 1종이며, 형석(萤石)이 주 광종으로 광석량 1,425.83천 톤이다. 이우는 수자원 부족 시로, 수자원 총량 7.19억 ㎥, 1인당 1,183.67㎥로 저장성 평균의 47.2%에 불과하다.</p>
+        <h3>생물자원</h3>
+        <p><b>식물</b>은 약재류 300여 종, 관상류 180종, 용재림류 46종 등이 있으며 국가 중점보호 야생식물로 남방 홍두삼(红豆杉)·은행·칠자화·향과수·후박·저장남·금전송·아장추가 있다. <b>동물</b>은 7개 문(门)에 걸쳐 절지동물문(416종)·척삭동물문(338종) 등이 분포하며, 국가 중점보호 야생동물로 백관·흑관·백경장미치·흑미·큰도롱뇽·호문와·원앙·백한·미후·수달 등이 있다.</p>
+      </section>
+
+      <section id="s5">
+        <h2>5. 행정구역</h2>
+        <p>2025년 11월 기준 8개 가도(街道)와 6개 진(镇)을 관할하며, 시정부는 저장성 이우시 셴첸가(县前街) 21호에 있다. 행정구역 코드는 330782이다.</p>
+        <table class="data">
+          <tbody><tr><th style="width:80px">구분</th><th>관할 <span class="yr">(2025.11)</span></th></tr>
+          <tr><td>8개 가도</td><td>처우청(稠城)·장둥(江东)·처우장(稠江)·베이위안(北苑)·허우자이(后宅)·청시(城西)·녠싼리(廿三里)·푸톈(福田)</td></tr>
+          <tr><td>6개 진</td><td>포탕(佛堂)·츠안(赤岸)·이팅(义亭)·상시(上溪)·쑤시(苏溪)·다천(大陈)</td></tr>
+        </tbody></table>
+      </section>
+
+      <section id="s6">
+        <h2>6. 정치</h2>
+        <table class="data">
+          <tbody><tr><th style="width:200px">기관</th><th>직위·성명 <span class="yr">(2025.7 기준)</span></th></tr>
+          <tr><td>중국공산당 이우시위원회</td><td>서기 예방루이(叶帮锐)</td></tr>
+          <tr><td>이우시 인민대표대회 상무위</td><td>주임 딩정(丁政)</td></tr>
+          <tr><td>이우시 인민정부</td><td>시장 원젠페이(温建飞)</td></tr>
+          <tr><td>이우시 정협</td><td>주석 천샤오중(陈小忠)</td></tr></tbody></table>
+      </section>
+
+      <section id="s7">
+        <h2>7. 경제</h2>
+        <h3>종합</h3>
+        <p>이미 청 건륭 연간(1736~1796)에 이우 사람들은 엿을 두드려 닭털과 바꾸는(敲糖换鸡毛) 소상인이 있었고, 신중국 성립 후에도 '지마오환탕(鸡毛换糖, 닭털을 엿과 바꿈)'이 중요한 생계 수단이었다. 1982년 소상품 시장을 개방하면서 '소상품의 도시(小商品之都)', 중국 현역경제 100강이 되었다. 2005년 내무역 위주에서 외무역 위주로 전환해 국제무역액이 국내무역액을 처음 넘어섰고, 같은 해 8월 이우 중국소상품성이 유엔·세계은행·모건스탠리 등에 의해 '세계 최대 소상품 도매시장'으로 지정되었다.</p>
+        <p>지능 조명·디스플레이, 태양광, 신에너지차·부품, 바이오건강 등 전략적 신흥산업을 선도로, 양말·의류·지퍼 등 10여 개 전통 우위 산업이 뒷받침하는 발전 구도를 형성했다. 2025년 지역총생산(GDP)은 2,693.3억 위안(약 396억 달러·약 61조 원)으로 불변가격 기준 전년 대비 7.9% 증가했다. 2024년 GDP는 2,503.51억 위안(+7.5%), 상주인구 기준 1인당 GDP 131,040위안(약 1.9만 달러·약 2,970만 원), 전체 주민 1인당 가처분소득 88,048위안으로 저장성 현·시 중 17년 연속 1위이다. 3차 산업 구조 비중은 1.1 : 28.7 : 70.2로 3차 산업 위주이다.</p>
+
+        <h3>제1차 산업</h3>
+        <p>식량 작물은 벼·고구마·옥수수 위주이며 사탕수수·채소·차·잠상·유채 등 경제 작물과 이우 홍탕(红糖)·화퇴(火腿, 햄)·남밀조(南蜜枣)·단계 홍국주 등 명우특 농산물이 있다. 이우 남조·이우 홍탕이 국가 농산물 지리표지 보호 제품으로 지정되었다. 2024년 농림목어업 총생산액 44.7억 위안(+4.5%), 식량 총산량 4.88만 톤(+4.5%)이다.</p>
+
+        <h3>제2차 산업</h3>
+        <p>2024년 공업 부가가치 605.6억 위안(+7.6%)으로, 규모 이상 공업 중 고신기술 산업이 규상 공업의 77.0%를 차지한다. 양말·의류·지퍼 등 10여 개 전통 우위 산업 집군을 형성했으며, 특히 <b>양말 산량이 중국의 35% 이상, 지퍼가 30% 이상, 무봉 내의가 세계의 20%·중국의 80%</b>를 차지한다. 랑사·멍나 양말이 중국 양말업 10강, 신광 장식품이 전국 장식품 선두 기업이며 국가급 이우 경제기술개발구가 있다. 화찬광전·루이펑광전·무린썬 조명 등 상장 기업을 중심으로 'LED 에피택시·칩–패키징·조명 응용'의 완전한 광전 산업 사슬을 형성했다.</p>
+        <h3>제3차 산업</h3>
+        <p>1982년 제1대 소상품 시장이 탄생해 중국 최초의 전문 시장 지역의 하나가 되었다. 2012년 9월 시장 채구(采购) 무역 방식을 시범 시행해 그해 소상품 수출이 처음 100억 달러를 돌파했고, 이후 '시장 채구+국경 간 전자상거래' 모델로 성장을 이끌었다. 경내 <b>이우 중국국제상무성(义乌国际商贸城)</b>은 상점 7.5만 개, 일 객류 21만여 명으로 26개 대류 180여만 종 상품을 취급하며, 시장 외향도가 65% 이상으로 상품을 219개 국가·지역에 판매한다. 전자상거래도 발달해 2021 중국 현역 전자상거래 경쟁력 100강 1위였다. 2024년 사회소비품 소매총액 2,048.35억 위안(+5.5%), 전자상거래 교역액 4,923.52억 위안(+11.3%), 온라인 소매액 3,527.38억 위안(저장성 현·시 8년 연속 1위)이다. 2024년 수출입 총액은 6,689.2억 위안(+18.2%), 그중 수출 5,889.5억 위안(시장 채구 무역이 80.1%)이다. 택배업은 2022년 상반기 업무량이 광저우에 이어 중국 2위였다. 2026년 1분기 수출입 총값은 2,093.7억 위안으로 동기 사상 최고, 전년 대비 25% 증가했다.</p>
+        <h3>대표 기업</h3><p>이우는 국제상무와 소상품 유통으로 유명하며, 최근에는 태양광·신에너지차 부품·방직화섬·문화완구·디지털 프린팅·반도체·포장제지 등 제조업 분야에서도 대표 기업이 집적되고 있다.</p><table class="data" style="width: 576px;"><tbody><tr><th style="width: 150px;">기업</th><th style="width: 110px;">분야</th><th>비고</th></tr><tr><td><b>저장 중국소상품성그룹</b>(浙江中国小商品城集团股份有限公司 / 商城集团 / Yiwugo Group)</td><td>상무시장·디지털 무역</td><td>이우 국제상무성 주요 운영사. 시장 운영·공급망·물류·결제·Chinagoods 플랫폼 운영</td></tr><tr><td>이우고(浙江义乌购电子商务有限公司 / 义乌购 / Yiwugo)</td><td>소상품 전자상거래</td><td>소상품성그룹 산하 온라인 거래 플랫폼. 이우 실물 시장의 상점·상품 정보를 온라인화</td></tr><tr><td>저장 카유 애니메이션(浙江卡游动漫有限公司 / Kayou)</td><td>문창·수집 카드</td><td>애니메이션 카드·수집 카드 중심의 문화창의·트렌드 완구 대표 기업</td></tr><tr><td>JA솔라 이우(义乌晶澳太阳能科技有限公司 / JA Solar Yiwu)</td><td>태양광 모듈</td><td>JA솔라의 이우 태양광 제조 기지. 태양전지 모듈 및 관련 제품 생산</td></tr><tr><td>아이코솔라 이우(浙江爱旭太阳能科技有限公司 / Aiko Solar)</td><td>태양광 전지</td><td>아이코솔라의 이우 주요 생산 기지. 고효율 태양전지 제조</td></tr><tr><td>트리나솔라 이우(天合光能〈义乌〉科技有限公司 / Trina Solar Yiwu)</td><td>태양광 모듈·신에너지</td><td>고효율 태양광 모듈과 신에너지 제품 제조</td></tr><tr><td>친트솔라 이우(义乌正泰太阳能科技有限公司 / CHINT Solar Yiwu)</td><td>태양광 모듈·신에너지</td><td>친트솔라의 이우 태양광 제조 기업. 현지 신에너지 산업 사슬 구성</td></tr><tr><td>지리 파워트레인 이우(义乌吉利动力总成有限公司 / Geely Powertrain Yiwu)</td><td>자동차 동력 시스템</td><td>지리자동차의 파워트레인 생산 기지. 엔진·동력 시스템·부품 생산</td></tr><tr><td>저장 신왕다 동력전지(浙江欣旺达动力电池有限公司 / Sunwoda)</td><td>동력전지·ESS</td><td>동력전지·배터리 시스템·에너지저장 제품 제조</td></tr><tr><td>BOE 화찬광전(京东方华灿光电〈浙江〉有限公司 / BOE HC SemiTek)</td><td>LED 칩·반도체</td><td>LED 에피택셜 웨이퍼·칩 및 관련 반도체 제품 연구개발·제조</td></tr><tr><td>이우 화딩 나일론(义乌华鼎锦纶股份有限公司 / Huading Nylon)</td><td>화섬·나일론</td><td>이우 본토 A주 상장사. 민용 나일론 필라멘트사 생산</td></tr><tr><td>저장 란위 디지털(浙江蓝宇数码科技股份有限公司 / Lanyu Digital)</td><td>디지털 날염 재료</td><td>디지털 잉크젯 날염 잉크 및 관련 제품 제조</td></tr><tr><td>저장 화촨실업그룹(浙江华川实业集团有限公司 / Huachuan Group)</td><td>제지·포장재</td><td>재생지·포장용지·친환경 포장 제품 중심의 대형 제지 기업</td></tr><tr><td>화훙 아트홈(华鸿画家居股份有限公司 / Huahong Art Home)</td><td>장식화·홈데코</td><td>장식화·액자·거울틀·홈데코 제품 제조</td></tr><tr><td>전아이그룹(真爱集团有限公司 / True Love)</td><td>담요·홈텍스타일</td><td>이우 전통 방직 산업 대표 기업. 담요·가정용 방직품 제조</td></tr><tr><td>톈파이 니트(天派针织股份有限公司 / Tianpai Knitting)</td><td>니트 의류·무봉 내의</td><td>무봉 내의와 니트 의류 제조</td></tr><tr><td>저장 뎨페이 화장품(浙江蝶妃化妆品有限公司)</td><td>화장품</td><td>색조 화장품 및 관련 제품 연구개발·생산</td></tr><tr><td>이우시 이카이가이실업(义乌市易开盖实业公司)</td><td>금속 포장</td><td>식품·음료·일화 제품용 금속 이지오픈 캔 뚜껑과 포장 부품 생산</td></tr></tbody></table>
+      </section>
+
+      <section id="s8">
+        <h2>8. 사회·문화</h2>
+        <h3>교육</h3>
+        <p>2024년 말 기준 대학 2개교, 직업원교 1개교, 기사학원 1개교, 공립 중소학 137개교(직고 포함), 민판 중소학 14개교, 유치원 189개, 특수교육학교 2개교이며 재학생 27.44만 명, 재학 외국인 학생 362명이다. 대표 대학은 중국계량대학 현대과기학원이며, 주요 중학으로 이우중학·이우 제2·제3·제4중학 등이 있고 이우중학·이팅중학이 저장성 1급 보통고교 특색 시범학교이다.</p>
+        <h3>과학기술·문화·체육</h3>
+        <p><b>과학기술</b> 방면에서 2024년 국가 고신기술기업 70개, 성 과기형 중소기업 407개를 육성했고 특허 9,340건(발명특허 388건)을 등록했으며, 중국과학원 선양자동화연구소 이우센터 등 연구기구가 있다. <b>문화</b>는 이우시 문화관(국가 1급)·도서관(국가 1급)·박물관(국가 3급)이 있다. <b>체육</b>은 매년 농민 농구 대회 등을 개최하며, 2024년 상시 체육 단련 인구 비율 44.1%, 국민 체질 합격률 94.5%이다.</p>
+        <h3>의료·사회보장·인거환경</h3>
+        <p>2024년 말 위생기구 1,283곳(병원 47), 위생기술 인원 17,581명, 병상 9,202개(3급 이상 병원 3,631개)이다. 중점 병원으로 이우 중심병원, 이우시 중의병원(3급 갑등), 저장대 제4병원(3급 갑등) 등이 있다. 2024년 도시·농촌 최저생계보장 1,145위안/월이다. <b>인거환경</b> 면에서 2024년 PM2.5 27㎍/㎥, 공기질 우량률 92.6%로 7년 연속 국가 2급 기준을 달성했고, 8개 현통제 이상 단면 수질이 100% Ⅲ류 이상이다.</p>
+      </section>
+
+      <section id="s9">
+        <h2>9. 교통</h2>
+        <p>이우는 중국 '4호 농촌로' 시범현이자 전국성 종합교통 허브로, 쾌속환·고속환과 궈마오대도·기장로(이우대도)를 주골격으로 하는 '두 개 환·하나의 횡·하나의 종(两环一横一纵)' 도시 쾌속 교통 노선망을 형성했다.</p>
+        <h3>도로·철도</h3>
+        <p>항진취 고속·이원 고속·소항 쾌속로·융진 고속 등이 지나며, 2018년 5월 항진취 고속 왕다오 인터체인지 병망 개통으로 이우는 중국 최초로 환성(环城) 고속을 갖춘 현급시가 되었다. 2021년 말 기준 공로 1,542km(고속 76km)를 건설했다. <b>철도</b>는 2014년 항창 고철 개통으로 고철 시대에 들어섰으며, 후쿤선·항창 고철·신진원 고철 등이 지나고 주요 역은 이우역(고철역, 1등 객운역)과 이우서역(화물역)이다.</p>
+        <h3>항공·대중교통</h3>
+        <p><b>이우 공항(义乌机场)</b>은 저장성 제4의 국제 항공항으로 베이위안가도에 있는 4D급 군민 합용 운수 공항이다. 2021년 여객 처리량 167.7만 명이며, 2022년 7월 기준 베이징·광저우·선전 등 국내 노선 28개와 러시아 블라디보스토크·한국·태국 등 국제 노선을 운항한다. <b>대중교통</b>은 2017년 BRT 1호선 개통으로 '쾌속 공교 시대'에 들어섰고, 2023년 1월 기준 일반 공교 노선 226개, 도시궤도교통 진이둥선(총연장 107.17km)이 운영된다.</p>
+      </section>
+
+      <section id="s10">
+        <h2>10. 대외교류</h2>
+        <p>이우는 여러 나라의 도시와 우호 관계를 맺었다. 오스트레일리아 애러랫시(2002), 일본 아와지시(2014), 르완다 키갈리 키쿠키로구(2020) 등과 우호 관계를 맺고 있다.</p>
+        <table class="data">
+          <tbody><tr><th style="width:60px">순번</th><th>도시</th><th style="width:130px">체결 시기</th></tr>
+          <tr><td>1</td><td>오스트레일리아 애러랫시</td><td>2002.10</td></tr>
+          <tr><td>2</td><td>대한민국 서울 중구</td><td>2005.5</td></tr>
+          <tr><td>3</td><td>일본 아와지시</td><td>2014.7</td></tr>
+          <tr><td>4</td><td>르완다 키갈리 키쿠키로구</td><td>2020.11</td></tr>
+          <tr><td>5</td><td>대한민국 해남군</td><td>2022.11</td></tr>
+        </tbody></table>
+      </section>
+
+      <section id="s11">
+        <h2>11. 인문·풍습</h2>
+        <p>이우는 '중국 현대 민간 회화의 고향', '중국 곡예의 고향', '중국 서법의 고향'으로 불린다. 지방 특색 민간 예술로 도정(道情)·화고(花鼓)·소라서(小锣书) 등이 있고, 이우 문화예술제·이우 홍탕절·이우 효의문화제·이우 양매절·이우 연우절·이우 단시문화양생절·이우 민속문화제·이우 도화절 등을 개최한다. 이우 홍탕 전통 가공 기예, 첩나한(叠罗汉), 죽마(高跷), 목활자 인쇄술 등 12항이 저장성 비물질문화유산 명록에 올랐다.</p>
+
+        <h3>문물 고적</h3>
+        <p><b>구웨차오(古月桥)</b>는 츠안진 야즈제촌 서부에 있는 진화시 최고(最古)의 인도교로, 남송 가정 6년(1213) 축조된 오변형 석공교이며 2001년 전국중점문물보호단위가 되었다. <b>황산 바몐팅(黄山八面厅, 진신당)</b>은 상시진 황산촌에 있는 화퇴 상인 천인공이 지은 건축으로 청 가경 원년(1796) 착공, 18년 만인 가경 18년(1813) 완공되었고 200여 년간 먼지가 앉지 않는 것으로 유명하며 2001년 6월 전국중점문물보호단위가 되었다.</p>
+        <table class="data">
+          <tbody><tr><th>명칭</th><th style="width:110px">시대</th><th style="width:110px">국보 지정</th></tr>
+          <tr><td>구웨차오(古月桥)</td><td>송</td><td>제5차(2001)</td></tr>
+          <tr><td>황산 바몐팅(黄山八面厅)</td><td>청</td><td>제5차(2001)</td></tr>
+          <tr><td>이우 다안사탑(大安寺塔)</td><td>북송</td><td>제8차(2019)</td></tr>
+          <tr><td>츠안 주택 건축군</td><td>명~민국</td><td>제8차(2019)</td></tr>
+          <tr><td>야돤촌 고건축군</td><td>청</td><td>제8차(2019)</td></tr>
+          <tr><td>탕샤팡 대종사(大宗祠)</td><td>청</td><td>제8차(2019)</td></tr>
+          <tr><td>천왕다오 고거(陈望道故居)</td><td>1891년</td><td>제8차(2019)</td></tr>
+        </tbody></table>
+
+        <h3>비물질문화유산</h3>
+        <p><b>진화 도정(金华道情)</b>은 이우에서 발원해 명말청초에 형성된 곡예로, 진화 방언으로 단구 좌창하며 《황금기》 등 전통 곡목 425부가 전한다. <b>진화 화퇴(火腿)</b>는 송대 항금 명장 종택(宗泽)과 얽힌 명산품으로 2008년 국가급 비유(화퇴 제작 기예)가 되었으며, 이우 사람들은 종택을 화퇴 조사(祖师)로 받든다. <b>이우 홍탕 제작 기예</b>는 청 순치 연간(1644~1661)으로 거슬러 오르며, 1929년 시후 박람회에서 특등상을 받았고 2014년 12월 제4차 국가급 비물질문화유산에 등재되었다.</p>
+        <div class="img-block">이미지 자리 — 이우 홍탕 제작 / 진화 도정 공연</div>
+        <div class="caption">이우 홍탕 제작 기예는 국가급 무형문화유산이다. 이우는 '홍탕의 고향'이다.</div>
+
+        <h3>이야기·일화(轶事趣闻)</h3>
+        <p>오늘날 '세계의 시장'이 된 이우의 출발점에는 <b>지마오환탕(鸡毛换糖)</b> 이야기가 있다. 농한기에 이우 사람들은 직접 만든 엿을 짊어지고 집집마다 다니며 닭털·폐품과 바꾸었는데, 이 작은 행상의 근면함과 장사 수완이 훗날 소상품 시장의 밑거름이 되었다는 것이다. 지명 '우상(乌伤, Wūshāng)'에도 이야기가 깃들어 있다. 진(秦)대의 효자 옌우(颜乌)가 부모를 지극히 모시다 아버지가 죽자 손수 흙을 져 무덤을 쌓았는데, 이를 본 까마귀 떼가 흙을 물어 나르다 부리를 다쳤다(乌伤) 하여 붙은 이름이라 전한다. 또 이 고장이 낳은 초당의 시인 <b>낙빈왕(骆宾王)</b>은 일곱 살에 연못의 거위를 보고 "거위야 거위야, 굽은 목 하늘 향해 노래하네(鹅鹅鹅, 曲项向天歌)"라는 《영아(咏鹅)》를 지어 신동으로 이름을 떨쳤다.</p>
+
+        <h3>민속·상징</h3>
+        <p><b>이우 용등(龙灯)</b>은 설 이후 용등을 맞이하는 풍속으로 대개 판덩룽(板凳龙, 벤치 용)이며, 한 마리가 수십 절에서 수백·수천 절에 이르러 마을 길을 돌며 광장에서 '반등(盘灯)'을 펼친다. 이 밖에 음력 6월 6일 육월병(고기전병)을 굽고 고기를 먹는 습속이 있다. <b>시화</b>는 월계(月季, 장미), <b>시수</b>는 향장(香樟, 녹나무)으로 2002년 7월 지정되었으며, 시내에 천 년 이상 향장 1그루, 800년 이상 4그루, 200년 이상 103그루가 있다.</p>
+
+        <h3>미식·특산</h3>
+        <ul class="plain">
+          <li><b>이우 화퇴(火腿)</b> : 비파 모양에 발이 작고 뼈가 가늘다. 1929년 시후 박람회 우등상. 당퇴·장퇴·계화퇴 등 품종</li>
+          <li><b>남밀조(南蜜枣)</b> : 청 초부터 제조. 붉은 대추보다 도톰하며 1993년 방콕 국제식품전 은상</li>
+          <li><b>단계 홍국주(丹溪红曲酒)</b> : 1327년 창제. 저장성 비물질문화유산, '중화 노자호' 칭호</li>
+        </ul>
+      </section>
+
+      <section id="s12">
+        <h2>12. 인구·민족·방언</h2>
+        <h3>인구</h3>
+        <p>2024년 말 호적 인구는 931,960명으로 전년 대비 20,440명 증가했고(남 456,707·여 475,253), 출생률 8.895‰·사망률 5.08‰·자연증가율 3.81‰이다. 2024년 5‰ 인구 변동 표본조사를 근거로 한 연말 상주인구는 <b>【추산】</b> 191.8만 명으로 전년 말 대비 1.5만 명 증가, 도시화율은 83.1%이다(호적 인구와 달리 표본 기반 추정치).</p>
+        <h3>민족</h3>
+        <p>한족 위주이며 먀오족·부이족·투자족·회족·좡족·이족·조선족 등 50개 소수민족이 거주한다. 이 가운데 인구가 1만 명을 넘는 소수민족은 먀오족·부이족·투자족이다.</p>
+        <h3>방언</h3>
+        <p>이우 방언은 저장 남구 오어(吴语) 무주편(婺州片)의 작은 분지로, 주요 방언은 이우화(义乌话)·둥양화·주지화 등이며 이우화가 주를 이룬다. 교통이 편리해 주변 도시와 왕래가 잦아 둥양화·주지화 등 인근 방언의 영향을 받아 복잡성이 생겼는데, "이우 18강, 개울 하나 건너면 다르다(义乌十八腔, 隔溪不一样)"는 말이 있다.</p>
+      </section>
+
+      <section id="s13">
+        <h2>13. 종교</h2>
+        <p>이우는 1980년대에 불교·기독교만 있던 데서 불교·기독교·천주교·이슬람교가 병존하는 국면으로 빠르게 확대되었다. 종교 단체 3개, 각종 종교 장소 80곳이 있으며, 국제 상업 도시 특성상 인원 구성이 복잡하고 사회적 영향이 넓다.</p>
+      </section>
+
+      <section id="s14">
+        <h2>14. 풍경명승</h2>
+        <p>이우는 '중국 국제 상무 관광 목적지'로 상업·농업·문화 관광이 융합된 다원 관광 구도를 형성했다. 2021년 말 기준 4A급 관광지 1곳, 3A급 6곳이 있다. 대표 관광지는 <b>이우 중국국제상무성 구물여유구(购物旅游区)</b>로 중국 최초의 국가급 4A급 구물(쇼핑) 관광지이며, 대형 관광 쇼핑센터·수입상품관·5,000여 개 '구물여유 추천 상위(商位)'·4D 영화관 등을 갖추어 2006년 4A급으로 평정되었다.</p>
+        <p>이 밖에 성급 삼림공원인 <b>화시 삼림공원</b>(녠싼리가도, 면적 22㎢, 낙빈왕 묘 등), <b>왕다오 삼림공원</b>(청시가도, 천왕다오 고거 등), 중국 역사문화명진인 <b>포탕 고진(佛堂古镇)</b>(명·청·민국 초 건축 수백 동, 포탕 노가 2,000m)이 있다.</p>
+        <div class="img-block">이미지 자리 — 이우 국제상무성 / 포탕 고진</div>
+        <div class="caption">이우 중국국제상무성. 세계 최대 소상품 도매시장이자 4A급 관광지이다.</div>
+      </section>
+
+      <section id="s15">
+        <h2>15. 주요 영예·종합 통계</h2>
+        <h3>주요 도시 영예</h3>
+        <ul class="plain">
+          <li>국가삼림도시 <span class="yr">(2015, 국가임업국)</span></li>
+          <li>제4차 국가지식재산권 시범도시 <span class="yr">(2016, 국가지식재산권국)</span></li>
+          <li>국가위생도시 <span class="yr">(2020, 전국애국위생운동위)</span></li>
+          <li>전국 쌍옹 모범성(县) <span class="yr">(2025)</span></li>
+          <li>2025 사이디(赛迪) 100강 현시 <span class="yr">(2025.7, 연구기관 평가)</span> · 전국 종합실력 100강 현시 <span class="yr">(2025.9, 민간 연구기관 평가)</span></li></ul><ul class="plain">
+        </ul>
+      </section>
+
+      <section id="s16">
+        <h2>16. 저명 인물</h2>
+        <p>이우는 '불학 대가 부대사, 문학 대가 낙빈왕, 병학 대가 종택, 의학 대가 주단계(朱丹溪)'의 사대가(四大家)를 배출한 인문의 고장이다.</p>
+        <table class="data">
+          <tbody><tr><th style="width:110px">인물</th><th style="width:110px">생몰</th><th>소개</th></tr>
+          <tr><td>낙빈왕(骆宾王)</td><td>619~약684</td><td>녠싼리 출신, '초당 4걸'. 7세에 《영아(咏鹅)》를 지음. 《낙빈왕문집》 10권</td></tr>
+          <tr><td>종택(宗泽)</td><td>1060~1128</td><td>처우청 출신, 남송 항금 명장. 금병과 13전 전승. 《종충간집》</td></tr>
+          <tr><td>천왕다오(陈望道)</td><td>1891~1977</td><td>청시 출신, 교육가. 중국 최초의 중문 《공산당 선언》 번역자. 상하이시 정협 부주석 등 역임</td></tr>
+          <tr><td>펑쉐펑(冯雪峰)</td><td>1903~1976</td><td>현대 문예이론가. 장정 참가. 인민문학출판사 사장, 중국작가협회 초대 당조 서기</td></tr>
+          <tr><td>우한(吴晗)</td><td>1909~1969</td><td>상시 출신, 역사학자. 칭화대 역사과 주임. 《주원장전》 《해서파관》 등 저술</td></tr></tbody></table>
+      </section>
+
+      <div class="cite-box">
+        <div class="naver-cite"><b>[중국 도시 정보 사전]</b> 이우시 [义乌市, Yiwu] (중국 도시 정보 사전, 현급시 편)</div>
+        <b>참고 자료</b>
+        <ol>
+          <li>이우시 통계국 《2024년 국민경제·사회발전 통계공보》</li>
+          <li>이우시 인민정부 홈페이지(www.yw.gov.cn) — 역사연혁·시정 개황</li>
+          <li>중화인민공화국 민정부 전국 행정구획 조회 플랫폼</li>
+          <li>이우시 자연자원·교통·문화·상무 등 관련 부문 자료</li>
+          <li>국무원 전국중점문물보호단위 명록 / 국가급 비물질문화유산 명록</li>
+          <li>사이디(赛迪)顾问·중소도시연구원 등 각종 현역경제 랭킹 자료</li>
+        </ol>
+      </div>
+
+
+    </div><!-- /main -->
+
+    <aside class="profile">
+      <div class="pf-title">이우시 기본 정보</div>
+      <div class="img-placeholder">이미지 자리<br>이우시 지도 / 위치도</div>
+      <table>
+        <tbody><tr><th>공식 명칭</th><td>이우시 (义乌市 / Yiwu City)</td></tr>
+        <tr><th>구분</th><td>저장성 진화시 대관 현급시 (코드 330782)</td></tr>
+        <tr><th>별칭</th><td>처우저우(稠州) / 옛 이름 우상(乌伤)</td></tr>
+        <tr><th>시정부</th><td>이우시 셴첸가(县前街) 21호</td></tr>
+        <tr><th>면적</th><td>1,103 ㎢ — 서울의 약 1.8배</td></tr>
+        <tr><th>인구</th><td>상주 191.8만 명 <span class="yr">(2024년 말)</span><br>도시화율 83.1% · 호적 931,960명</td></tr>
+        <tr><th>GDP</th><td>2,693.3억 위안 (+7.9%) <span class="yr">(2025)</span><br>약 396억 달러 · 약 61조 원 <span class="yr">(2026.7 환율)</span></td></tr>
+        <tr><th>1인당 GDP</th><td>131,040위안 <span class="yr">(2024, 상주인구)</span></td></tr>
+        <tr><th>1인당 가처분소득</th><td>88,048위안 <span class="yr">(2024)</span></td></tr>
+        <tr><th>관할</th><td>8개 가도 · 6개 진</td></tr>
+        <tr><th>기후</th><td>아열대 계절풍 기후</td></tr>
+        <tr><th>방언</th><td>이우화(义乌话) — 오어 무주편</td></tr>
+        <tr><th>차량 번호</th><td>저G(浙G)</td></tr>
+        <tr><th>우편번호</th><td>322000</td></tr>
+        <tr><th>전화 구호</th><td>0579</td></tr>
+        <tr><th>시간대</th><td>UTC+8 (한국보다 1시간 늦음)</td></tr>
+        <tr><th>설시 시기</th><td>1988년 5월 25일</td></tr>
+        <tr><th>대표 화훼·수목</th><td>월계(장미) · 향장(녹나무)</td></tr>
+        <tr><th>지도부</th><td>서기 예방루이 / 시장 원젠페이 <span class="yr">(2025 기준)</span></td></tr>
+      </tbody></table>
+    </aside>
+
+  </div><!-- /layout -->
+</div><!-- /wrap -->
+
+<div class="toolbar" style="display: none;">
+  <div class="save-hint" id="saveHint" style="display: none;"></div>
+  <button class="btn-edit" id="editBtn" onclick="toggleEdit()">✏️ 편집 모드</button>
+  <button class="btn-save" id="saveBtn" onclick="saveHtml()">💾 저장(다운로드)</button>
+  <button class="btn-print" onclick="window.print()">🖨 PDF로 인쇄</button>
+</div>
+
+<script>
+function toggleEdit(){
+  const on = document.body.classList.toggle('editing');
+  document.querySelectorAll('.main, .profile, .summary, .headword, .cite-box').forEach(el=>{
+    el.contentEditable = on;
+  });
+  const b = document.getElementById('editBtn');
+  b.classList.toggle('on', on);
+  b.textContent = on ? '✅ 편집 완료' : '✏️ 편집 모드';
+}
+
+function showHint(msg){
+  const h = document.getElementById('saveHint');
+  h.textContent = msg;
+  h.style.display = 'block';
+  clearTimeout(h._t);
+  h._t = setTimeout(()=>{ h.style.display='none'; }, 4000);
+}
+
+// 편집한 현재 화면 그대로를 HTML 파일로 저장(다운로드)
+function saveHtml(){
+  const wasEditing = document.body.classList.contains('editing');
+  if (wasEditing) toggleEdit();
+
+  const clone = document.documentElement.cloneNode(true);
+  clone.querySelectorAll('[contenteditable]').forEach(el=> el.removeAttribute('contenteditable'));
+  clone.querySelectorAll('.save-hint').forEach(el=>{ el.textContent=''; el.style.display='none'; });
+
+  const html = '<!DOCTYPE html>\n' + clone.outerHTML;
+  const blob = new Blob([html], {type:'text/html;charset=utf-8'});
+  const url = URL.createObjectURL(blob);
+
+  const now = new Date();
+  const pad = n=> String(n).padStart(2,'0');
+  const stamp = now.getFullYear()+pad(now.getMonth()+1)+pad(now.getDate())+'_'+pad(now.getHours())+pad(now.getMinutes());
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = '이우시_지식백과_'+stamp+'.html';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  setTimeout(()=> URL.revokeObjectURL(url), 1000);
+
+  showHint('편집한 내용을 HTML 파일로 저장했습니다. 다운로드 폴더를 확인하세요.');
+}
+
+window.addEventListener('beforeunload', function(e){
+  if (document.body.classList.contains('editing')){
+    e.preventDefault();
+    e.returnValue = '';
+  }
+});
+</script>
+
+
+
+
+</body></html>

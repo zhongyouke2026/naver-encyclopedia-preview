@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="ko"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1024">
+<title>쑤저우시 [苏州市, Suzhou] - 중국 도시 정보 사전</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Malgun Gothic','맑은 고딕','Apple SD Gothic Neo',sans-serif; color:#222; background:#fff; line-height:1.8; }
+
+  /* 상단 서비스 바 */
+  .topbar { border-bottom:1px solid #e4e6ea; background:#fff; }
+  .topbar .inner { max-width:944px; margin:0 auto; padding:14px 20px; display:flex; align-items:center; gap:10px; }
+  .logo { font-size:21px; font-weight:800; letter-spacing:-0.5px; }
+  .logo .brand { color:#03c75a; }
+  .logo .svc { color:#222; }
+  .searchbox { flex:1; max-width:420px; border:2px solid #03c75a; border-radius:4px; padding:7px 12px; color:#999; font-size:14px; background:#fff; }
+
+  .wrap { max-width:944px; margin:0 auto; padding:28px 20px 60px; }
+
+  /* 브레드크럼 */
+  .breadcrumb { font-size:12.5px; color:#888; margin-bottom:18px; }
+  .breadcrumb b { color:#555; font-weight:600; }
+
+  /* 표제어 */
+  .headword { border-bottom:2px solid #222; padding-bottom:18px; margin-bottom:22px; }
+  .headword h1 { font-size:34px; font-weight:800; letter-spacing:-1px; display:inline; }
+  .headword .origin { font-size:20px; color:#777; font-weight:400; margin-left:8px; }
+  .headword .src-badge { display:inline-block; margin-left:12px; font-size:12px; color:#03c75a; border:1px solid #03c75a; border-radius:12px; padding:1px 10px; vertical-align:middle; font-weight:600; }
+  .headword .pron { font-size:13.5px; color:#888; margin-top:8px; }
+
+  /* 요약 */
+  .summary { background:#f5f6f8; border-radius:6px; padding:20px 24px; margin-bottom:26px; font-size:15.5px; }
+  .summary .lbl { font-weight:800; font-size:14px; color:#03c75a; margin-right:10px; }
+
+  /* 본문 2단: 본문 + 프로필 */
+  .layout { display:flex; gap:28px; align-items:flex-start; }
+  .main { flex:1; min-width:0; }
+
+  /* 프로필(인포박스) */
+  .profile { width:300px; flex-shrink:0; border:1px solid #e4e6ea; border-radius:6px; overflow:hidden; font-size:13px; position:sticky; top:14px; }
+  .profile .pf-title { background:#f8f9fa; font-weight:800; font-size:14px; padding:10px 14px; border-bottom:1px solid #e4e6ea; text-align:center; }
+  .profile .img-placeholder { background:#eceef1; color:#98a0aa; height:180px; display:flex; align-items:center; justify-content:center; font-size:12.5px; border-bottom:1px solid #e4e6ea; text-align:center; padding:0 10px;}
+  .profile table { width:100%; border-collapse:collapse; }
+  .profile th { background:#f8f9fa; width:88px; font-weight:600; color:#555; padding:7px 10px; border-bottom:1px solid #eef0f2; text-align:left; vertical-align:top; font-size:12.5px;}
+  .profile td { padding:7px 10px; border-bottom:1px solid #eef0f2; color:#333; }
+  .profile tr:last-child th, .profile tr:last-child td { border-bottom:none; }
+
+  /* 목차 */
+  .toc { border:1px solid #e4e6ea; border-radius:6px; padding:16px 20px; margin-bottom:30px; font-size:13.5px; background:#fff; }
+  .toc .toc-t { font-weight:800; font-size:14px; margin-bottom:8px; }
+  .toc ol { list-style:none; column-count:2; column-gap:30px; }
+  .toc li { margin:3px 0; }
+  .toc a { color:#3d5a80; text-decoration:none; }
+  .toc a:hover { text-decoration:underline; }
+  .toc .num { color:#03c75a; font-weight:700; margin-right:6px; }
+
+  /* 본문 섹션 */
+  section { margin-bottom:34px; }
+  section h2 { font-size:21px; font-weight:800; letter-spacing:-0.5px; padding-bottom:8px; border-bottom:1px solid #e4e6ea; margin-bottom:14px; scroll-margin-top:14px; }
+  section h3 { font-size:15.5px; font-weight:700; color:#0b7a3e; margin:16px 0 6px; }
+  section h4 { font-size:14px; font-weight:700; color:#444; margin:12px 0 4px; }
+  section p { font-size:15px; margin-bottom:12px; }
+  section ul.plain { margin:6px 0 12px 18px; font-size:14.5px; }
+  section ul.plain li { margin:3px 0; }
+
+  /* 본문 표 */
+  table.data { width:100%; border-collapse:collapse; font-size:13.5px; margin:10px 0 16px; table-layout:auto; }
+  table.data th { background:#f2f8f4; color:#1a5c38; font-weight:700; padding:8px 10px; border:1px solid #dfe5e1; word-break:keep-all; overflow-wrap:normal; }
+  table.data td { padding:7px 10px; border:1px solid #e7eae8; vertical-align:top; word-break:keep-all; overflow-wrap:normal; }
+  table.data tr:nth-child(even) td { background:#fafcfb; }
+
+  .img-block { background:#eceef1; color:#98a0aa; border-radius:6px; height:220px; display:flex; align-items:center; justify-content:center; font-size:13px; margin:12px 0; text-align:center; padding:0 12px; }
+  .caption { font-size:12.5px; color:#888; margin-top:-6px; margin-bottom:14px; }
+
+  .check { color:#c0392b; font-weight:700; }
+  .yr { color:#888; font-size:0.9em; }
+  .note-box { background:#fbfaf4; border:1px solid #ece7d4; border-radius:6px; padding:12px 16px; font-size:13px; color:#6b6350; margin:10px 0 16px; }
+
+  /* 하단 출처 */
+  .cite-box { border-top:2px solid #222; margin-top:44px; padding-top:16px; font-size:13px; color:#555; }
+  .cite-box .naver-cite { background:#f5f6f8; border-radius:6px; padding:14px 18px; margin-bottom:14px; font-size:13.5px; }
+  .cite-box .naver-cite b { color:#03c75a; }
+  .cite-box ol { margin-left:20px; }
+  .cite-box li { margin:2px 0; }
+
+  .demo-note { text-align:center; font-size:11.5px; color:#b6bcc4; margin-top:30px; }
+
+  /* 편집 툴바 */
+  .toolbar { position:fixed; right:18px; bottom:18px; z-index:99; display:flex; gap:8px; align-items:center; }
+  .toolbar button { border:none; border-radius:24px; padding:11px 18px; font-size:13.5px; font-weight:700; cursor:pointer; box-shadow:0 2px 10px rgba(0,0,0,.18); font-family:inherit; }
+  .btn-edit { background:#03c75a; color:#fff; }
+  .btn-edit.on { background:#e6a700; }
+  .btn-save { background:#2b6cb0; color:#fff; }
+  .btn-print { background:#333; color:#fff; }
+  .save-hint { background:rgba(43,108,176,.95); color:#fff; font-size:12px; padding:8px 12px; border-radius:8px; box-shadow:0 2px 10px rgba(0,0,0,.18); max-width:230px; display:none; }
+  body.editing .main, body.editing .profile, body.editing .summary, body.editing .headword, body.editing .cite-box { outline:1px dashed #e6a700; outline-offset:4px; }
+
+  /* 인쇄(PDF) */
+  @media print {
+    .topbar, .toolbar, .demo-note, .save-hint { display:none !important; }
+    .wrap { padding:0; max-width:100%; }
+    body { font-size:12px; }
+    .layout { display:block; }
+    .profile { width:100%; margin-bottom:16px; position:static; }
+    .profile .img-placeholder, .img-block { height:110px; }
+    section { page-break-inside:avoid; }
+    a { color:inherit; text-decoration:none; }
+  }
+</style>
+</head>
+<body class="">
+
+<div class="topbar">
+  <div class="inner">
+    <div class="logo"><span class="brand">중국도시</span><span class="svc"> 정보사전</span></div>
+    <div class="searchbox">사전 전체 검색</div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <div class="breadcrumb">지식백과 &nbsp;›&nbsp; 지역 &nbsp;›&nbsp; 중국 &nbsp;›&nbsp; 화둥(华东) &nbsp;›&nbsp; <b>장쑤성(江苏省)</b></div>
+
+  <div class="headword">
+    <h1>쑤저우시</h1><span class="origin">[ 苏州市 , Suzhou ]</span><span class="src-badge">중국 도시 정보 사전</span>
+    <div class="pron">중국어 발음 <b>Sūzhōu Shì(쑤저우스)</b> &nbsp;|&nbsp; 약칭 <b>쑤(苏)</b> &nbsp;|&nbsp; 옛 이름 <b>우(吴)·구쑤(姑苏)·핑장(平江)</b></div>
+  </div>
+
+  <div class="summary">
+    <span class="lbl">요약</span>중국 장쑤성(江苏省) 동남부에 있는 지급시(地级市). 창장삼각주 중부·타이후 평원의 중심에 있으며, 동으로 상하이, 남으로 저장, 서로 타이후, 북으로 창장을 낀다. 총면적 8,657.32㎢, 2024년 말 상주인구 1,298.7만 명으로 5개 구와 4개 현급시(대관)를 관할한다. 시정부는 구쑤구 싼샹로 998호에 있다. 춘추시대 오(吴)나라의 도성으로 기원전 514년 축조된 이래 위치가 변하지 않은 중국 역사문화명성이며, "위에는 천당, 아래는 쑤저우·항저우(上有天堂, 下有苏杭)"라 불린다. 쿤취(昆曲)·고금(古琴) 등 7개 인류 무형문화유산과 줘정위안·류위안 등 9개 세계문화유산 고전 원림을 보유한 강남 오문화(吴文化)의 발상지이자, 나노·바이오·첨단제조 산업의 세계적 거점이다.
+  </div>
+
+  <div class="layout">
+    <div class="main">
+
+      <div class="toc">
+        <div class="toc-t">목차</div>
+        <ol>
+          <li><span class="num">1.</span><a href="#s1">명칭</a></li>
+          <li><span class="num">2.</span><a href="#s2">역사</a></li>
+          <li><span class="num">3.</span><a href="#s3">자연지리</a></li>
+          <li><span class="num">4.</span><a href="#s4">자연자원</a></li>
+          <li><span class="num">5.</span><a href="#s5">행정구역</a></li>
+          <li><span class="num">6.</span><a href="#s6">정치</a></li>
+          <li><span class="num">7.</span><a href="#s7">경제</a></li>
+          <li><span class="num">8.</span><a href="#s8">사회·문화</a></li>
+          <li><span class="num">9.</span><a href="#s9">교통</a></li>
+          <li><span class="num">10.</span><a href="#s10">대외교류</a></li>
+          <li><span class="num">11.</span><a href="#s11">인문·풍습</a></li>
+          <li><span class="num">12.</span><a href="#s12">인구·민족·방언</a></li>
+          <li><span class="num">13.</span><a href="#s13">종교</a></li>
+          <li><span class="num">14.</span><a href="#s14">풍경명승</a></li>
+          <li><span class="num">15.</span><a href="#s15">주요 영예·종합 통계</a></li>
+          <li><span class="num">16.</span><a href="#s16">저명 인물</a></li>
+        
+        
+        </ol>
+      </div>
+
+      <section id="s1">
+        <h2>1. 명칭</h2>
+        <p>'우(吴)'는 쑤저우의 가장 이른 이름으로 《사기·오태백세가》의 "태백이 남으로 달아나 스스로 구우(勾吴)라 칭했다"에서 유래한다. 쑤저우성의 가장 이른 명칭은 '합려성(阖闾城)'으로 역대 시인들이 쑤저우를 읊을 때 즐겨 썼다. 진왕정 25년(기원전 222) 진이 강남을 평정하고 회계군(会稽郡)을 두면서 동시에 우현(吴县)을 설치해 '회계'·'우'로도 불렸고, 한 영건 4년(129) 우군(吴郡)이 설치되어 '우군'이라는 아호를 얻었다. 이후 쑤저우는 동우(东吴)·중우·서우의 '삼우' 중 동우를 가리키며 '우중(吴中)' 등으로도 불렸다.</p>
+        <p>수 개황 9년(589) 우군을 폐하고 우주(吴州)를 '쑤저우(苏州)'로 고쳤는데, 경내에 구쑤산(姑苏山)이 있었기 때문이며 이 이름이 오늘날까지 이어진다. 1949년 4월 우현 성상(城厢)을 떼어 쑤저우시를 두면서 옛 이름 '쑤저우'로 명명하였다. 오늘날 '구쑤(姑苏)'는 쑤저우시 구쑤구(姑苏区)를 가리킨다.</p>
+      </section>
+
+      <section id="s2">
+        <h2>2. 역사</h2>
+        <p>6~7천 년 전부터 쑤저우 경내에 주민이 번성하였으며, 경내에서 40여 곳의 신석기시대 유적이 발견되었다. 가장 이른 인류 활동 흔적은 타이후 싼산다오(三山岛)에 있다.</p>
+
+        <h3>선진(先秦) 시기</h3>
+        <p>기원전 11세기 서주 태백(泰伯)·중옹(仲雍)이 남하하여 '구우(勾吴)'라 칭했다. 춘추시대 동주 수몽(寿梦)이 기원전 585년 왕을 칭하고 오나라를 세웠으며, 오왕 합려(阖闾)가 주경왕 6년(기원전 514) 쑤저우성을 처음 축조하여 오나라의 도성으로 삼았다. 춘추 후기 쑤저우는 오나라의 도성이자 경제 중심으로 청동 야주업이 발달하고 조선업이 초보적 규모를 갖추었다. 부차 23년(기원전 473) 월(越)이 오를 대파하여 오나라가 멸망했고, 초위왕 7년(기원전 330) 초가 월을 멸하여 오 땅이 초에 속했다.</p>
+
+        <h3>진·한(秦汉)에서 남북조까지</h3>
+        <p>진왕정 25년(기원전 222) 진이 강남을 평정하고 회계군을 두어 우현을 설치, 군치를 우에 두었다. 진 이세 원년(기원전 209) 항량(项梁)·항우(项羽)가 회계 가수(假守) 은통을 죽이고 항량이 군수가 되었다. 한 고조 5년(기원전 202) 유방이 항우를 멸하여 회계군이 한에 귀속되었다. 후한 영건 4년(129) 회계군 동북 지역을 나누어 우군을 두고 군치를 우에 두었다. 진·한 육조 시기 쑤저우의 견직업이 점차 발전하여 자수 공예가 출현했고 청자기 제조가 전국 선두였다. 진 태강 원년(280) 서진이 오를 멸하여 우군이 양주 자사에 속했다. 진 정명 원년(587) 우주가 설치되어 우주·우군·우현 삼급 치소가 함께 쑤저우성에 있었다.</p>
+
+        <h3>수·당에서 송·원까지</h3>
+        <p>수 개황 9년(589) 우군을 폐하고 우주를 '쑤저우'로 고쳐 우·창수·쿤산 세 현을 관할했다. 당 무덕 4년(620) 이후 여러 세력이 각축하다 강남이 평정되었고, 건원 원년(758) 우군을 다시 쑤저우로 고쳐 이때부터 '쑤저우'가 통칭이 되었다. 대력 13년(778) 쑤저우가 강남 유일의 웅주(雄州)로 승격되었다. 당대 쑤저우 수공업 품종이 수십 종에 달했고 대운하 통항이 상업 번성을 이끌었다. 오월왕 전류가 쑤저우성을 중수하고 중우군(中吴军)으로 승격시켰다. 송 정화 3년(1113) 쑤저우를 평강부(平江府)로 승격시켜 5현을 관할했다. 송대 쑤저우 농업은 "쑤저우·후저우가 풍년이면 천하가 족하다(苏湖熟, 天下足)"라 할 만큼 발달하여 강남 잠상업의 중심이 되었다. 원 지원 13년(1276) 평강로(平江路)가 설치되었고, 지정 16년(1356) 장사성(张士诚)이 평강에 도읍하여 융평부로 고쳤다. 지정 27년(1367) 주원장 군이 쑤저우를 함락하고 평강로를 쑤저우부로 고쳤다.</p>
+
+        <h3>명·청(明清) 시기</h3>
+        <p>명 홍무 원년(1368) 쑤저우 부성을 재건했다. 홍무 13년 중서성을 폐지하고 쑤저우부가 중앙 육부에 직례했다. 청 순치 2년(1645) 청군이 남하해 쑤저우를 점령했고, 옹정 2년(1724) 여러 현을 나누어 쑤저우부가 9현을 관할했다. 건륭 27년(1762) 강녕·강쑤 포정사를 나누어 두면서 강쑤 포정사가 쑤저우에 주재했다. 명·청 시기 쑤저우 농촌 집시 무역이 흥성하고 견직 생산이 전국 중심이 되어 도미·면포·견직·목재의 중요 시장이자 대외무역 기지가 되었다. 함풍 10년(1860) 태평천국 이수성(李秀成)이 쑤저우를 함락해 쑤푸성(苏福省)을 세우고 쑤저우를 성회로 삼았으나, 동치 2년(1863) 청군이 다시 함락했다. 광서 21년(1895) 《시모노세키 조약》으로 쑤저우가 통상 항구로 개방되었고, 선통 3년(1911) 강쑤 순무 정더취안이 쑤저우에서 독립을 선포해 '평화 광복'을 이루었다.</p>
+
+        <h3>중화민국</h3>
+        <p>민국 3년(1914) 옛 쑤저우·창저우 두 부 관할구로 쑤창도(苏常道)를 두어 도윤 공서가 쑤저우에 주재했다. 민국 17년(1928) 1월 27일 현·시 분치를 실시해 쑤저우 시정부가 설립되었다. 민국 26년(1937) 11월 19일 일본군이 진입해 쑤저우가 함락되었다. 민국 38년(1949) 4월 26일 인민해방군이 쑤저우를 해방했고, 우현 성상을 떼어 쑤저우시를 두면서 옛 이름 '쑤저우'로 명명했다.</p>
+
+        <h3>중화인민공화국</h3>
+        <p>신중국 성립 후 쑤저우는 쑤저우시와 쑤저우 전구(专区)로 나뉘었다. 1953년 1월 쑤저우시가 성 관할시로 조정되었다. 1983년 초 쑤저우 지구를 철회해 쑤저우시와 합병하고 시관현(市管县) 체제를 실시했으며, 이후 5개 현이 잇달아 현급시로 승격했다(사저우현은 장자강시로 개명). 1992·1994년 우현 등에서 향진을 떼어 쑤저우 신구(고신구)와 쑤저우 공업원구를 각각 설립했고, 1993년 국무원이 '비교적 큰 시(较大的市)'로 비준했다. 2001년 우현시를 철회해 우중구·샹청구를 두었고, 2012년 9월 창랑·핑장·진창 3구를 통합해 구쑤구를, 현급 우장시를 철회해 우장구를 설립하여 오늘날의 5구 4현급시 구도를 이루었다.</p>
+      </section>
+
+      <section id="s3">
+        <h2>3. 자연지리</h2>
+        <h3>위치·경역</h3>
+        <p>쑤저우는 창장삼각주 중부, 장쑤성 동남부에 위치하며 좌표는 동경 119°55′~121°20′, 북위 30°47′~32°02′이다. 동으로 상하이, 남으로 저장, 서로 타이후, 북으로 창장을 끼고 있으며 총면적은 8,657.32㎢로 서울(약 605㎢)의 약 14배, 제주도(약 1,850㎢)의 약 4.7배에 해당한다.</p>
+        <div class="img-block">이미지 자리 — 쑤저우시 정구도</div>
+        <div class="caption">쑤저우시 위치. 상하이 대도시권과 쑤시창 도시권의 핵심 도시이다.</div>
+
+        <h3>기후</h3>
+        <p>북아열대에 속하는 북아열대 계절풍 기후로 사계절이 분명하고 계절풍이 뚜렷하며 온난 습윤하고 무상기가 길며 일조가 충분한 전형적 해양성 기후이다. 연평균 기온 약 16℃, 최한월 1월 평균 약 3℃, 최난월 7월 평균 약 28℃이며, 연평균 강수량은 1,118.9mm로 5~10월에 집중된다(6월 강우 최다). 연평균 일조 1,780.9시간, 일조율 42%이다. 겨울에는 서북·동북풍이, 봄·여름에는 동남풍이 우세하다.</p>
+
+        <h3>지질·지형</h3>
+        <p>대지구조상 양쯔 준지대의 타이후–첸탕 습곡대에 위치하며, 인지–연산 구조운동기(1.9억~1.0억 년 전)에 생성된 단열 구조가 발달하여 후저우–쑤저우 단열 등 규모가 큰 7개 단열이 있다. 지층은 강남 지층 분구에 속하며 기암 노출이 적고 대부분 지하에 분포한다. 지세는 서남쪽이 동북쪽보다 약간 높아 황해 방향으로 미미하게 기운다. 지모 유형은 창장삼각주 충적평원, 타이후 수망(水网) 평원, 저산 구릉으로 나뉜다. 동부는 넓은 충적평원으로 해발 2~4m의 전형적 수망 평원이고, 서부는 저산 잔구와 산간 요지가 섞여 있으며 최고점은 쿵룽산(窟窿山) 341.7m이다. 평원·수면·산구가 각각 총면적의 54.83%·42.52%·2.65%를 차지한다.</p>
+
+        <h3>수문·수리</h3>
+        <p>쑤저우는 창장 하류 타이후 유역에 위치해 수역이 넓고 하천·호수가 별처럼 널려 있다. 전 시 수역 면적은 3,608㎢로 육지 총면적의 42.52%를 차지하며, 크고 작은 하천이 2만여 개, 호수·소택이 323개(2,807㎢)에 이른다. 주요 하천은 창장·쉬장(胥江)·러우장(娄江)·류허(浏河)이고, 강남운하 쑤저우 구간이 남북을 관통한다. <b>타이후(太湖)</b>는 옛 이름이 전쩌(震泽)·구취로 중국 3대 담수호이며, 수역 면적 2,427.8㎢의 약 3분의 2가 쑤저우에 속한다. 이 밖에 <b>양청후(阳澄湖)</b>(다자셰의 산지, 119㎢), 진지후(金鸡湖) 등이 있다. 수리 방면에서 2016~2020년 연강 제방 보강, 환타이후 대제, 왕위허·우쑹장 정비 등 수리공정을 완성했다.</p>
+
+        <h3>토양</h3>
+        <p>토양은 12개 토강, 61개 토류, 227개 아류로 나뉘며 분사토·오사토·황니토·황송토·백토·오니토 등이 주를 이룬다. 지대성 토양 유형은 황종양(黄棕壤)으로 저구릉·고강 지대에 분포하며, 중아열대 습윤 지역의 홍양·황양과 난온대의 종양 사이 성질을 띤다.</p>
+      </section>
+
+      <section id="s4">
+        <h2>4. 자연자원</h2>
+        <h3>토지·수자원</h3>
+        <p>제3차 국토조사 기준 경지 131,720.07㏊, 원지 20,293.03㏊, 임지 49,507.39㏊, 초지 11,834.80㏊, 습지 5,249.24㏊, 도시·촌·공광 용지 267,619.36㏊, 수역·수리시설 용지 349,774.84㏊이다. 2021년 수자원 면평균 강수 1,226mm(강수 총량 100.7억 ㎥), 지산(地产) 수자원 총량 42.051억 ㎥이며, 타이후 유입수 76.71억 ㎥, 연강 갑문 취수 창장수 48.93억 ㎥ 등 입경수 224억 ㎥, 출경수 237.8억 ㎥이다.</p>
+        <h3>광산·삼림 자원</h3>
+        <p>2022년 기준 39종의 광산이 발견되었고, 매장량이 확인되어 통계표에 등재된 것이 석탄·철·구리·납·아연·니오브·유황철·명반석·고령토 등 18종(비금속 7·금속 10·에너지 1)이다. 광산지 62곳으로 중·소형이 90.32%를 차지한다. 삼림 자원은 2022년 총량 222만 무, 육지 삼림 피복률 30.36%이며 주로 타이후 연안 구릉 산지에 집중된다. 지대성 식생은 북아열대 상록·낙엽 활엽 혼교림으로 고저(苦槠)·석력·향장·목하가 상견 군종이다.</p>
+        <h3>생물다양성</h3>
+        <p><b>식물</b>은 유관식물 1,213종(양치식물 52·나자식물 38·피자식물 1,123)이며 국가 1급 보호종에 홍두삼(红豆杉)·소철(苏铁), 2급에 거수(榉树)·칭추수(秤锤树)·수궐 등이 있다. <b>동물</b>은 육생 야생동물 431종으로, 어류에 중화철갑상어·백철갑상어·연지어 등 희귀 어종이, 조류 130여 종 중 국가 1급 보호종 황흉밀(黄胸鹀), 2급 면부·수치·소표휼 등이 있다. 양서·파충류 33종에 호문와 등이 포함된다.</p>
+        <h3>생태 기능구·자연재해</h3>
+        <p>2023년 3월 기준 풍경명승구 3개, 삼림공원 3개, 습지공원 14개 등 20개 자연보호지(58,851.96㏊)가 있다. 대표로 타이후 싼산다오 국가습지공원(756.63㏊, 습지율 68.27%, 조류 152종), 다양산(大阳山) 국가삼림공원(1,029.8㏊, 삼림 피복률 88.64%, 주봉 젠췌봉 338.2m)이 있다. 자연재해는 매우(梅雨)·복한(伏旱)·태풍·한발과 침수가 주를 이루며, 명·청 이래 통계로 수재는 평균 4년 1회, 한재는 7년 1회 발생했다. 2020년 초장 매우로 타이후가 47일 연속 경계수위를 넘어 1999년 이래 가장 심각한 수해를 겪었다.</p>
+      </section>
+
+      <section id="s5">
+        <h2>5. 행정구역</h2>
+        <p>2025년 9월 기준 5개 구를 두고 4개 현급시를 대관한다. 시정부는 쑤저우시 구쑤구 싼샹로 998호에 있으며 행정구역 코드는 320500, 전화 구호는 0512이다.</p>
+        <table class="data">
+          <tbody><tr><th style="width:110px">구·현급시</th><th style="width:60px">한자</th><th>주재지</th><th style="width:70px">우편번호</th></tr>
+          <tr><td><b>구쑤구</b>(시 중심)</td><td>姑苏区</td><td>쑤진가도</td><td>215031</td></tr>
+          <tr><td>후추구</td><td>虎丘区</td><td>스산가도</td><td>215004</td></tr>
+          <tr><td>우중구</td><td>吴中区</td><td>창차오가도</td><td>215100</td></tr>
+          <tr><td>샹청구</td><td>相城区</td><td>청양가도</td><td>215100</td></tr>
+          <tr><td>우장구</td><td>吴江区</td><td>쑹링가도</td><td>215200</td></tr>
+          <tr><td>창수시</td><td>常熟市</td><td>위산가도</td><td>215500</td></tr>
+          <tr><td>장자강시</td><td>张家港市</td><td>양서진</td><td>215600</td></tr>
+          <tr><td>쿤산시</td><td>昆山市</td><td>위산진</td><td>215300</td></tr>
+          <tr><td>타이창시</td><td>太仓市</td><td>러우둥가도</td><td>215400</td></tr></tbody></table>
+      </section>
+
+      <section id="s6">
+        <h2>6. 정치</h2>
+        <table class="data">
+          <tbody><tr><th style="width:180px">직무</th><th>성명 <span class="yr">(공개 자료 기준)</span></th></tr>
+          <tr><td>중국공산당 쑤저우시위원회 서기</td><td>판보(范波)</td></tr>
+          <tr><td>쑤저우시 인민대표대회 상무위 주임</td><td>황아이쥔(黄爱军)</td></tr>
+          <tr><td>쑤저우시 인민정부 시장</td><td>왕웨이(王维)</td></tr>
+          <tr><td>쑤저우시 정협 주석</td><td>주민(朱民)</td></tr></tbody></table>
+      </section>
+
+      <section id="s7">
+        <h2>7. 경제</h2>
+        <h3>종합</h3>
+        <p>쑤저우는 중국의 경제 대시로, 2021년 종합 경제 경쟁력이 전국 6위였고 공업이 경제 주도 산업이다. 나노 신소재, 바이오의약·첨단 의료기기, 첨단 방직이 국가 선진 제조업 집군에 들었다. 2024년 지역총생산(GDP) 2조 6,727.0억 위안으로 전년 대비 6.0% 증가하여 장쑤성 1위이자, 성내 유일의 GDP 2조 위안 도시로 청두·우한 등 성회 도시를 앞섰다.</p>
+        <p>2025년 GDP는 2조 7,695.1억 위안(약 4,073억 달러·약 629조 원)으로 불변가격 기준 전년 대비 5.4% 증가했고, 상주인구 기준 1인당 GDP는 21.3만 위안(약 3.1만 달러·약 4,830만 원)이다. 1차 208.9억(+4.5%)·2차 1조 2,844.4억(+5.6%)·3차 1조 4,641.8억(+5.2%) 위안이다. 2025년 전체 주민 1인당 가처분소득은 80,796위안(도시 90,125·농촌 51,303)으로 도농 소득비가 1.76:1로 좁혀졌다. 2026년 5월 8일 기준 A주 상장사 총시가총액이 4조 1,293.75억 위안으로 사상 첫 4조 위안을 돌파했고, 상장사 총수는 234개로 전국 5위이다.</p>
+
+        <h3>제1차 산업</h3>
+        <p>중국 최초로 농업농촌 현대화 평가 고핵 체계가 안착한 도시로, 도시·규모·생태 농업이 주를 이룬다. 양청후 다자셰(阳澄湖大闸蟹)·둥팅산 비뤄춘(洞庭山碧螺春) 등 28개 지역 공용 브랜드와 14개 지리표지 농산물을 육성했다. 2025년 농림목어업 총생산액 376.6억 위안(+4.1%), 식량 산량 96.1만 톤으로 6년 연속 증산했다.</p>
+
+        <h3>제2차 산업</h3>
+        <p>쑤저우는 중국 제1의 공업 도시로, 나노기술·바이오의약·첨단방직·특수강·통신기술이 세계 선두, 인공지능·반도체 제조·블록체인·항공 제조가 아시아 일류 수준이다. 신세대 정보기술·바이오의약·나노기술·인공지능의 4대 선도 산업과 선진 소재·전자정보·장비 제조의 세 개 조(兆) 위안급 산업을 보유한다. <b>장비 제조</b>는 전통 우위 산업으로 2022년 규모 1조 3,777.4억 위안이며 엘리베이터 산업이 전국 선두이다. <b>선진 소재</b>는 조 위안급 산업으로 나노 신소재 산업 창신 집군이 전국의 약 30%로 1위이다. <b>바이오의약</b>은 4대 중점 산업의 하나로, 글로벌 10대 제약·의료기기 기업 중 각 5곳이 입주해 기업 3,800여 개, 총생산액 2,400억 위안 이상이다. 2025년 규모 이상 공업 부가가치는 7.6% 증가했고, 규모 이상 고신기술 산업 생산액이 공업 총생산액의 56.2%를 차지한다.</p>
+        <h3>제3차 산업</h3>
+        <p>사회소비 규모가 장쑤성 1위를 유지하며, 정보전송·소프트웨어·과학연구·기술서비스가 주요 산업이다. 2025년 서비스업 부가가치는 5.2% 증가해 경제 성장 기여도 50.2%, GDP 비중 52.9%였다. 사회소비품 소매총액 9,092.2억 위안(+2.0%)이며, 국내외 관광객 2억 명 이상을 접대해 관광 총수입 2,227.4억 위안(+9.1%)을 기록했다. 무역은 미국·일본·EU·아세안 수출 위주로 기전·첨단기술 제품이 중심이며, 2022년 화물 수출입 총액 2조 5,721.1억 위안이다.</p>
+
+        <h3>경제기능구</h3>
+        <p>2022년 말 기준 국가급 개발구 14개, 성급 개발구 6개, 종합보세구 7개, 보세항구 1개가 있다. <b>쑤저우 공업원구(苏州工业园区)</b>는 1994년 2월 국무원 비준으로 설립된 중국·싱가포르 정부 간 중점 협력 사업으로 행정 면적 278㎢이며 '중국 개혁개방의 중요한 창구'로 불린다. 바이오의약·나노기술 응용·인공지능 등 신흥 산업을 형성했고 2022년 GDP 3,515.6억 위안, 규모 이상 공업 생산액 6,850.2억 위안이다. <b>쑤저우 국가고신기술산업개발구</b>는 1992년 전국 첫 국가급 고신구의 하나로 신세대 정보기술·첨단 장비 제조를 주도 산업으로 한다.</p>
+        <h3>대표 기업</h3><p>쑤저우는 중국의 대표적인 선진 제조업 기지로, 철강·화섬·태양광·전자정보·반도체·바이오의약·스마트 장비·자동차 부품·소비 제조 각 분야에 선도 기업이 집적되어 있다.</p><table class="data" style="width: 576px;"><tbody><tr><th style="width: 150px;">기업</th><th style="width: 110px;">분야</th><th>비고</th></tr><tr><td><b>헝리그룹</b>(恒力集团有限公司 / Hengli Group)</td><td>석화·화섬·신소재</td><td>우장 본사. 정유화학·석화·폴리에스터 신소재·방직 사업</td></tr><tr><td>성훙홀딩스그룹(盛虹控股集团有限公司 / Shenghong Group)</td><td>석화·화섬·신에너지 소재</td><td>우장 본사. 정유화학·화섬·신소재·신에너지 분야 대표 기업</td></tr><tr><td>장쑤 사강그룹(江苏沙钢集团有限公司 / Shagang Group)</td><td>철강·특수강</td><td>장자강 본사. 판재·선재·봉강·특수강 생산</td></tr><tr><td>GCL그룹(协鑫集团有限公司 / GCL Group)</td><td>태양광·신에너지·ESS</td><td>태양광 소재·제조·청정에너지·에너지저장 사업</td></tr><tr><td>헝퉁그룹(亨通集团有限公司 / Hengtong Group)</td><td>광통신·전력 케이블</td><td>우장 본사. 광섬유·광케이블·전력 케이블·해양통신 사업</td></tr><tr><td>융줘홀딩스(永卓控股有限公司 / Zenith Steel Group)</td><td>철강·금속재료</td><td>장자강 본사. 철강 제조와 물류·무역 사업</td></tr><tr><td>퉁딩그룹(通鼎集团有限公司)</td><td>광섬유 케이블·통신망</td><td>우장 본사. 광케이블·통신 케이블·네트워크 장비 생산</td></tr><tr><td>융딩그룹(永鼎集团有限公司)</td><td>광통신·전력 전송</td><td>우장 본사. 광케이블·전선·통신공정·자동차 와이어링 하네스 사업</td></tr><tr><td>캐나디안솔라(阿特斯阳光电力集团股份有限公司 / Canadian Solar)</td><td>태양광 모듈·ESS</td><td>쑤저우 본사. 태양광 모듈·발전소·에너지저장 시스템 사업</td></tr><tr><td>쑤저우 마이웨이과기(苏州迈为科技股份有限公司 / Maxwell Technologies)</td><td>태양광 장비·고급 장비</td><td>우장 본사. 태양전지 제조장비와 이종접합 전지 장비 생산</td></tr><tr><td>이노밴스 쑤저우(苏州汇川技术有限公司 / Inovance)</td><td>공업 자동화·전기구동</td><td>인버터·서보·공업제어·신에너지차 전기구동 시스템 생산</td></tr><tr><td>둥산정밀(苏州东山精密制造股份有限公司 / DSBJ)</td><td>전자부품·정밀 제조</td><td>쑤저우 본사. PCB·정밀 구조부품·통신장비 부품 제조</td></tr><tr><td>에코백스(科沃斯机器人股份有限公司 / ECOVACS)</td><td>서비스 로봇·스마트 가전</td><td>쑤저우 본사. 청소로봇·창문청소 로봇 등 가정용 로봇 제조</td></tr><tr><td>라이커전기(莱克电气股份有限公司 / LEXY)</td><td>청소가전·스마트 가전</td><td>쑤저우 본사. 청소기·공기청정기·정원공구·모터 생산</td></tr><tr><td>하이거버스(苏州金龙联合汽车工业有限公司 / 海格客车 / Higer)</td><td>버스·신에너지 상용차</td><td>쑤저우 공업원구 소재. 대중형 버스·신에너지 버스 제조</td></tr><tr><td>보스덩(波司登国际控股有限公司 / Bosideng)</td><td>다운재킷·의류</td><td>창수 본사. 중국 대표 다운 의류 브랜드</td></tr><tr><td>굿베이비(好孩子儿童用品有限公司 / Goodbaby)</td><td>아동용품·유아 장비</td><td>쿤산 기반. 유모차·아동 안전시트 등 제조</td></tr><tr><td>톈푸광통신(苏州天孚光通信股份有限公司 / TFC)</td><td>광통신 부품</td><td>쑤저우 본사. 데이터센터·통신망용 정밀 광통신 부품 제조</td></tr><tr><td>중지쉬촹 쑤저우 기업(中际旭创股份有限公司苏州相关企业)</td><td>고속 광모듈</td><td>고속 광통신 모듈 연구개발·생산. 데이터센터·클라우드 시장 대상</td></tr><tr><td>굿아크전자(苏州固锝电子股份有限公司 / Good-Ark)</td><td>반도체 분립소자</td><td>정류소자·전력반도체·집적회로 패키징 부품 생산</td></tr><tr><td>허젠테크놀로지(和舰芯片制造〈苏州〉股份有限公司 / HeJian Technology)</td><td>웨이퍼 제조·집적회로</td><td>쑤저우 공업원구 소재. 집적회로 웨이퍼 파운드리</td></tr><tr><td>SPIL 쑤저우(矽品科技〈苏州〉有限公司 / SPIL Suzhou)</td><td>반도체 패키징 테스트</td><td>쑤저우 공업원구 소재. 집적회로 패키징·테스트</td></tr><tr><td>퉁푸차오웨이 쑤저우(通富超威〈苏州〉微电子有限公司)</td><td>고급 칩 패키징</td><td>고급 프로세서 패키징 테스트 및 연구개발·생산</td></tr><tr><td>쑤저우 화싱광전(苏州华星光电技术有限公司 / TCL CSOT Suzhou)</td><td>신형 디스플레이</td><td>쑤저우 공업원구 소재. 디스플레이 패널 및 전자제품 제조</td></tr><tr><td>보쉬 쑤저우(博世汽车部件〈苏州〉有限公司 / Bosch Suzhou)</td><td>자동차 부품·스마트 주행</td><td>자동차 전자·신에너지차 핵심 부품·자동주행 관련 연구개발·제조</td></tr><tr><td>신다생물제약(信达生物制药〈苏州〉有限公司 / Innovent Biologics)</td><td>혁신약·바이오제약</td><td>쑤저우 공업원구 본사. 항체 의약품·혁신 바이오약 개발</td></tr><tr><td>베이진 쑤저우(百济神州〈苏州〉生物科技有限公司 / BeiGene Suzhou)</td><td>혁신약·바이오의약</td><td>종양 혁신약 연구개발 및 바이오의약 산업화</td></tr><tr><td>우시앱텍 쑤저우 기업(药明康德苏州相关企业 / WuXi AppTec Suzhou)</td><td>의약 R&amp;D 서비스</td><td>신약 발견·연구개발·검사·생산 관련 서비스 제공</td></tr><tr><td>장쑤 우중의약(江苏吴中医药发展股份有限公司)</td><td>의약·화학약</td><td>우중구 본사. 의약 연구개발·생산·판매</td></tr><tr><td>진훙가스(金宏气体股份有限公司)</td><td>특수가스·전자재료</td><td>쑤저우 본사. 전자 특수가스·산업가스 공급</td></tr><tr><td>창광화신(苏州长光华芯光电技术股份有限公司)</td><td>반도체 레이저·광자 기술</td><td>고출력 반도체 레이저 칩·소자·모듈 제조</td></tr><tr><td>창수 스위치기어 제조(常熟开关制造有限公司)</td><td>저압 전기·스마트 배전</td><td>저압 스위치·전기제어·스마트 배전 설비 생산</td></tr><tr><td>톈순풍능(天顺风能〈苏州〉股份有限公司)</td><td>풍력 장비·신에너지</td><td>타이창 본사. 풍력 타워·블레이드·신에너지 발전소 사업</td></tr></tbody></table>
+      </section>
+
+      <section id="s8">
+        <h2>8. 사회·문화</h2>
+        <h3>교육</h3>
+        <p>쑤저우는 전국 최초로 초등교육·9년 의무교육·고교 단계 교육·고등교육을 기본 보급한 지급시이다. 2024년 기준 각급 각류 학교 869개교(유치원 제외), 보통 대학 26개교, 재학생 191.9만 명(대학 재학 30.4만 명)이다. 창수·장자강·타이창이 전국 첫 의무교육 우질 균형 발전현에 선정되었고, 쑤저우과기대학·창수이공학원이 박사·석사 학위 수여 단위로 비준되었다. 대표 대학으로 쑤저우대학(211·쌍일류), 쑤저우과기대학, 창수이공학원, 쑤저우도시학원이 있으며, 시자오리버풀대학·쿤산듀크대학 등 중외합작대학과 난징대·둥난대·중국인민대 쑤저우 캠퍼스가 있다.</p>
+        <h3>위생·과학기술</h3>
+        <p>전국 건강도시 건설 표본시로 2024년 말 의료위생기구 4,865개(병원 282), 병상 9.2만 개, 위생기술 인원 12.0만 명이다. 대표 3급 갑등 병원으로 쑤저우대학 부속 제1·제2병원, 쑤저우시립병원, 쑤저우대학 부속 아동병원 등이 있다. <b>과학기술</b> 방면에서 상하이–쑤저우 과기 집군이 세계 5위를 유지하며, 쑤저우 실험실·국가바이오약 기술창신중심·국가 3세대 반도체 기술창신중심 등 국가급 플랫폼을 보유한다. 2024년 유효 발명특허 16.0만 건, 인재 총량 407만 명(고층차 45만 명), 유효 고신기술기업 1.75만 개이다.</p>
+        <h3>문화·체육</h3>
+        <p><b>문화</b>는 2024년 말 공공도서관 11개, 등록 박물관 49개, 전국중점문물보호단위 61곳을 보유한다. 대표로 쑤저우박물관(국가 1급, 태평천국 충왕부에 위치)과 쑤저우 실크박물관·우문화박물관 등이 있다. <b>체육</b>은 전국 축구 발전 중점 도시로 제53회 세계탁구선수권, 국제 컬링 월드컵 쑤저우전 등을 개최했고, 2024년 파리올림픽·패럴림픽에서 쑤저우 선수가 각각 2금1은1동, 4금3동을 거두었다. 세계 챔피언 총수가 23인 90개 종목에 이른다.</p>
+        <h3>인거환경·사회보장</h3>
+        <p>전국 첫 '국가생태원림도시군'을 건설해 관할 4개 현시가 모두 국가생태원림도시를 획득했다. 2024년 시구 PM2.5 연평균 29㎍/㎥, 공기질 우량일 84.2%, 창장 쑤저우 구간 간류 수질 Ⅱ류 유지, 1인당 공원 녹지 15.25㎡이다. 사회보장 면에서 2024년 말 도시직공 기본의료보험 가입 847.79만 명, 양로원 비안 병상 50,973개이며, 도시·농촌 최저생계보장 1,155위안/월, 최저임금 2,490위안/월이다.</p>
+      </section>
+
+      <section id="s9">
+        <h2>9. 교통</h2>
+        <p>쑤저우는 상하이 대도시권 100km 내 유일한 특대도시이자 쑤시창 도시권 핵심 도시로, 후닝 철도가 동서를, 징항 운하가 남북을 관통한다. 국가 간선 철도망이 '풍(丰)'자형을 이루고 고속도로가 '성환성망(成环成网)'을 이루며, 공로 밀도가 장쑤성 1위이다. 국가 '공교도시(公交都市)' 인증을 받았고 항구 능급이 성 1위이다.</p>
+        <h3>도로</h3>
+        <p>2022년 말 공로 총연장 11,553km, 공로망 밀도 138.36km/100㎢로, 후닝고속·연강고속과 무봉 접속하며 고속도로 620km를 보유해 공로 밀도·고속도로 연장이 모두 장쑤성 1위이다.</p>
+        <h3>철도</h3>
+        <p>2022년 말 통차 철도 총연장 323.7km로 후쑤퉁 철도, 후닝 고철, 징후 고철 등이 지난다. 관할 범위 14개 역 가운데 쑤저우역·쑤저우북역·쑤저우원구역·쑤저우신구역·쿤산역·쿤산남역·화차오역·양청후역 8개가 여객역이다. <b>쑤저우역</b>은 구쑤구 핑장 신성에 있는 상하이철도국 관할 1등역으로 징후 철도·후닝 도시철도의 중요 중간역이다.</p>
+        <h3>항운·항공</h3>
+        <p>쑤저우는 '수운 대시'로 창장삼각주·장쑤성에서 내하 수운이 가장 발달한 지역의 하나이다. 2022년 말 내하 항도 통항 거리 2,786.31km이며, 시내 <b>쑤저우항(苏州港)</b>은 중국 국가 주요 항구로 타이창·창수·장자강 세 항구로 나뉜다. 생산성 泊位 301개(만 톤급 이상 135개), 항구 종합 통과 능력 3.81억 톤, 컨테이너 능력 746만 TEU이며 2022년 화물 처리량 5.7억 톤, 컨테이너 908.0만 TEU를 기록했다. <b>항공</b>은 시내에 여객 공항이 없으나 인근 쑤난 숴팡 공항(약 20여 km)을 이용하며, 2023년 5월 상하이공항 쑤저우 도심 터미널이 공업원구에 개통되었다.</p>
+        <h3>대중교통</h3>
+        <p>국가 공교도시 건설 시범 도시로, 2022년 말 도시·농촌 공교 노선 1,164개(차량 10,335대)를 운영한다. <b>궤도교통</b>은 2023년 6월 기준 1·2·3·4·5·11호선 6개 노선(운영거리 251km, 역 197개)이 개통되어 있으며, 11호선은 장쑤 최초로 상하이 궤도교통 노선망과 접속하는 노선이다. 노선망 일평균 객류가 150만 명을 넘고 궤도교통이 대중교통 출행의 50% 이상을 차지한다.</p>
+      </section>
+
+      <section id="s10">
+        <h2>10. 대외교류</h2>
+        <p>쑤저우는 국내 우호도시로 지린성 창춘시와, 국제 우호도시로 여러 나라의 도시와 결연을 맺었다. 이 밖에 일본 가나자와시·이케다시, 독일 콘스탄츠시, 프랑스 그르노블시, 이탈리아 베네치아시, 캐나다 빅토리아시, 미국 포틀랜드시 등과 우호 관계를 맺고 있다.</p>
+      </section>
+
+      <section id="s11">
+        <h2>11. 인문·풍습</h2>
+        <p>쑤저우 고성은 춘추시대 이래 위치가 변하지 않은 중국 첫 24개 역사문화명성의 하나이자 '강남문화'의 핵심 담지 구역이다. 쑤저우 문화는 오문화(吴文化)의 핵심으로 춘추 금속 야련·도작 문화, 상잠(桑蚕)·방직 및 관련 수공업, 전통 공예미술, 희곡·문학·예술·교육 등을 아우른다. 고성은 "수륙병행, 하가상린(河街相邻)"의 이중 바둑판 구도와 "소교유수(小桥流水), 분장대와(粉墙黛瓦), 사적명원"의 독특한 풍모를 유지하며, 송·원·명·청 시기 고전 원림 50여 곳을 보존하고 있다.</p>
+
+        <h3>문물 고적</h3>
+        <p>2023년 6월 기준 문물보호단위 884곳이 있으며 고성·고건축이 가장 많다. 그중 전국중점문물보호단위가 61곳, 장쑤성 문물보호단위 128곳, 쑤저우시 문물보호단위 695곳이다. 대표적 국보급 문물로 윈옌사탑(云岩寺塔, 오대)·루이광탑(瑞光塔, 북송)·쑤저우 문묘 및 석각·줘정위안·류위안·현묘관 삼청전(남송)·왕스위안·환슈산좡·판먼·스쯔린·창랑팅 등이 있다. <b>쑤저우 문묘 석각</b> 중 '천문도·지리도·제왕소운도·평강도(平江图)'는 '천·지·인·성'의 4대 송비로, 특히 '평강도'는 세계에서 가장 오래된 도시 석각 평면도이다. 차오셰산(草鞋山) 유적은 환타이후 유역의 강남 사전(史前) 문화 중심 취락으로 창장 하류 사전 문화의 완전한 발전 서열을 보존한다.</p>
+        <div class="img-block">이미지 자리 — 쑤저우 문묘 '평강도' 석각 / 판먼</div>
+        <div class="caption">'평강도'는 세계에서 가장 오래된 도시 석각 평면도이다.</div>
+
+        <h3>비물질문화유산</h3>
+        <p>2023년 5월 기준 비물질문화유산 336항(인류 무형 7·국가급 33·성급 124·시급 172)을 보유한다. 특히 <b>인류 무형문화유산 7항</b>은 쿤취(昆曲, Kūnqǔ)·고금(古琴, Gǔqín)·쑤저우 단오 습속·쑤저우 송금(宋锦)·쑤저우 커쓰(缂丝)·쑤저우 샹산방(香山帮) 전통 건축 영조 기예·녹차 제작 기예(비뤄춘)이다. <b>쿤취</b>는 쑤저우 쿤산에서 발원한 '백희지조(百戏之祖)'로 2001년 첫 인류 무형문화유산에 등재되었고, <b>고금</b>은 3천 년 이상 역사의 발현악기로 명말청초 옌톈츠가 창립한 '우산금파(虞山琴派)'가 '고음정종'으로 불린다. <b>쑤저우 송금</b>은 난징 윈진·쓰촨 슈진과 함께 중국 3대 명금으로 '금수지관(锦绣之冠)'이라 불린다.</p>
+
+        <h3>습속·예술</h3>
+        <p><b>습속</b>으로 춘추 오나라 명장 오자서를 기리는 데서 비롯된 단오절 습속(용선·쭝쯔·창포)과 남송 순희 연간에서 유래한 '야선선(轧神仙)' 묘회, 루즈(甪直) 수향 부녀 복식 등이 있다. <b>예술</b>은 오가(吴歌)·쑤극(苏剧)·쑤저우 평탄(评弹)·강남 사죽(丝竹)·현묘관 도교음악 등의 음악과, 4대 명수(名绣)의 으뜸인 <b>쑤수(苏绣)</b>, 쑤저우 니소(泥塑), 헤수(核雕, 감람 씨앗 조각), 옥조(玉雕) 등의 공예가 발달했다. 이 밖에 중국 5대 민간 목판 연화의 하나인 <b>타오화우 목판 연화(桃花坞木版年画)</b>가 유명하다.</p>
+
+        <h3>건축 — 쑤저우 원림</h3>
+        <p>쑤저우 고전 원림은 청·당·헌·관·누·각·사·방·정·낭 등의 건축을 산·못을 둘러 배치하고 회랑으로 연결하여 관상 노선을 이룬다. 대편의 분장(粉墙)을 기조로 흑회색 기와, 밤색 대들보를 배합한 담백한 색채가 특징이다. 줘정위안 원향당, 류위안 오봉선관, 스쯔린 옌위탕 등이 대표 사례이다.</p>
+
+        <h3>음식</h3>
+        <p>쑤저우는 중국 동부 음식문화 중심으로 3대 음식문화의 하나인 쑤식(苏式) 음식문화의 발양지이다. 쑤저우 요리는 단맛이 도는 편이며 사계절 채소와 강·호·바다의 신선한 재료 조리에 능하다. 대표 요리로 쑹수구이위(松鼠桂鱼, 다람쥐 모양 쏘가리 튀김)·샹유산후(响油鳝糊)·셰펀티진·쑤식 셴러우 월병 등이 있고, 밀전(蜜饯)·쭝쯔탕(粽子糖)·성젠만터우(生煎馒头) 등 소식(小吃)·당과가 유명하다. 특산으로 양청후 다자셰, 둥팅산 비뤄춘, 장푸 황도, 시산 비파 등 지리표지 농산물 다수가 있다.</p>
+        <div class="img-block">이미지 자리 — 쑹수구이위 / 양청후 다자셰 / 비뤄춘</div>
+        <div class="caption">쑤식 요리와 특산. 쑹수구이위는 쑤방차이의 대표작이다.</div>
+
+        <h3>이야기·일화(轶事趣闻)</h3>
+        <p>쑤저우에는 그 명성만큼이나 이야기가 많다. 예로부터 강남의 풍요와 아름다움을 이르는 "위에는 천당, 아래는 쑤저우·항저우(上有天堂, 下有苏杭)"라는 말이 그대로 도시의 별명이 되었다. 당대 시인 <b>장계(张继)</b>가 과거에 낙방하고 배 위에서 잠 못 이루던 밤을 읊은 《풍교야박(枫桥夜泊)》의 "고소성 밖 한산사, 한밤의 종소리가 나그네 배에 이른다(姑苏城外寒山寺, 夜半钟声到客船)"는 구절 덕분에, 쑤저우 <b>한산사(寒山寺)</b>의 제야 종소리는 지금도 세밑마다 수많은 사람을 불러 모은다. 대표 원림 <b>줘정위안(拙政园)</b>의 이름은 관직에서 물러난 주인이 진(晉) 반악의 글에서 "정원에 물 주고 채소 파는 것도 어리석은 자의 정치(拙者之为政)"라 한 데서 따온 것으로, 벼슬을 내려놓고 원림에 은거한 강남 문인의 정서를 담고 있다. 또 춘추시대 미인 <b>서시(西施)</b>가 오왕 부차의 마음을 사로잡은 관왜궁(馆娃宫)의 전설이 오늘날 링옌산(灵岩山) 일대에 전해 내려온다.</p>
+
+        <h3>지방 상징</h3>
+        <table class="data">
+          <tbody><tr><th style="width:110px">구분</th><th>내용 <span class="yr">(1983년 지정)</span></th></tr>
+          <tr><td>시화(市花)</td><td>계화(桂花, 금목서) — 가을에 짙은 향으로 개화</td></tr>
+          <tr><td>시수(市树)</td><td>향장(香樟, 녹나무) — 타이후 시산에 300년 이상 고목 다수</td></tr>
+        </tbody></table>
+      </section>
+
+      <section id="s12">
+        <h2>12. 인구·민족·방언</h2>
+        <h3>인구</h3>
+        <p>2024년 말 상주인구는 1,298.7만 명으로 전년 말 대비 0.2% 증가, 상주인구 도시화율은 82.7%이며 호적 인구는 794.9만 명이다. 상주인구 규모는 장쑤성 1위를 유지한다. 2023년 국가통계국의 성향 분류 코드 갱신에 따라 쑤저우 성구(城区) 상주인구가 512.51만 명으로 집계되어 특대도시(特大城市)로 승격했다. 연령 구성(2023년 말)은 0~14세 12.91%, 15~59세 67.68%, 60세 이상 19.41%이다.</p>
+        <h3>민족</h3>
+        <p>56개 민족 성분이 모두 있으며 제6차 인구조사 기준 한족이 상주인구의 99.3%를 차지한다. 장쑤성에서 소수민족 인구 총량과 유동 인구가 가장 많은 설구시로, 소수민족이 각 구·현·시에 산잡거한다.</p>
+        <h3>방언</h3>
+        <p>쑤저우 방언은 오방언(吴方言)에 속하며 오어의 대표 방언으로 여겨진다. 오어 타이후편 쑤후자(苏沪嘉) 소편에 속하며 중고 어음 체계의 전탁 성모를 보존하고 첨단음(尖团音)을 구분한다. 성모 28개, 운모 49개이며 성조는 성모의 청탁에 따라 음·양 두 계통으로 나뉘어 총 7개이다.</p>
+      </section>
+
+      <section id="s13">
+        <h2>13. 종교</h2>
+        <p>경내 주요 종교는 불교·도교·이슬람교·천주교·기독교로, 장쑤성 종교 업무 중점시의 하나이다. 2018년 1월 기준 인정·비안된 종교 교직자가 832명(불교 564·도교 130·천주교 35·기독교 99·이슬람교 4), 종교 단체 35개, 종교 원교 6곳, 비준 등록된 종교 활동 장소 297곳(불교 153·도교 46·기독교 65·천주교 31·이슬람교 2)이 있다. 대표 사원으로 불교 중펑사(中峰寺)·완포사(万佛寺)·윈취안사(云泉寺), 도교 샤오마오산 도원·허산 도원 등이 있다.</p>
+      </section>
+
+      <section id="s14">
+        <h2>14. 풍경명승</h2>
+        <p>쑤저우는 전국 중점 관광 도시이자 성급 전역 관광 시범구로, 타이후 대부분 경구가 경내에 분포한다. 핑장·산탕 역사 거리가 각각 중국 역사문화명가·가장 인기 있는 관광 역사문화명가로 선정되었으며, 108곳의 원림이 쑤저우 원림 명록에 올라 있다. 줘정위안·류위안·왕스위안·환슈산좡·창랑팅·스쯔린·이푸·어우위안·퇴사원 등 9개 고전 원림이 세계문화유산에 등재되었다. 2022년 말 기준 국가 5A급 관광지 6곳, 4A급 36곳을 보유한다.</p>
+        <table class="data">
+          <tbody><tr><th style="width:36px">#</th><th>5A급 관광지</th><th style="width:100px">소재</th></tr>
+          <tr><td>1</td><td>쑤저우 원림 경구(줘정위안·류위안·후추산)</td><td>구쑤·후추</td></tr>
+          <tr><td>2</td><td>저우좡 고진 경구(周庄古镇)</td><td>쿤산시</td></tr>
+          <tr><td>3</td><td>퉁리 고진 경구(同里古镇)</td><td>우장구</td></tr>
+          <tr><td>4</td><td>진지후 경구(金鸡湖)</td><td>공업원구</td></tr>
+          <tr><td>5</td><td>둥산·충룽산·왕산 경구</td><td>우중구</td></tr>
+          <tr><td>6</td><td>위산 상후 경구 / 사자방 경구</td><td>창수시</td></tr>
+        </tbody></table>
+        <p><b>줘정위안(拙政园)</b>은 명 정덕 4년(1509) 창건된 78무 규모의 원림으로 수면이 3분의 1을 차지하며 원향당·향주·견산루 등을 갖춘 쑤저우 원림의 정수이다. <b>류위안(留园)</b>은 중국 4대 명원의 하나로 명 만력 21년(1593) 창건되어 운장과 건축군으로 중·동·북·서 네 경구를 나눈 건축 예술로 이름났다. <b>창랑팅</b>은 북송 경력 5년(1045) 시인 소순흠이 조성한 쑤저우 현존 최고(最古)의 원림이다. <b>저우좡 고진</b>은 북송 원우 원년(1086) 창건되어 CNN '세계 10대 아름다운 마을'에 뽑혔고, 60% 이상 민가가 명·청 건축이며 14개 고교(古桥)를 보존한다.</p>
+      </section>
+
+      <section id="s15">
+        <h2>15. 주요 영예·종합 통계</h2>
+        <h3>주요 도시 영예</h3>
+        <ul class="plain">
+          <li>국가역사문화명성 <span class="yr">(1982, 국무원)</span></li>
+          <li>국제화원도시 <span class="yr">(2003)</span> · 국가생태원림도시 <span class="yr">(2015, 주건부)</span></li>
+          <li>세계문화유산 전범도시 <span class="yr">(2018, 세계유산도시조직)</span></li>
+          <li>국가 공교도시 건설 시범도시 <span class="yr">(2018, 교통운수부)</span></li>
+          <li>전국문명도시 <span class="yr">(2020, 중앙문명판)</span></li>
+          <li>2025 중국 100강 도시 <span class="yr">(2025, 화둔경제연구원)</span></li></ul><ul class="plain">
+        </ul>
+      </section>
+
+      <section id="s16">
+        <h2>16. 저명 인물</h2>
+        <p>쑤저우는 '장원(状元)의 고향', '원사(院士)의 고향'으로 불릴 만큼 인재를 많이 배출했다.</p>
+        <table class="data">
+          <tbody><tr><th style="width:120px">인물</th><th style="width:120px">생몰</th><th>소개</th></tr>
+          <tr><td>언언(言偃, 자유)</td><td>前506~前443</td><td>공자 제자 중 유일한 남방인. '남방부자'로 불림</td></tr>
+          <tr><td>손무(孙武)</td><td>약 前545~前470</td><td>《손자병법》 13편 저술. '병성(兵圣)'</td></tr>
+          <tr><td>오자서(伍子胥)</td><td>?~前484</td><td>기원전 514년 합려대성 축조. 단오·쭝쯔의 유래</td></tr>
+          <tr><td>육기(陆机)</td><td>261~303</td><td>문학가. 《문부》 저술, 《평복첩》은 법첩의 시조</td></tr>
+          <tr><td>조충지(祖冲之)</td><td>429~500</td><td>남북조 수학자·과학자. 《대명력》 제정, 달·소행성에 이름</td></tr>
+          <tr><td>범중엄(范仲淹)</td><td>989~1052</td><td>우현 출신, 북송 정치가·문학가. 시호 문정</td></tr>
+          <tr><td>심주(沈周)</td><td>1427~1509</td><td>명대 회화 대사, 우문화파 창시자, '명 4가'</td></tr>
+          <tr><td>당인(唐寅, 당백호)</td><td>1470~1523</td><td>우현 출신, '우중 4재자'의 한 사람</td></tr>
+          <tr><td>문징명(文徵明)</td><td>1470~1559</td><td>명대 화가·서법가·문학가, '우문 4가'</td></tr>
+          <tr><td>고염무(顾炎武)</td><td>1613~1682</td><td>쿤산 첸덩진 출신, 명말청초 3대 유학자. 《일지록》</td></tr>
+          <tr><td>예성타오(叶圣陶)</td><td>1894~1988</td><td>쑤저우 출생, 현대 작가·교육가·문학출판가</td></tr>
+          <tr><td>왕간창(王淦昌)</td><td>1907~1998</td><td>창수 출신, 핵물리학자, '양탄일성 공훈장' 수상</td></tr>
+          <tr><td>우젠슝(吴健雄)</td><td>1912~1997</td><td>원적 타이창, 물리학자. 중국과학원 외국인 원사</td></tr>
+          <tr><td>리정다오(李政道)</td><td>1926~ </td><td>조적 쑤저우, 노벨물리학상 수상 물리학자</td></tr>
+        </tbody></table>
+      </section>
+
+      <div class="cite-box">
+        <div class="naver-cite"><b>[중국 도시 정보 사전]</b> 쑤저우시 [苏州市, Suzhou] (중국 도시 정보 사전, 지급시 편)</div>
+        <b>참고 자료</b>
+        <ol>
+          <li>쑤저우시 통계국 《2024·2025년 국민경제·사회발전 통계공보》</li>
+          <li>쑤저우시 인민정부 홈페이지(www.suzhou.gov.cn) — 역사연혁·시정 개황</li>
+          <li>중화인민공화국 민정부 전국 행정구획 조회 플랫폼</li>
+          <li>쑤저우시 자연자원·수리·교통·문화광전여유 등 관련 부문 자료</li>
+          <li>제일재경 신일선도시연구소 《도시상업매력랭킹》 (2025)</li>
+          <li>유네스코 세계유산·인류 무형문화유산 대표목록</li>
+          <li>화둔경제연구원 등 각종 도시 랭킹 자료</li>
+          <li>쑤저우시 인민정부 외사판공실 우호도시 자료(wsb.suzhou.gov.cn)</li>
+        </ol>
+      </div>
+
+
+    </div><!-- /main -->
+
+    <aside class="profile">
+      <div class="pf-title">쑤저우시 기본 정보</div>
+      <div class="img-placeholder">이미지 자리<br>쑤저우시 지도 / 위치도</div>
+      <table>
+        <tbody><tr><th>공식 명칭</th><td>쑤저우시 (苏州市 / Suzhou City)</td></tr>
+        <tr><th>구분</th><td>중화인민공화국 장쑤성 지급시 (코드 320500)</td></tr>
+        <tr><th>약칭·별칭</th><td>쑤(苏) / 옛 이름 우·구쑤·핑장</td></tr>
+        <tr><th>시정부</th><td>쑤저우시 구쑤구 싼샹로(三香路) 998호</td></tr>
+        <tr><th>면적</th><td>8,657.32 ㎢ — 서울의 약 14배, 제주도의 약 4.7배</td></tr>
+        <tr><th>인구</th><td>상주 1,298.7만 명 — 장쑤성 1위 <span class="yr">(2024년 말)</span><br>도시화율 82.7% · 특대도시</td></tr>
+        <tr><th>GDP</th><td>2조 7,695.1억 위안 (+5.4%) <span class="yr">(2025)</span><br>약 4,073억 달러 · 약 629조 원 <span class="yr">(2026.7 환율)</span></td></tr>
+        <tr><th>1인당 GDP</th><td>21.3만 위안 <span class="yr">(2025)</span></td></tr>
+        <tr><th>1인당 가처분소득</th><td>80,796위안 <span class="yr">(2025)</span></td></tr>
+        <tr><th>관할</th><td>5개 구 · 4개 현급시(대관)</td></tr>
+        <tr><th>기후</th><td>북아열대 계절풍 기후</td></tr>
+        <tr><th>언어</th><td>오어 타이후편 쑤후자 소편 쑤저우 방언</td></tr>
+        <tr><th>차량 번호</th><td>苏E (증보 苏U)</td></tr>
+        <tr><th>우편번호</th><td>215000</td></tr>
+        <tr><th>전화 구호</th><td>0512</td></tr>
+        <tr><th>시간대</th><td>UTC+8 (한국보다 1시간 늦음)</td></tr>
+        <tr><th>대표 수목·화훼</th><td>향장(녹나무) · 계화(금목서)</td></tr>
+        <tr><th>지도부</th><td>서기 판보 / 시장 왕웨이 <span class="yr">(2026 기준)</span></td></tr>
+      </tbody></table>
+    </aside>
+
+  </div><!-- /layout -->
+</div><!-- /wrap -->
+
+<div class="toolbar" style="display: none;">
+  <div class="save-hint" id="saveHint" style="display: none;"></div>
+  <button class="btn-edit" id="editBtn" onclick="toggleEdit()">✏️ 편집 모드</button>
+  <button class="btn-save" id="saveBtn" onclick="saveHtml()">💾 저장(다운로드)</button>
+  <button class="btn-print" onclick="window.print()">🖨 PDF로 인쇄</button>
+</div>
+
+<script>
+function toggleEdit(){
+  const on = document.body.classList.toggle('editing');
+  document.querySelectorAll('.main, .profile, .summary, .headword, .cite-box').forEach(el=>{
+    el.contentEditable = on;
+  });
+  const b = document.getElementById('editBtn');
+  b.classList.toggle('on', on);
+  b.textContent = on ? '✅ 편집 완료' : '✏️ 편집 모드';
+}
+
+function showHint(msg){
+  const h = document.getElementById('saveHint');
+  h.textContent = msg;
+  h.style.display = 'block';
+  clearTimeout(h._t);
+  h._t = setTimeout(()=>{ h.style.display='none'; }, 4000);
+}
+
+// 편집한 현재 화면 그대로를 HTML 파일로 저장(다운로드)
+function saveHtml(){
+  const wasEditing = document.body.classList.contains('editing');
+  if (wasEditing) toggleEdit();
+
+  const clone = document.documentElement.cloneNode(true);
+  clone.querySelectorAll('[contenteditable]').forEach(el=> el.removeAttribute('contenteditable'));
+  clone.querySelectorAll('.save-hint').forEach(el=>{ el.textContent=''; el.style.display='none'; });
+
+  const html = '<!DOCTYPE html>\n' + clone.outerHTML;
+  const blob = new Blob([html], {type:'text/html;charset=utf-8'});
+  const url = URL.createObjectURL(blob);
+
+  const now = new Date();
+  const pad = n=> String(n).padStart(2,'0');
+  const stamp = now.getFullYear()+pad(now.getMonth()+1)+pad(now.getDate())+'_'+pad(now.getHours())+pad(now.getMinutes());
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = '쑤저우시_지식백과_'+stamp+'.html';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  setTimeout(()=> URL.revokeObjectURL(url), 1000);
+
+  showHint('편집한 내용을 HTML 파일로 저장했습니다. 다운로드 폴더를 확인하세요.');
+}
+
+window.addEventListener('beforeunload', function(e){
+  if (document.body.classList.contains('editing')){
+    e.preventDefault();
+    e.returnValue = '';
+  }
+});
+</script>
+
+
+
+
+</body></html>
