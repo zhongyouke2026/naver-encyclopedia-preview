@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="ko"><head>
+<meta charset="utf-8">
+<meta content="width=1024" name="viewport">
+<title>선전시 [深圳市, Shenzhen] - 중국 도시 정보 사전</title>
+<style>
+  .toolbar { display: none !important; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Malgun Gothic','맑은 고딕','Apple SD Gothic Neo',sans-serif; color:#222; background:#fff; line-height:1.8; }
+
+  .topbar { border-bottom:1px solid #e4e6ea; background:#fff; }
+  .topbar .inner { max-width:500px; margin:0 auto; padding:14px 20px; display:flex; align-items:center; gap:10px; }
+  .logo { font-size:21px; font-weight:800; letter-spacing:-0.5px; }
+  .logo .brand { color:#03c75a; }
+  .logo .svc { color:#222; }
+  .searchbox { flex:1; max-width:420px; border:2px solid #03c75a; border-radius:4px; padding:7px 12px; color:#999; font-size:14px; background:#fff; }
+
+  .wrap { max-width:500px; margin:0 auto; padding:28px 20px 60px; }
+
+  .breadcrumb { font-size:12.5px; color:#888; margin-bottom:18px; }
+  .breadcrumb b { color:#555; font-weight:600; }
+
+  .headword { border-bottom:2px solid #222; padding-bottom:18px; margin-bottom:22px; }
+  .headword h1 { font-size:34px; font-weight:800; letter-spacing:-1px; display:inline; }
+  .headword .origin { font-size:20px; color:#777; font-weight:400; margin-left:8px; }
+  .headword .src-badge { display:inline-block; margin-left:12px; font-size:12px; color:#03c75a; border:1px solid #03c75a; border-radius:12px; padding:1px 10px; vertical-align:middle; font-weight:600; }
+  .headword .pron { font-size:13.5px; color:#888; margin-top:8px; }
+
+  .reader-note { background:#f2f8f4; border:1px solid #dfe5e1; border-left:4px solid #1a5c38; border-radius:6px; padding:12px 16px; font-size:13.5px; color:#3a5145; margin-bottom:22px; }
+  .reader-note b { color:#1a5c38; }
+
+  .summary { background:#f5f6f8; border-radius:6px; padding:20px 24px; margin-bottom:26px; font-size:15.5px; }
+  .summary .lbl { font-weight:800; font-size:14px; color:#03c75a; margin-right:10px; }
+  .summary p { margin-bottom:12px; }
+  .summary p:last-child { margin-bottom:0; }
+
+  .layout { display:flex; gap:28px; align-items:flex-start; }
+  .main { flex:1; min-width:0; }
+
+  .profile { width:300px; flex-shrink:0; border:1px solid #e4e6ea; border-radius:6px; overflow-y:auto; overflow-x:hidden; font-size:13px; position:sticky; top:14px; max-height:calc(100vh - 28px); scrollbar-width:thin; background:#fff; }
+  .profile .pf-title { background:#f8f9fa; font-weight:800; font-size:14px; padding:10px 14px; border-bottom:1px solid #e4e6ea; text-align:center; }
+  .profile .img-placeholder { background:#eceef1; color:#98a0aa; height:180px; display:flex; align-items:center; justify-content:center; font-size:12.5px; border-bottom:1px solid #e4e6ea; text-align:center; padding:0 10px;}
+  .profile table { width:100%; border-collapse:collapse; }
+  .profile th { background:#f8f9fa; width:88px; font-weight:600; color:#555; padding:7px 10px; border-bottom:1px solid #eef0f2; text-align:left; vertical-align:top; font-size:12.5px; line-height:1.8;}
+  .profile td { padding:7px 10px; border-bottom:1px solid #eef0f2; color:#333; line-height:1.8; }
+  .profile tr:last-child th, .profile tr:last-child td { border-bottom:none; }
+  .profile a { color:#3d5a80; text-decoration:none; }
+  .profile a:hover { text-decoration:underline; }
+
+  .toc { border:1px solid #e4e6ea; border-radius:6px; padding:16px 20px; margin-bottom:30px; font-size:13.5px; background:#fff; }
+  .toc .toc-t { font-weight:800; font-size:14px; margin-bottom:8px; }
+  .toc ol { list-style:none; column-count:2; column-gap:30px; }
+  .toc li { margin:3px 0; }
+  .toc a { color:#3d5a80; text-decoration:none; }
+  .toc a:hover { text-decoration:underline; }
+  .toc .num { color:#03c75a; font-weight:700; margin-right:6px; }
+
+  section { margin-bottom:34px; }
+  section h2 { font-size:21px; font-weight:800; letter-spacing:-0.5px; padding-bottom:8px; border-bottom:1px solid #e4e6ea; margin-bottom:14px; scroll-margin-top:14px; }
+  section h3 { font-size:15.5px; font-weight:700; color:#0b7a3e; margin:16px 0 6px; }
+  section h4 { font-size:14px; font-weight:700; color:#444; margin:12px 0 4px; }
+  section p { font-size:15px; margin-bottom:12px; }
+  section ul.plain { margin:6px 0 12px 18px; font-size:14.5px; }
+  section ul.plain li { margin:3px 0; }
+
+  table.data { width:100%; border-collapse:collapse; font-size:13.5px; margin:10px 0 16px; table-layout:auto; }
+  table.data th { background:#f2f8f4; color:#1a5c38; font-weight:700; padding:8px 10px; border:1px solid #dfe5e1; word-break:keep-all; overflow-wrap:normal; }
+  table.data td { padding:7px 10px; border:1px solid #e7eae8; vertical-align:top; word-break:keep-all; overflow-wrap:normal; }
+  table.data tr:nth-child(even) td { background:#fafcfb; }
+  table.data td a { color:#3d5a80; text-decoration:none; }
+  table.data td a:hover { text-decoration:underline; }
+  table.data.climate-table { width:560px; max-width:100%; table-layout:fixed; font-size:12.6px; margin:8px 0 18px; }
+  table.data.climate-table th, table.data.climate-table td { padding:6px 5px; text-align:center; vertical-align:middle; line-height:1.55; }
+  table.data.climate-table .climate-label { background:#f2f8f4; color:#1a5c38; font-weight:700; }
+  table.data.climate-table .weather-note { text-align:left; line-height:1.6; white-space:normal; word-break:keep-all; }
+  .thumb { display:inline-block; width:100%; min-width:64px; height:64px; background:#eceef1; color:#98a0aa; border-radius:4px; font-size:10.5px; text-align:center; line-height:1.25; padding:4px 3px; }
+
+  .map-embed { width:100%; height:340px; border:1px solid #dfe5e1; border-radius:6px; margin:12px 0 6px; }
+  .map-row { display:flex; gap:14px; margin:12px 0 6px; flex-wrap:wrap; }
+  .map-row .map-col { flex:1; min-width:260px; }
+  .map-row iframe { width:100%; height:300px; border:1px solid #dfe5e1; border-radius:6px; }
+  .map-row .map-cap { font-size:12px; color:#888; margin-top:4px; }
+  .maplink { display:inline-block; font-size:12px; color:#1a5c38; text-decoration:none; border:1px solid #cfe0d7; background:#f2f8f4; border-radius:4px; padding:1px 8px; margin-left:4px; }
+  .maplink:hover { background:#e6f2ea; }
+
+
+  .pf-img { width:100%; height:190px; object-fit:cover; display:block; border-bottom:1px solid #e4e6ea; }
+  .img-block-img { width:100%; height:240px; object-fit:cover; border-radius:6px; display:block; margin:12px 0; }
+  .thumb-img { width:100%; min-width:60px; height:64px; object-fit:cover; border-radius:4px; display:block; }
+  .imgcredit { font-size:11px; color:#aab0b8; margin:-4px 0 12px; }
+
+  .mini-map { display:block; margin-top:6px; }
+  .mini-map iframe { width:100%; height:150px; border:1px solid #dfe5e1; border-radius:6px; display:block; }
+  .pf-map { display:block; margin-top:6px; }
+  .pf-map iframe { width:100%; height:150px; border:1px solid #dfe5e1; border-radius:6px; display:block; }
+
+  .logo-img { max-width:66px; max-height:36px; width:auto; height:auto; object-fit:contain; display:block; margin:0 auto; }
+  .logo-ph { display:flex; align-items:center; justify-content:center; width:66px; height:36px; background:#eceef1; color:#98a0aa; border-radius:4px; font-size:10.5px; margin:0 auto; }
+  .img-block { background:#eceef1; color:#98a0aa; border-radius:6px; height:220px; display:flex; align-items:center; justify-content:center; font-size:13px; margin:12px 0; text-align:center; padding:0 12px; }
+  .img-strip { display:flex; gap:10px; margin:12px 0; }
+  .img-strip .cell { flex:1; background:#eceef1; color:#98a0aa; border-radius:6px; height:130px; display:flex; align-items:center; justify-content:center; font-size:12px; text-align:center; padding:0 8px; }
+  .caption { font-size:12.5px; color:#888; margin-top:-6px; margin-bottom:14px; }
+
+  .term-box { background:#f2f8f4; border:1px solid #dfe5e1; border-radius:6px; padding:12px 16px; font-size:13px; color:#3a5145; margin:10px 0 16px; }
+  .term-box .tt { font-weight:800; color:#1a5c38; display:block; margin-bottom:4px; font-size:13px; }
+  .term-box dl { margin:0; }
+  .term-box dt { font-weight:700; color:#0b7a3e; margin-top:6px; }
+  .term-box dd { margin:0 0 2px 0; color:#4a5a50; }
+
+  .check { color:#c0392b; font-weight:700; }
+  .yr { color:#888; font-size:0.9em; }
+  .note-box { background:#fbfaf4; border:1px solid #ece7d4; border-radius:6px; padding:12px 16px; font-size:13px; color:#6b6350; margin:10px 0 16px; }
+
+  .cite-box { border-top:2px solid #222; margin-top:44px; padding-top:16px; font-size:13px; color:#555; }
+  .cite-box .naver-cite { background:#f5f6f8; border-radius:6px; padding:14px 18px; margin-bottom:14px; font-size:13.5px; }
+  .cite-box .naver-cite b { color:#03c75a; }
+  .cite-box ol { margin-left:20px; }
+  .cite-box li { margin:2px 0; }
+
+  .demo-note { text-align:center; font-size:11.5px; color:#b6bcc4; margin-top:30px; }
+
+  .toolbar { position: fixed !important; bottom: 25px !important; right: 25px !important; z-index: 2147483647 !important; display: flex !important; align-items: center !important; gap: 8px !important; visibility: visible !important; opacity: 1 !important; }
+  .toolbar > button { border:none; border-radius:24px; padding:11px 18px; font-size:13.5px; font-weight:700; cursor:pointer; box-shadow:0 2px 10px rgba(0,0,0,.18); font-family:inherit; }
+  .btn-edit { background:#03c75a; color:#fff; }
+  .btn-edit.on { background:#e6a700; }
+  .btn-save { background:#2b6cb0; color:#fff; }
+  .btn-print { background:#333; color:#fff; }
+  .save-hint { background:rgba(43,108,176,.95); color:#fff; font-size:12px; padding:8px 12px; border-radius:8px; box-shadow:0 2px 10px rgba(0,0,0,.18); max-width:260px; display:none; }
+  .edit-tools { display:none; align-items:center; gap:6px; padding:7px 8px; border:1px solid #dfe7e2; border-radius:24px; background:rgba(255,255,255,.97); box-shadow:0 2px 10px rgba(0,0,0,.16); }
+  body.editing .edit-tools { display:flex; }
+  .edit-tools label, .edit-group { display:flex; align-items:center; gap:5px; color:#333; font-size:12px; font-weight:700; white-space:nowrap; }
+  .edit-group-title { color:#333; font-size:12px; font-weight:700; }
+  .color-palette { display:flex; align-items:center; gap:3px; padding-right:2px; }
+  .color-swatch { width:23px; min-width:23px; height:23px; padding:0; border:1px solid #bfcac4; border-radius:50%; font-size:0; cursor:pointer; box-shadow:none; }
+  .color-swatch:hover { transform:translateY(-1px); box-shadow:0 1px 5px rgba(0,0,0,.18); }
+  .color-swatch.is-light { border-color:#aeb8b2; }
+  .color-swatch.is-clear { width:auto; min-width:34px; padding:0 8px; border-radius:14px; background:#fff; color:#444; font-size:11px; font-weight:700; }
+  .edit-tools select { height:30px; border:1px solid #cfd8d2; border-radius:16px; padding:0 8px; background:#fff; color:#333; font-family:inherit; font-size:12px; font-weight:700; }
+  .edit-tools button { font-family:inherit; font-weight:700; cursor:pointer; }
+  .format-btn, .clear-format { min-width:30px; height:30px; border:1px solid #cfd8d2; border-radius:16px; background:#fff; color:#333; font-size:12px; }
+  .edit-tools .clear-format { padding:0 10px; }
+  .image-file-input { display:none; }
+  .image-edit-wrap { position:relative; display:block; width:100%; }
+  .image-edit-wrap.is-inline { display:inline-block; }
+  .image-edit-wrap.is-logo { display:inline-flex; align-items:center; justify-content:center; width:100%; }
+  .img-strip .image-edit-wrap { flex:1; }
+  .image-upload-btn { display:none; position:absolute; top:6px; right:6px; z-index:4; border:none; border-radius:14px; padding:5px 9px; background:rgba(3,199,90,.95); color:#fff; font-size:11px; font-weight:800; line-height:1; cursor:pointer; box-shadow:0 2px 8px rgba(0,0,0,.2); font-family:inherit; }
+  body.editing .image-upload-btn { display:block; }
+  .image-edit-wrap.is-small .image-upload-btn { top:3px; right:3px; padding:3px 6px; font-size:10px; }
+  .strip-img { width:100%; height:100%; min-height:130px; object-fit:cover; border-radius:6px; display:block; }
+  .img-strip .cell .strip-img { min-height:0; height:100%; }
+  .image-edit-wrap > .img-block-img, .image-edit-wrap > .pf-img { margin-top:0; margin-bottom:0; }
+  body.editing .main, body.editing .profile, body.editing .summary, body.editing .headword, body.editing .cite-box { outline:1px dashed #e6a700; outline-offset:4px; }
+  body.editing [contenteditable="true"]:focus { outline:2px solid rgba(3,199,90,.35); outline-offset:4px; }
+
+  @media print {
+    .topbar, .toolbar, .demo-note, .save-hint { display:none !important; }
+    .wrap { padding:0; max-width:100%; }
+    body { font-size:12px; }
+    .layout { display:block; }
+    .profile { width:100%; margin-bottom:16px; position:static; max-height:none; overflow:visible; }
+    .profile .img-placeholder, .img-block { height:110px; }
+    section { page-break-inside:avoid; }
+    a { color:inherit; text-decoration:none; }
+  }
+
+        .img-block-img.fit-to-photo {
+          height: auto;
+          max-height: none;
+          object-fit: contain;
+          object-position: center;
+          background: #fff;
+        }
+
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="layout">
+<div class="main">
+<section id="s3">
+<h3>지질·지형</h3>
+<p>지질 구조상 선전은 저장·푸젠·광둥 서부 인지(印支) 요함대의 남동부에 해당하며, <b>롄화 단층대(莲花断裂带)</b>가 시내를 지나기 때문에 지질 구조가 비교적 복잡하다. 대부분이 화강암 등 마그마암이고 퇴적암은 드물게 분포한다. 가리동기·해서인지기·연산기·히말라야기의 네 차례 큰 지각 변동을 겪은 것으로 분석되며, 이 가운데 연산기의 변동이 가장 강했다.</p>
+<p>지형은 <b>구릉·대지(台地)·평원</b>이 섞인 복합 지형이다. 유형별 면적 비중은 구릉 44.07%, 대지 22.35%, 평원 22.12%, 계단지 5.09%, 저산 4.84%다. 전체 평균 해발은 약 50m이며, 동남쪽이 높고 서북쪽이 낮다. 동남부에는 낮은 산과 구릉이 많고(대표적으로 우퉁산), 서북부는 평원과 대지가 넓게 펼쳐진다. 저산·구릉·고대지가 차지하는 산지는 시 전체 육지의 62.8%에 이른다.</p>
+<ul class="plain">
+<li>최고봉: <b>우퉁산(梧桐山) 943.7m</b></li>
+<li>해발 500m 이상 봉우리 17개, 300m 이상 57개</li>
+<li>해안선 길이: 311.4km(선산합작구 포함) / 260.5km(미포함). 동에서 서로 다야만·다펑만·선전만·주장 하구의 네 만을 잇는다</li>
+<li>섬 17개. 가장 큰 <b>네이링딩다오(内伶仃岛)</b>가 4.85㎢이며, 다찬다오·샤오찬다오 등 큰 섬은 주장 하구 링딩양에, 나머지 작은 섬들은 다펑반도 연안에 분포한다</li>
+</ul>
+
+
+</section>
+<section id="s5">
+<h2>5. 행정구역</h2>
+<p>선전시는 <b>9개 시할구(市辖区)</b>와 <b>1개 신구(다펑신구)</b>로 이뤄져 있으며, 이와 별도로 인접 산웨이시 안에 있는 <b>선산특별합작구</b>를 관리한다. 시 정부는 푸톈구에 있다.</p>
+<div class="term-box">
+<span class="tt">중국의 도시 행정 단위</span>
+<dl>
+<dt>시할구(市辖区)</dt><dd>지급시 아래의 정식 행정구. 우리나라 광역시의 ‘구’에 해당한다.</dd>
+<dt>신구(新区)</dt><dd>정식 행정구가 아니라 <b>시 정부가 파견한 관리기구</b>가 운영하는 개발 구역. 다펑신구가 여기에 해당해, 별도의 행정구역 코드를 갖지 않는다.</dd>
+<dt>가도(街道)</dt><dd>구 아래의 기초 행정단위. 우리나라의 ‘동(洞)’에 가깝다. 농촌 지역의 ‘진(镇)’에 대응한다.</dd>
+<dt>선산특별합작구(深汕特别合作区)</dt><dd>선전에서 동쪽으로 약 100km 떨어진 <b>산웨이시(汕尾市) 안에 있는데도 선전시가 개발·관리하는 구역</b>. 선전에 개발할 땅이 부족해 만들어진 이례적인 구조로, 2018년 12월 선전시 파출기구(당 공작위원회·관리위원회)가 정식 출범했다.</dd>
+</dl>
+</div>
+<table class="data">
+<tbody>
+<tr><th style="width:100px">구</th><th style="width:70px">한자</th><th style="width:100px">행정코드</th><th style="width:75px">가도 수</th><th>성격</th></tr>
+<tr><td>뤄후구</td><td>罗湖区</td><td>440303</td><td>10개</td><td>홍콩과 맞닿은 구도심. 뤄후 통상구와 둥먼 상업가가 있다</td></tr>
+<tr><td>푸톈구</td><td>福田区</td><td>440304</td><td>11개</td><td>시 정부 소재지이자 중심업무지구(CBD). 선전증권거래소, 화창베이 전자상가, 푸톈 맹그로브 보호구가 있다</td></tr>
+<tr><td>난산구</td><td>南山区</td><td>440305</td><td>9개</td><td>대학·연구기관과 첨단기업이 밀집. 셔코우(蛇口), 첸하이합작구, 난터우고성이 있다</td></tr>
+<tr><td>바오안구</td><td>宝安区</td><td>440306</td><td>11개</td><td>선전 바오안 국제공항이 있는 서부 제조업 집적지</td></tr>
+<tr><td>룽강구</td><td>龙岗区</td><td>440307</td><td>14개</td><td>동부 최대 구. 화웨이 본사(반톈)와 객가 위옥 ‘허후신쥐’가 있다</td></tr>
+<tr><td>옌톈구</td><td>盐田区</td><td>440308</td><td>5개</td><td>컨테이너 항만인 옌톈항, 다메이사·샤오메이사 해변, 중잉제가 있다</td></tr>
+<tr><td>룽화구</td><td>龙华区</td><td>440309</td><td>6개</td><td>2016년 신설. 북부 주거·제조 지역이며 선전북역이 있다</td></tr>
+<tr><td>핑산구</td><td>坪山区</td><td>440310</td><td>7개</td><td>2016년 신설. BYD 생산기지 등 신에너지차 산업 거점</td></tr>
+<tr><td>광밍구</td><td>光明区</td><td>440311</td><td>6개</td><td>2018년 신설. 과학연구 시설과 농장 지대가 함께 있다</td></tr>
+<tr><td>다펑신구</td><td>大鹏新区</td><td><span style="color:#888;">— (신구)</span></td><td><span style="color:#888;">—</span></td><td>다펑반도 일대. 다펑소성, 국가지질공원, 해안 관광지가 분포</td></tr>
+<tr><td>선산특별합작구</td><td>深汕特别<br>合作区</td><td><span style="color:#888;">— (합작구)</span></td><td><span style="color:#888;">—</span></td><td>산웨이시 경내에 있으나 선전시가 개발·관리</td></tr>
+</tbody>
+</table>
+<div class="note-box">
+<b>참고</b> — 룽화·핑산·광밍은 2010년대에 기존 룽강·바오안구에서 분리돼 정식 행정구가 됐다. 선전시 자료 가운데 “9개 구, 1개 신구” 대신 “9개 행정구”만 세는 것도 있는데, 이는 다펑신구가 정식 행정구가 아니기 때문이다.
+</div>
+</section>
+</div>
+</div>
+</div>
+</body>
+</html>
