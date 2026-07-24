@@ -1,0 +1,1366 @@
+<!DOCTYPE html>
+<html lang="ko"><head>
+<meta charset="utf-8">
+<meta content="width=1024" name="viewport">
+<title>선전시 [深圳市, Shenzhen] - 중국 도시 정보 사전</title>
+<style>
+  .toolbar { display: none !important; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Malgun Gothic','맑은 고딕','Apple SD Gothic Neo',sans-serif; color:#222; background:#fff; line-height:1.8; }
+
+  .topbar { border-bottom:1px solid #e4e6ea; background:#fff; }
+  .topbar .inner { max-width:944px; margin:0 auto; padding:14px 20px; display:flex; align-items:center; gap:10px; }
+  .logo { font-size:21px; font-weight:800; letter-spacing:-0.5px; }
+  .logo .brand { color:#03c75a; }
+  .logo .svc { color:#222; }
+  .searchbox { flex:1; max-width:420px; border:2px solid #03c75a; border-radius:4px; padding:7px 12px; color:#999; font-size:14px; background:#fff; }
+
+  .wrap { max-width:944px; margin:0 auto; padding:28px 20px 60px; }
+
+  .breadcrumb { font-size:12.5px; color:#888; margin-bottom:18px; }
+  .breadcrumb b { color:#555; font-weight:600; }
+
+  .headword { border-bottom:2px solid #222; padding-bottom:18px; margin-bottom:22px; }
+  .headword h1 { font-size:34px; font-weight:800; letter-spacing:-1px; display:inline; }
+  .headword .origin { font-size:20px; color:#777; font-weight:400; margin-left:8px; }
+  .headword .src-badge { display:inline-block; margin-left:12px; font-size:12px; color:#03c75a; border:1px solid #03c75a; border-radius:12px; padding:1px 10px; vertical-align:middle; font-weight:600; }
+  .headword .pron { font-size:13.5px; color:#888; margin-top:8px; }
+
+  .reader-note { background:#f2f8f4; border:1px solid #dfe5e1; border-left:4px solid #1a5c38; border-radius:6px; padding:12px 16px; font-size:13.5px; color:#3a5145; margin-bottom:22px; }
+  .reader-note b { color:#1a5c38; }
+
+  .summary { background:#f5f6f8; border-radius:6px; padding:20px 24px; margin-bottom:26px; font-size:15.5px; }
+  .summary .lbl { font-weight:800; font-size:14px; color:#03c75a; margin-right:10px; }
+  .summary p { margin-bottom:12px; }
+  .summary p:last-child { margin-bottom:0; }
+
+  .layout { display:flex; gap:28px; align-items:flex-start; }
+  .main { flex:1; min-width:0; }
+
+  .profile { width:300px; flex-shrink:0; border:1px solid #e4e6ea; border-radius:6px; overflow-y:auto; overflow-x:hidden; font-size:13px; position:sticky; top:14px; max-height:calc(100vh - 28px); scrollbar-width:thin; background:#fff; }
+  .profile .pf-title { background:#f8f9fa; font-weight:800; font-size:14px; padding:10px 14px; border-bottom:1px solid #e4e6ea; text-align:center; }
+  .profile .img-placeholder { background:#eceef1; color:#98a0aa; height:180px; display:flex; align-items:center; justify-content:center; font-size:12.5px; border-bottom:1px solid #e4e6ea; text-align:center; padding:0 10px;}
+  .profile table { width:100%; border-collapse:collapse; }
+  .profile th { background:#f8f9fa; width:88px; font-weight:600; color:#555; padding:7px 10px; border-bottom:1px solid #eef0f2; text-align:left; vertical-align:top; font-size:12.5px; line-height:1.8;}
+  .profile td { padding:7px 10px; border-bottom:1px solid #eef0f2; color:#333; line-height:1.8; }
+  .profile tr:last-child th, .profile tr:last-child td { border-bottom:none; }
+  .profile a { color:#3d5a80; text-decoration:none; }
+  .profile a:hover { text-decoration:underline; }
+
+  .toc { border:1px solid #e4e6ea; border-radius:6px; padding:16px 20px; margin-bottom:30px; font-size:13.5px; background:#fff; }
+  .toc .toc-t { font-weight:800; font-size:14px; margin-bottom:8px; }
+  .toc ol { list-style:none; column-count:2; column-gap:30px; }
+  .toc li { margin:3px 0; }
+  .toc a { color:#3d5a80; text-decoration:none; }
+  .toc a:hover { text-decoration:underline; }
+  .toc .num { color:#03c75a; font-weight:700; margin-right:6px; }
+
+  section { margin-bottom:34px; }
+  section h2 { font-size:21px; font-weight:800; letter-spacing:-0.5px; padding-bottom:8px; border-bottom:1px solid #e4e6ea; margin-bottom:14px; scroll-margin-top:14px; }
+  section h3 { font-size:15.5px; font-weight:700; color:#0b7a3e; margin:16px 0 6px; }
+  section h4 { font-size:14px; font-weight:700; color:#444; margin:12px 0 4px; }
+  section p { font-size:15px; margin-bottom:12px; }
+  section ul.plain { margin:6px 0 12px 18px; font-size:14.5px; }
+  section ul.plain li { margin:3px 0; }
+
+  table.data { width:100%; border-collapse:collapse; font-size:13.5px; margin:10px 0 16px; table-layout:auto; }
+  table.data th { background:#f2f8f4; color:#1a5c38; font-weight:700; padding:8px 10px; border:1px solid #dfe5e1; word-break:keep-all; overflow-wrap:normal; }
+  table.data td { padding:7px 10px; border:1px solid #e7eae8; vertical-align:top; word-break:keep-all; overflow-wrap:normal; }
+  table.data tr:nth-child(even) td { background:#fafcfb; }
+  table.data td a { color:#3d5a80; text-decoration:none; }
+  table.data td a:hover { text-decoration:underline; }
+  table.data.climate-table { width:560px; max-width:100%; table-layout:fixed; font-size:12.6px; margin:8px 0 18px; }
+  table.data.climate-table th, table.data.climate-table td { padding:6px 5px; text-align:center; vertical-align:middle; line-height:1.55; }
+  table.data.climate-table .climate-label { background:#f2f8f4; color:#1a5c38; font-weight:700; }
+  table.data.climate-table .weather-note { text-align:left; line-height:1.6; white-space:normal; word-break:keep-all; }
+  .thumb { display:inline-block; width:100%; min-width:64px; height:64px; background:#eceef1; color:#98a0aa; border-radius:4px; font-size:10.5px; text-align:center; line-height:1.25; padding:4px 3px; }
+
+  .map-embed { width:100%; height:340px; border:1px solid #dfe5e1; border-radius:6px; margin:12px 0 6px; }
+  .map-row { display:flex; gap:14px; margin:12px 0 6px; flex-wrap:wrap; }
+  .map-row .map-col { flex:1; min-width:260px; }
+  .map-row iframe { width:100%; height:300px; border:1px solid #dfe5e1; border-radius:6px; }
+  .map-row .map-cap { font-size:12px; color:#888; margin-top:4px; }
+  .maplink { display:inline-block; font-size:12px; color:#1a5c38; text-decoration:none; border:1px solid #cfe0d7; background:#f2f8f4; border-radius:4px; padding:1px 8px; margin-left:4px; }
+  .maplink:hover { background:#e6f2ea; }
+
+
+  .pf-img { width:100%; height:190px; object-fit:cover; display:block; border-bottom:1px solid #e4e6ea; }
+  .img-block-img { width:100%; height:240px; object-fit:cover; border-radius:6px; display:block; margin:12px 0; }
+  .thumb-img { width:100%; min-width:60px; height:64px; object-fit:cover; border-radius:4px; display:block; }
+  .imgcredit { font-size:11px; color:#aab0b8; margin:-4px 0 12px; }
+
+  .mini-map { display:block; margin-top:6px; }
+  .mini-map iframe { width:100%; height:150px; border:1px solid #dfe5e1; border-radius:6px; display:block; }
+  .pf-map { display:block; margin-top:6px; }
+  .pf-map iframe { width:100%; height:150px; border:1px solid #dfe5e1; border-radius:6px; display:block; }
+
+  .logo-img { max-width:66px; max-height:36px; width:auto; height:auto; object-fit:contain; display:block; margin:0 auto; }
+  .logo-ph { display:flex; align-items:center; justify-content:center; width:66px; height:36px; background:#eceef1; color:#98a0aa; border-radius:4px; font-size:10.5px; margin:0 auto; }
+  .img-block { background:#eceef1; color:#98a0aa; border-radius:6px; height:220px; display:flex; align-items:center; justify-content:center; font-size:13px; margin:12px 0; text-align:center; padding:0 12px; }
+  .img-strip { display:flex; gap:10px; margin:12px 0; }
+  .img-strip .cell { flex:1; background:#eceef1; color:#98a0aa; border-radius:6px; height:130px; display:flex; align-items:center; justify-content:center; font-size:12px; text-align:center; padding:0 8px; }
+  .caption { font-size:12.5px; color:#888; margin-top:-6px; margin-bottom:14px; }
+
+  .term-box { background:#f2f8f4; border:1px solid #dfe5e1; border-radius:6px; padding:12px 16px; font-size:13px; color:#3a5145; margin:10px 0 16px; }
+  .term-box .tt { font-weight:800; color:#1a5c38; display:block; margin-bottom:4px; font-size:13px; }
+  .term-box dl { margin:0; }
+  .term-box dt { font-weight:700; color:#0b7a3e; margin-top:6px; }
+  .term-box dd { margin:0 0 2px 0; color:#4a5a50; }
+
+  .check { color:#c0392b; font-weight:700; }
+  .yr { color:#888; font-size:0.9em; }
+  .note-box { background:#fbfaf4; border:1px solid #ece7d4; border-radius:6px; padding:12px 16px; font-size:13px; color:#6b6350; margin:10px 0 16px; }
+
+  .cite-box { border-top:2px solid #222; margin-top:44px; padding-top:16px; font-size:13px; color:#555; }
+  .cite-box .naver-cite { background:#f5f6f8; border-radius:6px; padding:14px 18px; margin-bottom:14px; font-size:13.5px; }
+  .cite-box .naver-cite b { color:#03c75a; }
+  .cite-box ol { margin-left:20px; }
+  .cite-box li { margin:2px 0; }
+
+  .demo-note { text-align:center; font-size:11.5px; color:#b6bcc4; margin-top:30px; }
+
+  .toolbar { position: fixed !important; bottom: 25px !important; right: 25px !important; z-index: 2147483647 !important; display: flex !important; align-items: center !important; gap: 8px !important; visibility: visible !important; opacity: 1 !important; }
+  .toolbar > button { border:none; border-radius:24px; padding:11px 18px; font-size:13.5px; font-weight:700; cursor:pointer; box-shadow:0 2px 10px rgba(0,0,0,.18); font-family:inherit; }
+  .btn-edit { background:#03c75a; color:#fff; }
+  .btn-edit.on { background:#e6a700; }
+  .btn-save { background:#2b6cb0; color:#fff; }
+  .btn-print { background:#333; color:#fff; }
+  .save-hint { background:rgba(43,108,176,.95); color:#fff; font-size:12px; padding:8px 12px; border-radius:8px; box-shadow:0 2px 10px rgba(0,0,0,.18); max-width:260px; display:none; }
+  .edit-tools { display:none; align-items:center; gap:6px; padding:7px 8px; border:1px solid #dfe7e2; border-radius:24px; background:rgba(255,255,255,.97); box-shadow:0 2px 10px rgba(0,0,0,.16); }
+  body.editing .edit-tools { display:flex; }
+  .edit-tools label, .edit-group { display:flex; align-items:center; gap:5px; color:#333; font-size:12px; font-weight:700; white-space:nowrap; }
+  .edit-group-title { color:#333; font-size:12px; font-weight:700; }
+  .color-palette { display:flex; align-items:center; gap:3px; padding-right:2px; }
+  .color-swatch { width:23px; min-width:23px; height:23px; padding:0; border:1px solid #bfcac4; border-radius:50%; font-size:0; cursor:pointer; box-shadow:none; }
+  .color-swatch:hover { transform:translateY(-1px); box-shadow:0 1px 5px rgba(0,0,0,.18); }
+  .color-swatch.is-light { border-color:#aeb8b2; }
+  .color-swatch.is-clear { width:auto; min-width:34px; padding:0 8px; border-radius:14px; background:#fff; color:#444; font-size:11px; font-weight:700; }
+  .edit-tools select { height:30px; border:1px solid #cfd8d2; border-radius:16px; padding:0 8px; background:#fff; color:#333; font-family:inherit; font-size:12px; font-weight:700; }
+  .edit-tools button { font-family:inherit; font-weight:700; cursor:pointer; }
+  .format-btn, .clear-format { min-width:30px; height:30px; border:1px solid #cfd8d2; border-radius:16px; background:#fff; color:#333; font-size:12px; }
+  .edit-tools .clear-format { padding:0 10px; }
+  .image-file-input { display:none; }
+  .image-edit-wrap { position:relative; display:block; width:100%; }
+  .image-edit-wrap.is-inline { display:inline-block; }
+  .image-edit-wrap.is-logo { display:inline-flex; align-items:center; justify-content:center; width:100%; }
+  .img-strip .image-edit-wrap { flex:1; }
+  .image-upload-btn { display:none; position:absolute; top:6px; right:6px; z-index:4; border:none; border-radius:14px; padding:5px 9px; background:rgba(3,199,90,.95); color:#fff; font-size:11px; font-weight:800; line-height:1; cursor:pointer; box-shadow:0 2px 8px rgba(0,0,0,.2); font-family:inherit; }
+  body.editing .image-upload-btn { display:block; }
+  .image-edit-wrap.is-small .image-upload-btn { top:3px; right:3px; padding:3px 6px; font-size:10px; }
+  .strip-img { width:100%; height:100%; min-height:130px; object-fit:cover; border-radius:6px; display:block; }
+  .img-strip .cell .strip-img { min-height:0; height:100%; }
+  .image-edit-wrap > .img-block-img, .image-edit-wrap > .pf-img { margin-top:0; margin-bottom:0; }
+  body.editing .main, body.editing .profile, body.editing .summary, body.editing .headword, body.editing .cite-box { outline:1px dashed #e6a700; outline-offset:4px; }
+  body.editing [contenteditable="true"]:focus { outline:2px solid rgba(3,199,90,.35); outline-offset:4px; }
+
+  @media print {
+    .topbar, .toolbar, .demo-note, .save-hint { display:none !important; }
+    .wrap { padding:0; max-width:100%; }
+    body { font-size:12px; }
+    .layout { display:block; }
+    .profile { width:100%; margin-bottom:16px; position:static; max-height:none; overflow:visible; }
+    .profile .img-placeholder, .img-block { height:110px; }
+    section { page-break-inside:avoid; }
+    a { color:inherit; text-decoration:none; }
+  }
+
+        .img-block-img.fit-to-photo {
+          height: auto;
+          max-height: none;
+          object-fit: contain;
+          object-position: center;
+          background: #fff;
+        }
+
+</style>
+</head>
+<body class="">
+<div class="topbar">
+<div class="inner">
+<div class="logo"><span class="brand">중국도시</span><span class="svc"> 정보사전</span></div>
+<div class="searchbox">사전 전체 검색</div>
+</div>
+</div>
+<div class="wrap">
+<div class="breadcrumb">지식백과 &nbsp;›&nbsp; 지역 &nbsp;›&nbsp; 중국 &nbsp;›&nbsp; 광둥성(广东省) &nbsp;›&nbsp; <b>부성급시·경제특구</b></div>
+<div class="headword">
+<h1>선전시</h1><span class="origin">[ 深圳市, Shenzhen ]</span><span class="src-badge">중국 도시 정보 사전</span>
+<div class="pron">중국어 발음 <b>Shēnzhèn Shì(선전스)</b> &nbsp;|&nbsp; 우리 한자음 <b>심천시</b> &nbsp;|&nbsp; 약칭 <b>선(深)</b> &nbsp;|&nbsp; 별칭 <b>펑청(鹏城)</b></div>
+</div>
+
+<div class="reader-note">
+<b>이 항목을 읽기 전에</b> — ① 중국 행정·통계 용어는 우리나라 제도와 대응되지 않는 것이 많아, 처음 나오는 자리에서 <b>초록색 용어 상자</b>로 풀어 설명했습니다. ② 통계 수치는 <b>기준 연도와 발표 기관</b>을 함께 적었습니다. 중국 통계는 발표 시점에 따라 잠정치가 수정되는 경우가 있습니다. ③ 지명·인명은 <b>국립국어원 외래어 표기법(중국어)</b>에 따라 현대 중국어 발음으로 적고 한자를 병기했으며, 역사 항목의 옛 지명·인명은 우리 한자음을 함께 썼습니다.
+</div>
+
+<div class="summary">
+<span class="lbl">요약</span>
+<p>선전(深圳)은 중국 <b>광둥성 남부, 홍콩과 국경을 맞댄 도시</b>다. 1980년 중국이 처음 지정한 네 곳의 <b>경제특구</b> 가운데 하나로, 1979년 시(市)로 승격되기 전까지는 인구 30여만 명의 바오안현(宝安县)이라는 농·어촌 지역이었다. 40여 년 만에 상주인구 1,800만 명대의 대도시로 바뀌면서, 중국의 개혁·개방 정책을 상징하는 도시로 자주 언급된다.</p>
+<p>제조업 하청 기지에서 출발해 현재는 <b>통신장비·인터넷·전기차·드론</b> 등의 본사가 모인 도시가 됐다. <b>화웨이(华为)</b>, <b>텐센트(腾讯)</b>, <b>비야디(BYD)</b>, <b>중국핑안(中国平安)</b>, <b>DJI(다장촹신)</b>가 이곳에 본사를 두고 있으며, 중국의 2대 증권거래소 가운데 하나인 <b>선전증권거래소</b>가 있다. 선전시 통계공보에 따르면 2025년 지역총생산(GDP)은 3조 8,731억 위안이다.</p>
+<p>다만 도시가 급격히 커지면서 생긴 과제도 뚜렷하다. 상주인구의 약 <b>65%가 선전 호적(戶口)을 갖지 못한 유입 인구</b>이고, 자체 수원(水源)이 부족해 생활용수의 상당 부분을 이웃 지역의 <b>둥장(东江)·시장(西江)</b>에서 끌어온다. 인구밀도는 중국 대도시 가운데 가장 높은 수준이다.</p>
+</div>
+
+<div class="layout">
+<div class="main">
+<div class="toc">
+<div class="toc-t">목차</div>
+<ol>
+<li><span class="num">1.</span><a href="#s1">명칭</a></li>
+<li><span class="num">2.</span><a href="#s2">역사</a></li>
+<li><span class="num">3.</span><a href="#s3">자연지리</a></li>
+<li><span class="num">4.</span><a href="#s4">자연자원</a></li>
+<li><span class="num">5.</span><a href="#s5">행정구역</a></li>
+<li><span class="num">6.</span><a href="#s6">경제</a></li>
+<li><span class="num">7.</span><a href="#s7">교육·의료·과학기술</a></li>
+<li><span class="num">8.</span><a href="#s8">교통</a></li>
+<li><span class="num">9.</span><a href="#s9">한국과의 교류</a></li>
+<li><span class="num">10.</span><a href="#s10">문화·풍습·음식</a></li>
+<li><span class="num">11.</span><a href="#s11">인구·민족·방언</a></li>
+<li><span class="num">12.</span><a href="#s12">주요 관광지</a></li>
+<li><span class="num">13.</span><a href="#s13">주요 제도·정책 연혁</a></li>
+<li><span class="num">14.</span><a href="#s14">유명 인물</a></li>
+</ol>
+</div>
+
+<section id="s1">
+<h2>1. 명칭</h2>
+<p>‘선전(深圳)’의 ‘圳(전)’은 광둥어(광부 방언)와 객가 방언에서 <b>밭 사이로 난 물도랑</b>을 가리키는 말이다. 마을 주변에 물웅덩이와 습지가 많고 밭 사이로 깊은 물도랑(오늘날의 선전강)이 흘렀다고 해서 붙은 이름으로 전해진다. 선전과 홍콩, 둥관 일대 마을에는 광부계·객가계를 가리지 않고 ‘전볜(圳边)’, ‘전터우(圳头)’ 같은 지명이 남아 있는데, 모두 밭가를 흐르는 작은 물길을 뜻한다.</p>
+<p>문헌에 ‘선전’이라는 이름이 처음 나타나는 것은 청 <b>강희본 《신안현지(新安县志)》</b>로, “강희 7년(1668년) 연안에 돈대(墩台) 21곳을 설치하였다 — 선전 돈대”라는 기록이 있다. 돈대는 해안을 감시하던 초소를 말한다.</p>
+<p>실물 문서에 처음 등장하는 것은 청 함풍 6년(1856년)의 사건 기록으로, 선전쉬(深圳墟)의 한 약재·잡화점이 강도를 당한 사건을 다루면서 ‘선전쉬’를 여덟 차례 언급한다. 이 문서는 중국제일역사당안관에 소장돼 있다.</p>
+<div class="term-box">
+<span class="tt">‘쉬(墟)’와 ‘소성(所城)’</span>
+<dl>
+<dt>쉬(墟)</dt><dd>정해진 날에 서는 <b>정기 시장(장터)</b>과 그 주변 마을. 신안현의 여러 장터 가운데 선전쉬가 가장 번성했고, 오늘날 <b>둥먼 옛거리(东门老街)</b>가 그 자리다.</dd>
+<dt>소성(所城)</dt><dd>명나라가 해안 방어를 위해 쌓은 <b>수비대 주둔 성곽</b>. 정식 명칭은 ‘수어천호소성(守御千户所城)’으로, 천호(千户)라는 지휘관이 통솔하는 부대의 성이라는 뜻이다.</dd>
+</dl>
+</div>
+<p>별칭 <b>‘펑청(鹏城)’</b>은 관내에 있는 <b>다펑소성(大鹏所城)</b>에서 따온 이름이다.</p>
+<p>행정 명칭의 변화를 보면, 1931년 선전진(镇)이 설치됐고 1949년 10월 19일 둥먼(선전쉬)에 선전진 인민정부가 세워졌다. 1953년 바오안현 정부가 난터우(南头)에서 선전진으로 옮겨왔으며, 1978년 8월 22일 중공 후이양 지구위원회가 성 위원회에 올린 〈바오안현을 선전시로 바꾸는 건에 관한 지시 요청 보고〉에서 ‘선전시’라는 이름이 공식 문서에 처음 등장했다. 1979년 3월 5일 국무원이 바오안현을 선전시로 바꾸는 안을 승인했다.</p>
+</section>
+
+<section id="s2">
+<h2>2. 역사</h2>
+<p>선전 일대에는 6,000~7,000년 전 신석기 시대부터 사람이 살았다. 1981년 문화재 조사에서 발견된 <b>셴터우링(咸头岭) 유적</b>이 그 근거로 꼽힌다.</p>
+<table class="data" style="width:100%;">
+<tbody>
+<tr><th style="width:140px; white-space:nowrap; text-align:center;">시대</th><th style="text-align:center;">주요 내용</th></tr>
+<tr><td style="vertical-align:middle; text-align:center; font-weight:700; background:#f4f8f5; white-space:nowrap; padding:12px 10px;">진·한~남북조</td><td style="text-align:left; word-break:keep-all; line-height:1.75; padding:12px 16px;">기원전 214년(진 시황 33년) 진이 링난(岭南, 오늘날 광둥·광시 일대)을 통합하고 남해군(南海郡)을 두면서, 선전 지역 대부분이 남해군 판위현(番禺县)에 속했다. 기원전 111년(한 무제 원정 6년) 한이 링난을 평정한 뒤 중원 문화가 유입됐다. <b>331년(동진 함화 6년)</b> 둥관군(东官郡)을 설치하고 그 아래 6개 현을 두면서 <b>바오안현(宝安县)</b>이 처음 설치됐다. 군과 현의 치소는 오늘날 난산구 난터우에 있었으며, 이것이 선전 지역에 현이 설치된 시초다.</td></tr>
+<tr><td style="vertical-align:middle; text-align:center; font-weight:700; background:#f4f8f5; white-space:nowrap; padding:12px 10px;">수·당~송·원</td><td style="text-align:left; word-break:keep-all; line-height:1.75; padding:12px 16px;">590년(수 개황 10년) 둥관군이 폐지되고 바오안현은 광저우 관할로 바뀌었다. 당대에 여러 차례 통폐합을 거쳐 중당(中唐) 무렵 <b>둥관현(东莞县)에 흡수된 뒤 약 800년간 현이 설치되지 않았다</b>. 한편 당·송·원대에 걸쳐 남중국 해상 무역이 활발해지고 이른바 ‘해상 실크로드’가 발달하면서, 이 지역은 군사·교역상의 요충으로 기능했다.</td></tr>
+<tr><td style="vertical-align:middle; text-align:center; font-weight:700; background:#f4f8f5; white-space:nowrap; padding:12px 10px;">명</td><td style="text-align:left; word-break:keep-all; line-height:1.75; padding:12px 16px;">1394년(홍무 27년) 해적과 왜구를 막기 위해 <b>둥관소성(난터우)</b>과 <b>다펑소성</b> 두 곳의 수비 성곽을 쌓았고, 이어 난터우 반도에 난터우자이(南头寨)라는 대규모 군영을 두었다. 1554년(가정 33년)에는 오늘날 난터우 허우하이만에서 홍콩 칭산에 이르는 ‘툰먼(屯门)’ 해역에서 포르투갈 함대와 충돌이 있었다. <b>1573년(만력 원년)</b> 둥관현에서 <b>신안현(新安县)</b>을 분리 설치하면서, 당대 중기 이후 처음으로 이 지역에 다시 현이 생겼다.</td></tr>
+<tr><td style="vertical-align:middle; text-align:center; font-weight:700; background:#f4f8f5; white-space:nowrap; padding:12px 10px;">청</td><td style="text-align:left; word-break:keep-all; line-height:1.75; padding:12px 16px;">청 초 정성공 세력 등 해상 반청 세력을 차단하기 위해 동남 연안 5개 성에 두 차례 <b>천계령(迁海令)</b>을 시행했다. 주민을 해안에서 내륙으로 강제 이주시키는 정책으로, 1666년 신안현이 폐지되고 둥관현에 병합되는 등 지역 경제가 크게 위축됐다. 1669년 신안현이 복설된 뒤에는 <b>객가(客家)계 이주민이 대거 유입</b>돼 오늘날 선전 동부의 인구 구성이 형성됐다. 1842·1860·1898년에는 영국이 신안현 관할이던 <b>홍콩섬·주룽(九龙)·신제(新界)</b>를 차례로 할양받거나 조차했다(1997년 홍콩 반환). 1911년 광저우~주룽을 잇는 <b>광주철도(广九铁路)</b>가 개통되면서 선전쉬역이 내륙과 홍콩을 잇는 교통 결절점이 됐다.</td></tr>
+<tr><td style="vertical-align:middle; text-align:center; font-weight:700; background:#f4f8f5; white-space:nowrap; padding:12px 10px;">중화민국</td><td style="text-align:left; word-break:keep-all; line-height:1.75; padding:12px 16px;">1912년(민국 원년) 지방 행정이 성·현 2급으로 정리되면서 신안현이 광둥성 관할이 됐다. 1914년 인접 성의 같은 이름 현과 구별하기 위해 신안현을 <b>바오안현</b>으로 되돌렸으며, 현 치소는 여전히 난터우에 있었다.</td></tr>
+<tr><td style="vertical-align:middle; text-align:center; font-weight:700; background:#f4f8f5; white-space:nowrap; padding:12px 10px;">중화인민공화국<br><span class="yr">(1949~1978)</span></td><td style="text-align:left; word-break:keep-all; line-height:1.75; padding:12px 16px;">1949년 10월 바오안현 인민정부가 세워졌다. 이후 주장 전서(1950), 웨중 행정공서(1952), 후이양 전구(1956), 포산 전구(1959), 다시 후이양 전구(1963)로 상급 관할이 여러 차례 바뀌었다. <b>1953년 현 정부가 난터우에서 선전쉬로 옮겨오면서</b> 오늘날의 도심 자리가 행정 중심이 됐다.</td></tr>
+<tr><td style="vertical-align:middle; text-align:center; font-weight:700; background:#f4f8f5; white-space:nowrap; padding:12px 10px;">경제특구 시기<br><span class="yr">(1979~)</span></td><td style="text-align:left; word-break:keep-all; line-height:1.75; padding:12px 16px;"><b>1979년 3월 5일</b> 국무원이 바오안현을 선전시로 개편하는 안을 승인했고, 같은 해 11월 지구급 성 직할시가 됐다. <b>1980년 8월 26일 선전경제특구가 공식 출범</b>해 주하이·산터우·샤먼과 함께 중국 첫 경제특구 네 곳이 됐다. 1982년 1월 개혁·개방 이후 첫 외자계 은행 지점인 난양상업은행 선전지점이 문을 열었고, 1982년 12월에는 특구 바깥 지역을 담당할 바오안현이 선전시 소속으로 다시 설치됐다. 1988년 10월 <b>계획단열시</b>로 지정돼 성(省)에 준하는 경제 관리 권한을 받았고, 1990년 12월 <b>선전증권거래소</b>가 시범 영업(1991년 7월 정식 개업)을 시작했다. 1992년 7월 1일 경제특구 입법권을 부여받았으며, 1994년 2월 <b>부성급시</b>가 됐다.</td></tr>
+<tr><td style="vertical-align:middle; text-align:center; font-weight:700; background:#f4f8f5; white-space:nowrap; padding:12px 10px;">2000년대 이후</td><td style="text-align:left; word-break:keep-all; line-height:1.75; padding:12px 16px;">2004년 12월 관내 농촌 지역의 도시화 전환이 마무리돼 <b>행정상 농촌이 없는 도시</b>가 됐다. 2010년 7월 1일 그때까지 도심 일부에만 적용되던 <b>경제특구 범위가 선전시 전역으로 확대</b>됐고, 2018년 1월 국무원 승인으로 특구 안팎을 가르던 검문선(이른바 ‘얼셴관’)이 공식 폐지됐다. 2017~2018년에는 산웨이시 안에 있는 <b>선산특별합작구(深汕特别合作区)</b>가 선전시 파출기구 체제로 정리됐다. 2019년 2월 중공중앙·국무원이 〈웨강아오 대만구 발전계획강요〉를 발표해 선전을 대만구 중심 도시의 하나로 규정했고, 같은 해 8월 ‘중국특색 사회주의 선행시범구’ 건설이 시작됐다.</td></tr>
+</tbody>
+</table>
+<div class="note-box">
+<b>참고</b> — 선전의 역사 서술은 ‘1979년 이전에는 작은 어촌이었다’는 표현으로 요약되는 경우가 많지만, 실제로는 331년 이래 현(县) 치소가 있었고 명대에는 두 곳의 수비 성곽을 둔 해안 방어 거점이었다. 1979년 시 승격 당시 바오안현 인구는 30만 명대였고, 선전쉬는 홍콩과 이어진 철도역이 있는 장터 마을이었다.
+</div>
+</section>
+
+<section id="s3">
+<h2>3. 자연지리</h2>
+<h3>위치</h3>
+<p>광둥성 남부, 주장(珠江) 하구 동안에 있다. 좌표는 북위 22°26′59″~22°51′49″, 동경 113°45′42″~114°37′21″이다. 동쪽으로 다야만(大亚湾)·다펑만(大鹏湾)에 면하고, 서쪽으로는 주장 하구와 링딩양(伶仃洋)에 접한다. 남쪽은 <b>선전강(深圳河)을 사이에 두고 홍콩과 맞닿아 있으며</b>, 북쪽으로는 둥관·후이저우와 경계를 이룬다. 해역은 남중국해로 이어진다.</p>
+<p>육지 면적은 1,997.47㎢, 해역 면적은 1,145㎢다.</p>
+<div class="note-box">
+<b>면적 수치가 자료마다 다른 이유</b> — 선전시의 육지 면적으로는 <b>1,997.47㎢</b>와 <b>약 2,465㎢</b> 두 가지가 함께 쓰인다. 앞의 수치는 선전시 본체만, 뒤의 수치는 인접 산웨이시 안에 있는 <b>선산특별합작구(약 468㎢)</b>를 더한 것이다. 인구밀도(7,422명/㎢)처럼 선산합작구를 포함해 계산한 지표도 있으므로, 수치를 비교할 때 기준 범위를 확인해야 한다.
+</div>
+<div class="map-row">
+<div class="map-col">
+<iframe loading="lazy" src="https://maps.google.com/maps?q=%E5%B9%BF%E4%B8%9C%E7%9C%81&amp;z=6&amp;hl=ko&amp;output=embed"></iframe>
+<div class="map-cap">① 중국 안에서의 선전 위치 (광저우 남동쪽 약 100km, 홍콩 바로 북쪽)</div>
+</div>
+<div class="map-col">
+<iframe loading="lazy" src="https://maps.google.com/maps?q=%E6%B7%B1%E5%9C%B3%E5%B8%82&amp;z=10&amp;hl=ko&amp;output=embed"></iframe>
+<div class="map-cap">② 선전 시가지와 홍콩 접경</div>
+</div>
+</div>
+
+<h3>지질·지형</h3>
+<p>지질 구조상 선전은 저장·푸젠·광둥 서부 인지(印支) 요함대의 남동부에 해당하며, <b>롄화 단층대(莲花断裂带)</b>가 시내를 지나기 때문에 지질 구조가 비교적 복잡하다. 대부분이 화강암 등 마그마암이고 퇴적암은 드물게 분포한다. 가리동기·해서인지기·연산기·히말라야기의 네 차례 큰 지각 변동을 겪은 것으로 분석되며, 이 가운데 연산기의 변동이 가장 강했다.</p>
+<p>지형은 <b>구릉·대지(台地)·평원</b>이 섞인 복합 지형이다. 유형별 면적 비중은 구릉 44.07%, 대지 22.35%, 평원 22.12%, 계단지 5.09%, 저산 4.84%다. 전체 평균 해발은 약 50m이며, 동남쪽이 높고 서북쪽이 낮다. 동남부에는 낮은 산과 구릉이 많고(대표적으로 우퉁산), 서북부는 평원과 대지가 넓게 펼쳐진다. 저산·구릉·고대지가 차지하는 산지는 시 전체 육지의 62.8%에 이른다.</p>
+<ul class="plain">
+<li>최고봉: <b>우퉁산(梧桐山) 943.7m</b></li>
+<li>해발 500m 이상 봉우리 17개, 300m 이상 57개</li>
+<li>해안선 길이: 311.4km(선산합작구 포함) / 260.5km(미포함). 동에서 서로 다야만·다펑만·선전만·주장 하구의 네 만을 잇는다</li>
+<li>섬 17개. 가장 큰 <b>네이링딩다오(内伶仃岛)</b>가 4.85㎢이며, 다찬다오·샤오찬다오 등 큰 섬은 주장 하구 링딩양에, 나머지 작은 섬들은 다펑반도 연안에 분포한다</li>
+</ul>
+
+<h3>기후</h3>
+<p>북회귀선 이남에 있어 <b>아열대 계절풍 기후</b>에 속한다. 연중 온난다습하고 여름이 길고 겨울이 짧으며, 일조와 강수가 모두 풍부하다. 봄에는 날씨 변화가 커서 ‘더웠다 추웠다’를 반복하며 동풍 계열이 분다. 여름은 평균 202일에 이를 만큼 길고 남풍 계열이 불며 무덥고 비가 많다. 가을·겨울에는 북동 계절풍이 불어 건조하고 비가 적다.</p>
+<table class="data" style="width:560px; max-width:100%;">
+<tbody>
+<tr><th style="width:150px; text-align:center;">항목</th><th style="text-align:center;">수치</th></tr>
+<tr><td style="font-weight:600;">연평균 기온</td><td>23.3℃</td></tr>
+<tr><td style="font-weight:600;">가장 추운 달(1월)</td><td>평균 15.7℃ &nbsp;<span class="yr">— 서울 1월 평균보다 약 18℃ 높다</span></td></tr>
+<tr><td style="font-weight:600;">가장 더운 달(7월)</td><td>평균 29.0℃</td></tr>
+<tr><td style="font-weight:600;">역대 극값</td><td>최고 38.7℃ / 최저 0.2℃ &nbsp;<span class="yr">— 영하로 내려간 기록이 없다</span></td></tr>
+<tr><td style="font-weight:600;">연강수량</td><td>1,932.9mm &nbsp;<span class="yr">— 연간 강수의 86%가 4~9월 우기에 집중</span></td></tr>
+<tr><td style="font-weight:600;">연일조시간</td><td>1,853.0시간</td></tr>
+<tr><td style="font-weight:600;">여름 길이</td><td>평균 202일</td></tr>
+</tbody>
+</table>
+
+<h3>하천과 물</h3>
+<p>선산합작구를 포함해 <b>11개 유역 수계</b>가 있고, 유역 면적 1㎢ 이상인 하천이 362개, 총연장 1,255km다. 이 가운데 유역 면적 100㎢가 넘는 하천은 <b>선전강·관란허·마오저우허·룽강허·핑산허·츠스허·밍러허</b> 7개다. 대부분 시내 양타이산과 해안 산지에서 발원하며, 우기 유출량이 연간 유출량의 90% 이상을 차지한다. 선전강을 제외하면 배가 다닐 수 있는 하천은 없다.</p>
+<p>비는 많이 오지만 <b>지형상 빗물이 대부분 바다로 빠져나가고 지하수도 부족</b>해, 선전은 중국의 물 부족 도시로 분류된다. 2022년 10월 기준 수자원 총량은 20.95억㎥, 1인당 수자원량은 약 121㎥에 그친다. 이 때문에 도시 용수의 상당 부분을 시 바깥에서 끌어온다.</p>
+<div class="term-box">
+<span class="tt">선전의 물은 어디에서 오는가</span>
+<dl>
+<dt>둥선공수공정(东深供水工程)</dt><dd>둥장(东江) 물을 선전과 홍콩으로 보내는 수로. 홍콩 상수도의 주요 공급원이기도 하다.</dd>
+<dt>둥장수원공정(东江水源工程)</dt><dd>둥장 물을 선전 시내 저수지로 직접 끌어오는 사업.</dd>
+<dt>주장삼각주 수자원배치공정</dt><dd>2019년 5월 착공해 2024년부터 가동. 주장의 지류인 <b>시장(西江)</b> 물을 포산 순더에서 선전 궁밍 저수지까지 보낸다. 설계 연간 송수량 17.08억㎥ 가운데 선전 몫이 8.47억㎥로 절반 가까이다.</dd>
+</dl>
+</div>
+<p>2022년 10월 기준 저수지는 177개(선산합작구 28개 포함)이며 총저수용량은 9.7억㎥다. 선전시 〈도시 급수 수원 계획(2020~2035)〉은 2035년까지 ‘자체 수원·둥장·시장·재생수’ 네 갈래로 수원을 다변화하는 것을 목표로 하고 있다.</p>
+
+<h3>토양</h3>
+<p>남아열대 기후 조건에서 넓은 지역에 <b>적홍양(赤红壤)</b>이 발달했고, 비교적 높은 산지에는 홍양·황양 같은 대상성 토양이 나타난다. 하곡과 해안 평원에는 사토·해안 염류토·소택토가, 사람이 오래 경작한 지역에는 논토양·채소밭 토양이 발달했다. 1983년 토양 조사 결과 10개 토류, 15개 아류, 36개 토속, 74개 토종이 확인됐으며 총면적은 168,141㏊였다.</p>
+
+<h3>자연재해</h3>
+<p>선전에서 가장 큰 자연재해는 <b>태풍과 폭풍해일</b>이다. 1546년 이래 피해가 극심했던 태풍·해일이 30여 차례 기록돼 있다. 태풍 외에 홍수, 가뭄, 한파, 우박 등 기상재해와 이에 따른 토사 유출·산사태·암용 함몰 같은 지질재해, 그리고 산불도 발생한다. 2022년 한 해에만 태풍 9회, 폭우 27회가 있었고 지질재해 위험 지점 60곳이 관리 대상이었다.</p>
+<p>선전 기상 당국이 <b>태풍 적색경보</b>(가장 높은 등급)를 발령한 것은 2025년까지 다섯 차례로, 해당 태풍은 2016년 니다(妮妲), 2017년 하토(天鸽), 2018년 망쿳(山竹), 2023년 사올라(苏拉), 2025년 라가사(桦加沙)다. 이 가운데 2018년 망쿳은 1983년 이후 선전에 가장 큰 영향을 준 태풍으로 기록됐으며, 당시 인명 사망 보고는 없었다.</p>
+</section>
+
+<section id="s4">
+<h2>4. 자연자원</h2>
+<h3>토지</h3>
+<p>제3차 전국 국토조사(기준 시점 2019년 12월 31일) 결과는 다음과 같다.</p>
+<table class="data">
+<tbody>
+<tr><th style="width:150px; text-align:center;">지목</th><th style="width:180px; text-align:center;">선전시(선산합작구 제외)</th><th style="text-align:center;">선산특별합작구</th></tr>
+<tr><td style="font-weight:600;">경지</td><td>2,844.74㏊</td><td>1,997.29㏊</td></tr>
+<tr><td style="font-weight:600;">원지(과수·차밭 등)</td><td>11,345.51㏊</td><td>2,078.23㏊</td></tr>
+<tr><td style="font-weight:600;">임지</td><td>64,323.61㏊</td><td>36,516.92㏊</td></tr>
+<tr><td style="font-weight:600;">초지</td><td>3,994.84㏊</td><td>278.90㏊</td></tr>
+<tr><td style="font-weight:600;">습지</td><td>4,051.89㏊</td><td>531.78㏊</td></tr>
+<tr><td style="font-weight:600;">도시·마을·광공업 용지</td><td>92,416.05㏊</td><td>1,956.95㏊</td></tr>
+<tr><td style="font-weight:600;">교통운수 용지</td><td>9,810.22㏊</td><td>703.35㏊</td></tr>
+<tr><td style="font-weight:600;">수역·수리시설 용지</td><td>9,392.55㏊</td><td>2,685.40㏊</td></tr>
+</tbody>
+</table>
+<p>선전시 본체에서는 <b>도시·마을·광공업 용지가 임지 다음으로 넓다</b>는 점이 특징이다. 개발 가능한 토지가 사실상 소진돼, 기존 시가지를 재개발하는 방식(도시 갱신)이 주된 공급 수단이 됐다.</p>
+
+<h3>광물</h3>
+<p>선전의 광물자원은 <b>비금속 건축자재가 중심</b>이다. 흙·석재·모래와 시멘트용 석회암 등이 풍부하게 매장돼 있다. 철·망간·텅스텐 같은 금속 광물도 확인되지만 광상 규모가 작아 <b>산업적 채굴 가치는 없다</b>. 2015년 말 기준으로 30종(아종 포함)의 광물과 80곳의 광산지가 확인됐다.</p>
+<table class="data">
+<tbody>
+<tr><th style="width:120px;">구분</th><th>주요 광종</th><th style="width:90px;">광산지 수</th></tr>
+<tr><td style="font-weight:600;">에너지 광물</td><td>석탄, 지열</td><td>6곳</td></tr>
+<tr><td style="font-weight:600;">금속 광물</td><td>철·망간·납·아연·텅스텐·주석·비스무트·몰리브덴·금·은·희토류</td><td>26곳</td></tr>
+<tr><td style="font-weight:600;">비금속 광물</td><td>황철석, 이탄, 남정석, 시멘트용 석회암, 건축용 모래, 벽돌용 점토, 휘록암, 건축용 화강암, 장식용 대리암, 수정, 정장석, 방해석, 고령토</td><td>39곳</td></tr>
+<tr><td style="font-weight:600;">수(水)·기(氣) 광물</td><td>지하수, 광천수</td><td>9곳</td></tr>
+</tbody>
+</table>
+
+<h3>생물</h3>
+<p>자연 식생에는 1,500여 종의 식물이 자라며, 국가 중점보호 야생식물이 16종 있다. 이 가운데 <b>Ⅰ급 보호종은 셴후소철(仙湖苏铁)과 자문두란(紫纹兜兰)</b> 2종이고, 나머지 15종이 Ⅱ급이다. 주요 서식지는 우퉁산·양타이산·싼저우톈·탕랑산·치냥산·톈터우산·파이야산과 네이링딩다오 일대다. 이 밖에 격목·수송·점목·토침향·사라 등 희귀·멸종위기 식물과 맹그로브(红树)·반맹그로브 군락이 분포한다.</p>
+<p>인공 식생은 생태림, 경제림, 경제작물로 나뉜다. 경제림은 과수가 중심으로 <b>용안·여지(리치)·금귀귤·망고·감·황피</b> 등이 주요 산물이며, 경제작물은 채소와 화훼가 중심이다. 2020년 기준 산림 면적은 7.8만㏊, 산림 피복률은 39.4%, 건설구역 녹화 피복률은 43.4%였다.</p>
+<p>육상 야생 척추동물은 513종으로 조류 335종, 포유류 53종이 확인됐고 외래종은 26종이다. 국가 중점보호 야생동물은 42종이며, <b>Ⅰ급은 비단뱀·검은황새·흰죽지수리</b> 3종이다. 이 밖에 호랑무늬개구리·짧은꼬리원숭이·사향고양이류·구름표범 등이 보호종으로 지정돼 있다.</p>
+
+<h3>보호지역과 생물다양성</h3>
+<p>2020년 기준 각종 자연보호지가 25곳, 총면적 494.43㎢다. 국가급 5곳, 성급 1곳, 시급 20곳, 구급 2곳으로 구성된다. 국가급 보호지는 다음과 같다.</p>
+<ul class="plain">
+<li><b>푸톈 맹그로브 조류 자연보호구</b> — 도심 한복판에 맹그로브 숲이 남아 있는 드문 사례로, 선전만을 찾는 철새의 중간 기착지다</li>
+<li>네이링딩다오 짧은꼬리원숭이 자연보호구</li>
+<li>우퉁산 국가삼림공원</li>
+<li>화차오청 국가습지공원</li>
+<li>다펑반도 국가지질공원</li>
+</ul>
+<p>연구 기반으로는 2006년 설립된 <b>전국 난과식물 종질자원 보호센터</b>가 있으며, 이곳에서 세계 최초로 난초의 전체 유전체 해독이 이뤄졌다. 2015년에는 국가급 유전자은행인 <b>선전 국가유전자은행</b> 설립이 승인됐다.</p>
+</section>
+
+<section id="s5">
+<h2>5. 행정구역</h2>
+<p>선전시는 <b>9개 시할구(市辖区)</b>와 <b>1개 신구(다펑신구)</b>로 이뤄져 있으며, 이와 별도로 인접 산웨이시 안에 있는 <b>선산특별합작구</b>를 관리한다. 시 정부는 푸톈구에 있다.</p>
+<div class="term-box">
+<span class="tt">중국의 도시 행정 단위</span>
+<dl>
+<dt>시할구(市辖区)</dt><dd>지급시 아래의 정식 행정구. 우리나라 광역시의 ‘구’에 해당한다.</dd>
+<dt>신구(新区)</dt><dd>정식 행정구가 아니라 <b>시 정부가 파견한 관리기구</b>가 운영하는 개발 구역. 다펑신구가 여기에 해당해, 별도의 행정구역 코드를 갖지 않는다.</dd>
+<dt>가도(街道)</dt><dd>구 아래의 기초 행정단위. 우리나라의 ‘동(洞)’에 가깝다. 농촌 지역의 ‘진(镇)’에 대응한다.</dd>
+<dt>선산특별합작구(深汕特别合作区)</dt><dd>선전에서 동쪽으로 약 100km 떨어진 <b>산웨이시(汕尾市) 안에 있는데도 선전시가 개발·관리하는 구역</b>. 선전에 개발할 땅이 부족해 만들어진 이례적인 구조로, 2018년 12월 선전시 파출기구(당 공작위원회·관리위원회)가 정식 출범했다.</dd>
+</dl>
+</div>
+<table class="data">
+<tbody>
+<tr><th style="width:100px">구</th><th style="width:70px">한자</th><th style="width:100px">행정코드</th><th style="width:75px">가도 수</th><th>성격</th></tr>
+<tr><td>뤄후구</td><td>罗湖区</td><td>440303</td><td>10개</td><td>홍콩과 맞닿은 구도심. 뤄후 통상구와 둥먼 상업가가 있다</td></tr>
+<tr><td>푸톈구</td><td>福田区</td><td>440304</td><td>11개</td><td>시 정부 소재지이자 중심업무지구(CBD). 선전증권거래소, 화창베이 전자상가, 푸톈 맹그로브 보호구가 있다</td></tr>
+<tr><td>난산구</td><td>南山区</td><td>440305</td><td>9개</td><td>대학·연구기관과 첨단기업이 밀집. 셔코우(蛇口), 첸하이합작구, 난터우고성이 있다</td></tr>
+<tr><td>바오안구</td><td>宝安区</td><td>440306</td><td>11개</td><td>선전 바오안 국제공항이 있는 서부 제조업 집적지</td></tr>
+<tr><td>룽강구</td><td>龙岗区</td><td>440307</td><td>14개</td><td>동부 최대 구. 화웨이 본사(반톈)와 객가 위옥 ‘허후신쥐’가 있다</td></tr>
+<tr><td>옌톈구</td><td>盐田区</td><td>440308</td><td>5개</td><td>컨테이너 항만인 옌톈항, 다메이사·샤오메이사 해변, 중잉제가 있다</td></tr>
+<tr><td>룽화구</td><td>龙华区</td><td>440309</td><td>6개</td><td>2016년 신설. 북부 주거·제조 지역이며 선전북역이 있다</td></tr>
+<tr><td>핑산구</td><td>坪山区</td><td>440310</td><td>7개</td><td>2016년 신설. BYD 생산기지 등 신에너지차 산업 거점</td></tr>
+<tr><td>광밍구</td><td>光明区</td><td>440311</td><td>6개</td><td>2018년 신설. 과학연구 시설과 농장 지대가 함께 있다</td></tr>
+<tr><td>다펑신구</td><td>大鹏新区</td><td><span style="color:#888;">— (신구)</span></td><td><span style="color:#888;">—</span></td><td>다펑반도 일대. 다펑소성, 국가지질공원, 해안 관광지가 분포</td></tr>
+<tr><td>선산특별합작구</td><td>深汕特别<br>合作区</td><td><span style="color:#888;">— (합작구)</span></td><td><span style="color:#888;">—</span></td><td>산웨이시 경내에 있으나 선전시가 개발·관리</td></tr>
+</tbody>
+</table>
+<div class="note-box">
+<b>참고</b> — 룽화·핑산·광밍은 2010년대에 기존 룽강·바오안구에서 분리돼 정식 행정구가 됐다. 선전시 자료 가운데 “9개 구, 1개 신구” 대신 “9개 행정구”만 세는 것도 있는데, 이는 다펑신구가 정식 행정구가 아니기 때문이다.
+</div>
+</section>
+
+<section id="s6">
+<h2>6. 경제</h2>
+<h3>개관</h3>
+<p>선전은 경제특구·계획단열시·부성급시라는 세 가지 지위를 함께 가진 도시다. 이 때문에 광둥성에 속하면서도 경제 정책과 예산 운용에서 성(省)에 준하는 권한을 행사한다.</p>
+<div class="term-box">
+<span class="tt">선전의 행정·경제 지위를 나타내는 용어</span>
+<dl>
+<dt>경제특구(经济特区)</dt><dd>외국 자본 유치와 시장경제 실험을 위해 세제·투자·행정 규제를 별도로 적용하는 구역. 1980년 선전·주하이·산터우·샤먼 네 곳이 첫 지정을 받았다. 2010년부터 선전은 시 전역이 특구다.</dd>
+<dt>계획단열시(计划单列市)</dt><dd>국가 계획과 예산에서 <b>소속 성을 거치지 않고 중앙과 직접 항목을 세우는 도시</b>. 재정 수입 배분과 경제 관리 권한이 성급에 준한다. 선전 외에 다롄·칭다오·닝보·샤먼 등 5곳뿐이다.</dd>
+<dt>부성급시(副省级市)</dt><dd>행정 등급이 성(省)의 절반 급, 곧 <b>일반 지급시보다 한 단계 높은 도시</b>. 시장·서기의 직급이 부성장급이다.</dd>
+<dt>웨강아오 대만구(粤港澳大湾区)</dt><dd>광둥성 9개 도시와 홍콩·마카오를 하나의 경제권으로 묶는 국가 구상. 2019년 2월 〈발전계획강요〉가 발표됐다. ‘대만구(大湾区)’는 큰 만(灣)을 낀 도시권이라는 뜻으로, 주장 하구 일대를 가리킨다.</dd>
+<dt>선행시범구(先行示范区)</dt><dd>2019년 8월부터 선전에 부여된 지위로, 제도 개혁을 먼저 시험해 보는 지역이라는 뜻이다.</dd>
+</dl>
+</div>
+<p>선전시 통계국이 2026년 5월 25일 발표한 〈2025년 국민경제·사회발전 통계공보〉에 따르면, 2025년 선전의 지역총생산은 <b>3조 8,731.80억 위안</b>으로 전년 대비 5.5% 늘었다. 1인당 지역총생산은 21만 3,763위안(전년 대비 +4.1%)이다.</p>
+<h4>주요 경제 지표 <span class="yr">(2025년, 선전시 통계공보 기준)</span></h4>
+<table class="data" style="width:100%;">
+<tbody>
+<tr><th style="width:170px; text-align:center;">항목</th><th style="text-align:center;">수치</th></tr>
+<tr><td style="font-weight:600;">지역총생산(GRDP)</td><td>3조 8,731.80억 위안 (전년 대비 +5.5%)</td></tr>
+<tr><td style="font-weight:600;">산업 구성 (1·2·3차)</td><td>1차 28.04억 위안(0.1%, −4.5%) · 2차 1조 4,482.54억 위안(37.4%, +4.1%) ·<br>3차 2조 4,221.22억 위안(62.5%, +6.3%)</td></tr>
+<tr><td style="font-weight:600;">1인당 지역총생산</td><td>21만 3,763위안 (+4.1%)</td></tr>
+<tr><td style="font-weight:600;">소비자물가</td><td>전년 대비 +0.2%</td></tr>
+<tr><td style="font-weight:600;">화물 수출입</td><td>4조 5,533.89억 위안 (+1.4%) — 수출 2조 7,387.81억(−2.6%), 수입 1조 8,146.08억(+8.0%)</td></tr>
+<tr><td style="font-weight:600;">사회소비재 소매총액</td><td>1조 259.93억 위안 (+2.3%)</td></tr>
+<tr><td style="font-weight:600;">고정자산투자</td><td>전년 대비 <span class="check">−21.7%</span> (부동산 개발투자 −31.0%)</td></tr>
+<tr><td style="font-weight:600;">주력 산업</td><td>하이테크 · 금융 · 물류 · 문화 (4대 지주산업)</td></tr>
+</tbody>
+</table>
+<div class="note-box">
+<b>읽을 때 유의할 점</b> — 2025년 선전 경제는 생산과 소비가 늘어난 반면 <b>투자는 크게 줄었다</b>. 고정자산투자가 전년 대비 21.7%, 부동산 개발투자가 31.0% 감소했고 신축 주택 판매면적도 11.1% 줄었다. 수출액 역시 2.6% 감소해, 수입 증가(+8.0%)가 전체 무역액을 끌어올린 구조다. 성장률 수치만으로는 드러나지 않는 부분이므로 함께 볼 필요가 있다.
+</div>
+
+<h3>제1차 산업</h3>
+<p>2004년 행정상 농촌이 사라진 도시인 만큼 1차 산업 비중은 <b>0.1%</b>에 그친다. 2025년 1차 산업 부가가치는 28.04억 위안으로 전년 대비 4.5% 줄었다. 농작물 파종 면적은 16.49만 무(亩)로 5.9% 감소했고, 채소 생산량 18.98만 톤(+7.1%), 과일 생산량 2.95만 톤(−6.6%)을 기록했다.</p>
+<p>반면 수산물 총생산량은 17.67만 톤으로 전년 대비 57.2% 늘었고, 그중 해산물이 17.16만 톤(+61.6%)이다. 연근해 어획보다 원양어업 조직화의 영향이 큰 것으로 해석된다. 전통 특산물로는 <b>사징 굴(沙井蚝)</b>, <b>난산 여지(南山荔枝)</b>, 시리 망고, 다펑 윈우차 등이 있다.</p>
+
+<h3>제2차 산업</h3>
+<p>2025년 전체 공업 부가가치는 1조 3,232.34억 위안으로 전년 대비 5.7% 늘었고, <b>규상공업</b> 부가가치는 5.4% 증가했다. 업종별로는 제조업이 5.9% 늘고 채굴업이 1.1% 줄었다.</p>
+<div class="term-box">
+<span class="tt">규상공업(规上工业)이란?</span>
+중국 통계에서 <b>연매출 2,000만 위안 이상인 ‘일정 규모 이상’ 기업</b>만 따로 묶어 집계하는 방식이다. ‘규모 이상 공업(规模以上工业)’의 줄임말로, 중국 공업 통계에서 가장 자주 쓰이는 기준이다. 영세 기업이 빠지므로 전체 공업 수치와는 차이가 난다.
+</div>
+<table class="data">
+<tbody>
+<tr><th style="width:230px;">규상공업 주요 업종 <span class="yr">(2025)</span></th><th style="text-align:center;">전년 대비</th></tr>
+<tr><td>컴퓨터·통신·기타 전자장비 제조업</td><td style="text-align:center;">+6.2%</td></tr>
+<tr><td>자동차 제조업</td><td style="text-align:center;">+29.4%</td></tr>
+<tr><td>범용 설비 제조업</td><td style="text-align:center;">+13.9%</td></tr>
+<tr><td>전력·열 생산 및 공급업</td><td style="text-align:center;">+6.5%</td></tr>
+<tr><td>전용 설비 제조업</td><td style="text-align:center;">+5.1%</td></tr>
+<tr><td>전기기계·기자재 제조업</td><td style="text-align:center;">+2.6%</td></tr>
+<tr><td>석유·천연가스 채굴업</td><td style="text-align:center;">−1.0%</td></tr>
+</tbody>
+</table>
+<p>2025년 규상공업 이익 총액은 3,580.11억 위안으로 10.6% 늘었고, 공업제품 판매율은 96.3%였다.</p>
+<h4>전략적 신흥산업</h4>
+<div class="term-box">
+<span class="tt">전략적 신흥산업(战略性新兴产业)</span>
+중국 정부가 <b>차세대 성장 동력으로 지정해 별도로 통계를 내는 산업군</b>이다. 차세대 정보기술, 바이오, 신에너지, 신소재, 첨단장비, 신에너지차, 친환경 산업 등이 포함된다. 지방정부의 산업 정책 성과를 보여 주는 지표로 자주 인용되며, 지역별로 포함 업종에 차이가 있다.
+</div>
+<p>2025년 전략적 신흥산업 부가가치는 전년 대비 7.2% 늘었고, 지역총생산에서 차지하는 비중은 <b>43.0%</b>였다. 규상공업 안에서 하이테크 제조업이 차지하는 비중은 59.9%(+5.6%), 장비 제조업은 72.6%(+8.2%), 첨단 제조업은 68.4%(+6.9%)다.</p>
+<table class="data" style="width:560px; max-width:100%;">
+<tbody>
+<tr><th style="width:220px;">주요 품목 생산량 <span class="yr">(2025)</span></th><th style="text-align:center;">수량</th><th style="text-align:center;width:90px;">증감</th></tr>
+<tr><td>산업용 로봇</td><td style="text-align:center;">19.49만 세트</td><td style="text-align:center;">+43.1%</td></tr>
+<tr><td>민간용 드론</td><td style="text-align:center;">745.38만 대</td><td style="text-align:center;">+40.1%</td></tr>
+<tr><td>3D 프린터</td><td style="text-align:center;">421.95만 대</td><td style="text-align:center;">+45.1%</td></tr>
+</tbody>
+</table>
+
+<h3>제3차 산업</h3>
+<p>2025년 3차 산업 부가가치는 2조 4,221.22억 위안으로 지역총생산의 62.5%를 차지했다. 업종별 부가가치는 다음과 같다.</p>
+<table class="data">
+<tbody>
+<tr><th style="width:230px;">업종</th><th style="width:150px; text-align:center;">부가가치</th><th style="text-align:center;">전년 대비</th></tr>
+<tr><td>금융업</td><td style="text-align:center;">5,261.56억 위안</td><td style="text-align:center;">+12.1%</td></tr>
+<tr><td>정보전송·소프트웨어·IT 서비스업</td><td style="text-align:center;">5,244.68억 위안</td><td style="text-align:center;">+10.3%</td></tr>
+<tr><td>부동산업</td><td style="text-align:center;">2,950.69억 위안</td><td style="text-align:center;">+0.4%</td></tr>
+<tr><td>도소매업</td><td style="text-align:center;">2,844.42억 위안</td><td style="text-align:center;">−0.7%</td></tr>
+<tr><td>임대·비즈니스 서비스업</td><td style="text-align:center;">1,853.98억 위안</td><td style="text-align:center;">+5.9%</td></tr>
+<tr><td>운수·창고·우편업</td><td style="text-align:center;">1,282.35억 위안</td><td style="text-align:center;">+3.5%</td></tr>
+<tr><td>숙박·음식업</td><td style="text-align:center;">537.23억 위안</td><td style="text-align:center;">+2.6%</td></tr>
+</tbody>
+</table>
+
+<h3>금융과 선전증권거래소</h3>
+<p>선전은 <b>선전증권거래소(深圳证券交易所)</b>가 있는 금융 도시다. 1990년 12월 시범 영업을 시작해 1991년 7월 정식 개업했으며, 상하이증권거래소와 함께 중국 본토의 2대 거래소를 이룬다.</p>
+<table class="data">
+<tbody>
+<tr><th style="width:230px;">항목 <span class="yr">(2025년 말)</span></th><th style="text-align:center;">수치</th></tr>
+<tr><td>금융기관 예금 잔액(내외화)</td><td style="text-align:center;">14조 6,346.95억 위안 (+7.8%)</td></tr>
+<tr><td>금융기관 대출 잔액(내외화)</td><td style="text-align:center;">9조 9,658.76억 위안 (+5.1%)</td></tr>
+<tr><td>선전거래소 상장사 수</td><td style="text-align:center;">2,887개 (전년 대비 +35개)</td></tr>
+<tr><td>상장사 시가총액</td><td style="text-align:center;">43조 2,400억 위안 (+30.9%)</td></tr>
+<tr><td>연간 증권시장 총거래대금</td><td style="text-align:center;">343조 5,600억 위안 (+54.7%)</td></tr>
+<tr><td>보험료 수입</td><td style="text-align:center;">2,177.98억 위안 (+11.2%)</td></tr>
+</tbody>
+</table>
+
+<h3>대외무역</h3>
+<p>2025년 화물 수출입 총액은 4조 5,533.89억 위안으로 전년 대비 1.4% 늘었다. 이 가운데 수출은 2조 7,387.81억 위안으로 2.6% 줄었고, 수입은 1조 8,146.08억 위안으로 8.0% 늘었다. 선전시 통계공보는 <b>수출액이 33년 연속 중국 본토 대·중도시 가운데 1위</b>라고 밝히고 있다. 하이테크 제품 수출은 1조 2,765.95억 위안으로 10.1% 늘어, 전체 수출의 46.6%를 차지했다.</p>
+
+<h3>대표 기업</h3>
+<p>선전에 본사를 둔 기업 가운데 2022년 기준으로 <b>포춘 글로벌 500대 기업</b>에 이름을 올린 곳은 10개사다. 아래는 선전에 본사 또는 주요 생산 거점을 둔 대표 기업이다.</p>
+<table class="data">
+<tbody>
+<tr><th style="width:70px">로고</th><th style="width:170px">기업</th><th style="width:110px">분야</th><th>비고</th><th style="width:130px">홈페이지</th></tr>
+<tr><td><div class="logo-ph">로고</div></td><td><b>화웨이</b> (Huawei, 华为)</td><td>통신장비·단말</td><td>1987년 선전에서 창업. 룽강구 반톈에 본사</td><td style="white-space:nowrap;"><a href="https://www.huawei.com" rel="noopener" target="_blank">huawei.com</a></td></tr>
+<tr><td><div class="logo-ph">로고</div></td><td><b>텐센트</b> (Tencent, 腾讯)</td><td>인터넷·게임</td><td>1998년 창업. 위챗(WeChat)·QQ 운영사</td><td style="white-space:nowrap;"><a href="https://www.tencent.com" rel="noopener" target="_blank">tencent.com</a></td></tr>
+<tr><td><div class="logo-ph">로고</div></td><td><b>비야디</b> (BYD, 比亚迪)</td><td>전기차·배터리</td><td>1995년 창업. 배터리에서 완성차로 확장, 핑산구에 생산기지</td><td style="white-space:nowrap;"><a href="https://www.byd.com" rel="noopener" target="_blank">byd.com</a></td></tr>
+<tr><td><div class="logo-ph">로고</div></td><td><b>중국핑안</b> (Ping An, 中国平安)</td><td>보험·금융</td><td>1988년 셔코우에서 창업한 종합 금융그룹</td><td style="white-space:nowrap;"><a href="https://www.pingan.cn" rel="noopener" target="_blank">pingan.cn</a></td></tr>
+<tr><td><div class="logo-ph">로고</div></td><td>자오상은행 (招商银行)</td><td>은행</td><td>1987년 셔코우에서 설립된 상업은행</td><td style="white-space:nowrap;"><a href="https://www.cmbchina.com" rel="noopener" target="_blank">cmbchina.com</a></td></tr>
+<tr><td><div class="logo-ph">로고</div></td><td>완커 (Vanke, 万科)</td><td>부동산</td><td>중국 대표 주택개발 기업</td><td style="white-space:nowrap;"><a href="https://www.vanke.com" rel="noopener" target="_blank">vanke.com</a></td></tr>
+<tr><td><div class="logo-ph">로고</div></td><td>순펑 (SF Express, 顺丰)</td><td>물류</td><td>중국 최대 민간 특송 기업</td><td style="white-space:nowrap;"><a href="https://www.sf-express.com" rel="noopener" target="_blank">sf-express.com</a></td></tr>
+<tr><td><div class="logo-ph">로고</div></td><td><b>DJI</b> (다장촹신, 大疆创新)</td><td>드론</td><td>2006년 창업. 민간 드론 분야 세계 최대 제조사</td><td style="white-space:nowrap;"><a href="https://www.dji.com" rel="noopener" target="_blank">dji.com</a></td></tr>
+<tr><td><div class="logo-ph">로고</div></td><td>ZTE (중싱통신, 中兴通讯)</td><td>통신장비</td><td>1985년 설립. 선전거래소·홍콩거래소 상장</td><td style="white-space:nowrap;"><a href="https://www.zte.com.cn" rel="noopener" target="_blank">zte.com.cn</a></td></tr>
+<tr><td><div class="logo-ph">로고</div></td><td>마이루이 (Mindray, 迈瑞医疗)</td><td>의료기기</td><td>환자 감시장치·초음파 등 의료장비</td><td style="white-space:nowrap;"><a href="https://www.mindray.com" rel="noopener" target="_blank">mindray.com</a></td></tr>
+<tr><td><div class="logo-ph">로고</div></td><td>정웨이그룹 (正威集团)</td><td>비철금속</td><td>구리 등 비철금속 소재 그룹</td><td style="color:#888;">—</td></tr>
+<tr><td><div class="logo-ph">로고</div></td><td>중국전자정보산업그룹 (中国电子, CEC)</td><td>전자·반도체</td><td>2021년 본사를 베이징에서 선전으로 이전</td><td style="color:#888;">—</td></tr>
+</tbody>
+</table>
+<div class="note-box">
+<b>로고 이미지</b> — 기업 로고는 저작권·상표권이 있어 이 문서에는 넣지 않았습니다. 편집 모드에서 각 칸을 눌러 직접 이미지를 올릴 수 있습니다.
+</div>
+
+<h3>주요 개발구</h3>
+<table class="data" style="width:100%;">
+<tbody>
+<tr><th style="width:230px; text-align:center;">구역</th><th style="text-align:center;">특징</th></tr>
+<tr><td style="vertical-align:middle; font-weight:600; background:#fafcfb; padding:10px 14px;">셔코우(蛇口) 공업구</td><td style="vertical-align:middle; line-height:1.6; padding:10px 14px; word-break:keep-all;">1979년 자오상국(招商局)이 개발한 중국 최초의 대외개방 공업구. 선전 경제특구보다 앞서 착공됐다</td></tr>
+<tr><td style="vertical-align:middle; font-weight:600; background:#fafcfb; padding:10px 14px;">첸하이(前海) 선강 현대서비스업 합작구</td><td style="vertical-align:middle; line-height:1.6; padding:10px 14px; word-break:keep-all;">2010년 출범. 홍콩과의 금융·법률·물류 협력을 목적으로 한 구역으로, 홍콩 기업에 대한 규제 완화를 시험한다</td></tr>
+<tr><td style="vertical-align:middle; font-weight:600; background:#fafcfb; padding:10px 14px;">중국(광둥) 자유무역시험구 첸하이·셔코우 편구</td><td style="vertical-align:middle; line-height:1.6; padding:10px 14px; word-break:keep-all;">2015년 지정. 무역·투자 규제를 시범적으로 완화하는 구역으로, 우리나라의 ‘경제자유구역’과 비슷한 개념이다</td></tr>
+<tr><td style="vertical-align:middle; font-weight:600; background:#fafcfb; padding:10px 14px;">허타오(河套) 선강 과기혁신 합작구</td><td style="vertical-align:middle; line-height:1.6; padding:10px 14px; word-break:keep-all;">푸톈구와 홍콩 경계에 걸친 연구개발 협력 구역</td></tr>
+</tbody>
+</table>
+</section>
+
+<section id="s7">
+<h2>7. 교육·의료·과학기술</h2>
+<h3>교육</h3>
+<p>2025년 말 기준 각급 학교는 2,996곳, 재학생은 287.52만 명이다. 유치원 1,977곳(원아 49.20만 명), 초등학교 358곳(재학생 124.31만 명), 중등학교 602곳(재학생 79.42만 명), 대학 16곳(재학생 18.77만 명)이다.</p>
+<p>선전의 고등교육은 <b>자체 대학의 역사가 짧다는 점</b>이 특징이다. 1983년 설립된 선전대학이 지역 최초의 종합대학이며, 이 공백을 메우기 위해 <b>다른 지역 명문대의 분교·대학원(연구생원)을 유치</b>하는 방식이 널리 쓰였다.</p>
+<table class="data">
+<tbody>
+<tr><th style="width:180px">대학</th><th style="width:120px">설립</th><th>성격</th></tr>
+<tr><td><b>선전대학</b> (深圳大学)</td><td>1983년</td><td>선전시가 설립·운영하는 종합대학</td></tr>
+<tr><td><b>남방과기대학</b> (南方科技大学)</td><td>2010년 설립<br>2012년 인가</td><td>연구중심 신설 대학. 2022년 ‘쌍일류’ 건설 대학·학과(수학)에 선정</td></tr>
+<tr><td>선전기술대학 (深圳技术大学)</td><td>2018년</td><td>응용기술 중심 대학</td></tr>
+<tr><td>홍콩중문대학(선전)</td><td>2014년</td><td>홍콩중문대와의 합작 대학</td></tr>
+<tr><td>선전 베이리-모스크바대학</td><td>2016년</td><td>베이징이공대·모스크바대와의 합작 대학</td></tr>
+<tr><td>하얼빈공업대학(선전)</td><td>—</td><td>본교 분교. 학부·대학원 운영</td></tr>
+<tr><td>칭화대학 선전국제연구생원</td><td>—</td><td>대학원 과정</td></tr>
+<tr><td>베이징대학 선전연구생원</td><td>—</td><td>대학원 과정</td></tr>
+<tr><td>중산대학·선전</td><td>—</td><td>본교 캠퍼스. 학부·대학원 운영</td></tr>
+</tbody>
+</table>
+<div class="term-box">
+<span class="tt">‘쌍일류·985·211’과 ‘연구생원’</span>
+<dl>
+<dt>211공정</dt><dd>21세기를 대비해 중국이 지정한 약 100개 중점대학. 상위권 대학의 ‘1차 관문’이다.</dd>
+<dt>985공정</dt><dd>211 가운데서도 세계적 수준을 목표로 선정한 최상위 39개 대학.</dd>
+<dt>쌍일류(双一流)</dt><dd>985·211을 대체·계승한 최신 정책. ‘세계 일류 대학·일류 학과’를 육성하는 국가사업으로, 대학 단위와 학과 단위로 나눠 지정한다.</dd>
+<dt>연구생원(研究生院)</dt><dd>학부 없이 <b>대학원 과정만 운영하는 캠퍼스</b>. 본교는 다른 도시에 있고 선전에는 대학원만 두는 형태로, 칭화대·베이징대가 이 방식으로 선전에 들어와 있다.</dd>
+</dl>
+</div>
+
+<h3>의료</h3>
+<p>2024년 말 기준 의료기관은 5,887곳(전년 대비 +456곳)이며 이 가운데 병원이 162곳이다. 병상은 79,561개(+13.9%), 의료기술 인력은 132,806명(+5.4%)이다. 2024년 한 해 진료 건수는 1억 3,657.91만 건(+6.0%), 입원 건수는 248.30만 건이며 병상 이용률은 80.7%였다.</p>
+<p>2022년 10월 기준 <b>삼갑(三甲) 병원</b>은 32곳이다. 선전시인민병원, 선전시중의원, 선전시제2인민병원, 베이징대선전병원, 홍콩대선전병원, 선전시아동병원 등이 여기에 속한다.</p>
+<div class="term-box">
+<span class="tt">삼갑(三甲) 병원이란?</span>
+중국은 병원을 규모·인력·설비·진료 수준에 따라 <b>1~3급</b>으로 나누고, 각 급을 다시 <b>갑·을·병</b> 등급으로 세분한다. ‘삼갑(三级甲等)’은 그중 <b>가장 높은 등급</b>으로, 우리나라의 ‘상급종합병원’에 대응한다고 보면 이해가 쉽다.
+</div>
+
+<h3>과학기술</h3>
+<p>선전은 기업 주도의 연구개발 비중이 높은 도시로 알려져 있다. 2021년 기준 연구개발(R&amp;D) 투자가 지역총생산에서 차지하는 비중은 5.49%였다.</p>
+<table class="data">
+<tbody>
+<tr><th style="width:250px;">항목 <span class="yr">(2025년)</span></th><th style="text-align:center;">수치</th></tr>
+<tr><td>발명특허 등록</td><td style="text-align:center;">63,725건</td></tr>
+<tr><td>유효 발명특허 보유</td><td style="text-align:center;">40.49만 건 (+12.9%)</td></tr>
+<tr><td>PCT 국제특허 출원</td><td style="text-align:center;">19,660건</td></tr>
+<tr><td>기술계약 건수 / 거래액</td><td style="text-align:center;">15,505건 / 1,640.52억 위안 (+2.2%)</td></tr>
+<tr><td>전문기술인력</td><td style="text-align:center;">267.89만 명 (+4.9%)</td></tr>
+</tbody>
+</table>
+<div class="term-box">
+<span class="tt">PCT 국제특허 출원</span>
+특허협력조약(Patent Cooperation Treaty)에 따라 <b>한 번의 출원으로 여러 나라에 특허를 신청할 수 있게 하는 절차</b>. 해외 시장을 겨냥한 기술 출원의 규모를 보여 주는 지표로 자주 쓰인다.
+</div>
+<p>주요 연구 기반으로는 <b>국가슈퍼컴퓨팅 선전센터</b>, <b>선전 국가유전자은행</b>, 인공지능 연산 인프라인 <b>펑청윈나오(鹏城云脑)</b> 등이 있다. 2021년 기준 국가급 하이테크 기업은 2.1만 개를 넘었다.</p>
+</section>
+
+<section id="s8">
+<h2>8. 교통</h2>
+<h3>개관</h3>
+<p>선전은 항만·공항·철도·육로 통상구를 모두 갖춘 도시다. 2025년 화물 운송량은 3억 7,443.40만 톤(−5.2%), 여객 운송량은 2억 4,600.61만 명(+7.5%)이었다.</p>
+
+<h3>공항</h3>
+<p><b>선전 바오안 국제공항(深圳宝安国际机场, SZX)</b>이 관문이다. 바오안구에 있으며 1991년 10월 취항해 1993년 5월 국제공항이 됐다. 부지 면적은 28.3㎢이고 <b>평행 활주로 2본</b>을 갖춰 모든 민항기 기종의 이착륙이 가능하다.</p>
+<p>2019년 말 기준 취항 도시는 190곳(국내 126, 국제 60, 홍콩·마카오·대만 4)이었고, 2020년 여객 처리량은 3,791.6만 명이었다. 화물 부문에서는 2020년 화물·우편 처리량 139.9만 톤을 기록했다. 2021년에는 스카이트랙스 5성 공항 평가를 받았다.</p>
+<p><b>한국 노선</b>은 인천~선전 직항편이 운항하지만, 시기에 따라 운항사·운항 횟수가 달라지므로 예약 시 확인이 필요하다. 홍콩 국제공항이 육로로 가까워 홍콩을 경유해 선전으로 들어가는 방법도 널리 쓰인다.</p>
+<img alt="선전 바오안 국제공항 터미널" class="img-block-img" src="https://commons.wikimedia.org/wiki/Special:FilePath/ShenzhenInternationalAirportTerminal.JPG?width=900">
+<div class="caption">선전 바오안 국제공항 터미널</div>
+<span class="mini-map"><iframe loading="lazy" src="https://maps.google.com/maps?q=%E6%B7%B1%E5%9C%B3%E5%AE%9D%E5%AE%89%E5%9B%BD%E9%99%85%E6%9C%BA%E5%9C%BA&amp;z=13&amp;hl=ko&amp;output=embed"></iframe></span>
+
+<h3>철도</h3>
+<p>선전에는 8개 철도역이 있다. <b>선전역, 선전북역, 선전서역, 선전동역, 선전핑산역, 푸톈역, 광밍청역, 핑후역</b>이다. 2021년 11월 기준 선전에서 전국 19개 성(직할시)으로 직통 열차가 다니며, 28개 대·중도시 및 성도와 연결된다.</p>
+<table class="data">
+<tbody>
+<tr><th style="width:150px">역</th><th style="width:100px">위치</th><th>이용 안내</th><th style="width:96px">사진</th></tr>
+<tr><td><b>선전북역</b><br>(深圳北站)</td><td>룽화구</td><td>선전 최대 고속철도역. 광저우·우한·베이징 방면 고속철의 중심. 지하철 4·5·6호선 환승 <span class="mini-map"><iframe loading="lazy" src="https://maps.google.com/maps?q=%E6%B7%B1%E5%9C%B3%E5%8C%97%E7%AB%99&amp;z=14&amp;hl=ko&amp;output=embed"></iframe></span></td><td><img alt="선전북역" class="thumb-img" src="https://commons.wikimedia.org/wiki/Special:FilePath/Shenzhen_North_railway_station_by_drone.jpg?width=300"></td></tr>
+<tr><td>선전역<br>(深圳站)</td><td>뤄후구</td><td>뤄후 통상구 바로 옆에 있는 구도심 역. 광선철도(광저우~선전) 이용에 편리 <span class="mini-map"><iframe loading="lazy" src="https://maps.google.com/maps?q=%E6%B7%B1%E5%9C%B3%E7%AB%99&amp;z=14&amp;hl=ko&amp;output=embed"></iframe></span></td><td><div class="thumb">사진 자리<br>(편집 모드에서 추가)</div></td></tr>
+<tr><td>푸톈역<br>(福田站)</td><td>푸톈구</td><td>도심 지하에 있는 고속철도역. <b>광선강 고속철</b>로 홍콩 시주룽역과 직결 <span class="mini-map"><iframe loading="lazy" src="https://maps.google.com/maps?q=%E6%B7%B1%E5%9C%B3%E7%A6%8F%E7%94%B0%E7%AB%99&amp;z=14&amp;hl=ko&amp;output=embed"></iframe></span></td><td><div class="thumb">사진 자리<br>(편집 모드에서 추가)</div></td></tr>
+</tbody>
+</table>
+<div class="term-box">
+<span class="tt">광선강 고속철(广深港高铁)</span>
+광저우~선전~홍콩을 잇는 고속철도. 선전 푸톈역·선전북역에서 홍콩 <b>시주룽역(西九龙站)</b>까지 직통 열차가 다닌다. 시주룽역에서는 <b>‘일지양검(一地两检)’</b> 방식으로 중국 측과 홍콩 측 출입국 심사를 한 건물 안에서 함께 받는다.
+</div>
+
+<h3>지하철(도시철도)</h3>
+<p>2025년 말 기준 운영 노선은 <b>18개, 총연장 634.5km</b>다(2024년 말 595km). 2025년 궤도교통 수송 인원은 32.81억 명으로 전년 대비 5.9% 늘어, 선전 대중교통 수송량의 약 69%를 차지했다.</p>
+<table class="data" style="width:560px; max-width:100%;">
+<tbody>
+<tr><th style="width:230px;">대중교통 수송 실적 <span class="yr">(2025)</span></th><th style="text-align:center;">수송량</th><th style="text-align:center; width:90px;">증감</th></tr>
+<tr><td>전체 공공교통</td><td style="text-align:center;">47.81억 명</td><td style="text-align:center;">+2.4%</td></tr>
+<tr><td>지하철(궤도교통)</td><td style="text-align:center;">32.81억 명</td><td style="text-align:center;">+5.9%</td></tr>
+<tr><td>시내버스</td><td style="text-align:center;">7.06억 명</td><td style="text-align:center;">−11.7%</td></tr>
+<tr><td>차량호출(네트워크 택시)</td><td style="text-align:center;">5.58억 명</td><td style="text-align:center;">+11.1%</td></tr>
+<tr><td>일반 택시</td><td style="text-align:center;">2.36억 명</td><td style="text-align:center;">−12.3%</td></tr>
+</tbody>
+</table>
+
+<h3>시내 대중교통</h3>
+<p>2025년 기준 시내버스 운영 차량은 1.38만 대, 노선은 897개(총연장 1.74만 km)이며, 택시는 2.21만 대다. 선전은 <b>2017년 말 시내버스를 전량 전기버스로 전환</b>한 도시로 알려져 있으며, 택시도 전기차 전환이 진행됐다. 중국 최초의 순수 전기버스 노선인 18번 노선도 선전에서 운행을 시작했다.</p>
+<p>지하철과 버스 모두 교통카드나 QR 결제(알리페이·위챗페이 등 중국 간편결제)를 이용하는 것이 편하다. 외국인 방문객은 결제 앱 등록과 실명 인증에 시간이 걸릴 수 있으므로 미리 준비하는 것이 좋다.</p>
+
+<h3>항만</h3>
+<p>선전항은 <b>6개 항구 구역</b>으로 나뉜다.</p>
+<table class="data">
+<tbody>
+<tr><th style="width:130px">항구 구역</th><th>기능</th></tr>
+<tr><td><b>옌톈(盐田) 항구</b></td><td>컨테이너 간선항의 핵심. 현대 물류 기능</td></tr>
+<tr><td><b>난산(南山) 항구</b></td><td>컨테이너 간선항의 주요 부분이자 복합 기능 항구</td></tr>
+<tr><td>다찬완(大铲湾) 항구</td><td>컨테이너 운송 기반의 현대 물류</td></tr>
+<tr><td>다샤오찬다오 항구</td><td>석유제품·액체 화공품 위주</td></tr>
+<tr><td>바오안(宝安) 항구</td><td>벌크·잡화 및 여객 운송 위주</td></tr>
+<tr><td>다펑(大鹏) 항구</td><td>석유제품·액체 화공품·액화가스 위주, 수상 관광 여객 겸용</td></tr>
+</tbody>
+</table>
+<p>2025년 항만 화물 처리량은 3억 3,402.23만 톤(+5.1%), 컨테이너 처리량은 3,540.84만 TEU(+6.0%)였다. 이 가운데 수출 컨테이너가 1,792.49만 TEU(+5.8%)다. 연말 기준 생산성 선석은 144개이며 이 가운데 1만 톤급 이상이 75개다.</p>
+
+<h3>통상구(口岸)</h3>
+<div class="term-box">
+<span class="tt">통상구(口岸, 커우안)란?</span>
+사람과 화물이 국경(또는 홍콩·마카오 경계)을 드나드는 <b>공식 출입 지점</b>을 말한다. 세관·출입국·검역 시설이 갖춰진 곳으로, 우리나라의 ‘출입국항’에 해당한다. ‘일류(一类) 통상구’는 중앙정부가 지정·관리하는 통상구를 가리킨다.
+</div>
+<p>선전에는 일류 통상구가 16곳 있다. 홍콩과 국경을 맞대고 있어 <b>육로 통상구가 특히 발달</b>했다.</p>
+<ul class="plain">
+<li><b>도로 7곳</b> — 뤄후(罗湖), 원진두(文锦渡), 황강(皇岗), 사터우자오(沙头角), 선전만(深圳湾), 푸톈(福田), 롄탕(莲塘)</li>
+<li><b>철도 2곳</b> — 광선강 고속철 시주룽역 통상구, 선전 철도 통상구</li>
+<li><b>수운 6곳</b> — 옌톈항, 다야만, 셔코우, 츠완, 마완, 다찬완</li>
+<li><b>항공 1곳</b> — 선전 바오안 국제공항</li>
+</ul>
+<h4>뤄후 통상구(罗湖口岸)</h4>
+<p>선전에서 여객 통행량이 가장 많은 육로 출입국 통상구다. 뤄후 상업 중심지 남쪽에 있으며 홍콩 신제와 강 하나를 사이에 두고 있다. 2층 보행교와 철도교로 홍콩 쪽과 이어진다.</p>
+<img alt="뤄후 통상구" class="img-block-img" src="https://commons.wikimedia.org/wiki/Special:FilePath/LUOHU_PORT%2C_SHENZHEN.jpg?width=900">
+<div class="caption">뤄후 통상구</div>
+<h4>선전만 통상구(深圳湾口岸)</h4>
+<p>여객과 화물을 함께 처리하는 종합 도로 통상구로, 규모가 아시아 최대급으로 꼽힌다. 난산구 서자오터우에 있으며 홍콩 아오카우섹(鳌勘石)과 연결된다. 부지는 110㏊(홍콩 측 40㏊, 선전 측 70㏊)이며, <b>‘일지양검’ 방식</b>으로 운영된다. 즉 선전 쪽 청사 안에서 중국과 홍콩 양측의 출입국 수속을 한 번에 마친다.</p>
+<img alt="선전만 통상구" class="img-block-img" src="https://commons.wikimedia.org/wiki/Special:FilePath/Shenzhen_Bay_Port2021.jpg?width=900">
+<div class="caption">선전만 통상구</div>
+
+<h3>도로</h3>
+<p>2025년 기준 선전시 도로 총연장은 1,051.26km이며 이 가운데 고속도로가 436.96km다. 연말 기준 민간 자동차 보유 대수는 458.69만 대(+6.1%)로, 이 가운데 자가용이 372.78만 대(+7.4%)다.</p>
+</section>
+
+<section id="s9">
+<h2>9. 한국과의 교류</h2>
+<p>선전시는 2021년 12월 31일 기준으로 <b>국제 자매도시 24곳, 우호교류도시 66곳</b>과 관계를 맺고 있다. 첫 자매도시는 1986년 4월 3일 체결한 미국 휴스턴이다.</p>
+<h3>한국 자매도시</h3>
+<table class="data">
+<tbody>
+<tr><th style="width:150px">한국 도시</th><th style="width:130px">유형</th><th style="width:130px">체결 시기</th><th>비고</th></tr>
+<tr><td>광양 (光阳)</td><td>국제 자매도시</td><td>2004.10.11</td><td>선전의 24개 국제 자매도시 가운데 유일한 한국 도시. 항만 도시라는 공통점</td></tr>
+</tbody>
+</table>
+<p>참고로 같은 자매도시 명단에는 일본 쓰쿠바(2004.6.9), 중국 외 아시아권으로 캄보디아 프놈펜(2017.12.11), 키르기스스탄 비슈케크(2016.10.24) 등이 포함돼 있다.</p>
+
+<h3>한국인·한국 기업</h3>
+<p>선전에는 <b>대한민국 총영사관이 없다</b>. 선전을 포함한 광둥성 전역은 <b>주광저우 대한민국 총영사관</b>의 관할 구역이다. 영사 민원이나 사건·사고 발생 시 광저우 총영사관을 통해야 한다.</p>
+<p>경제 측면에서 선전은 화웨이·텐센트·BYD·DJI 등 <b>완성품 기업이 밀집한 도시</b>여서, 한국 기업들은 주로 이들을 상대로 한 부품·소재 영업 및 구매 조직을 두는 형태로 진출해 왔다. 대한무역투자진흥공사(KOTRA)는 선전에 무역관을 두고 있다.</p>
+<div class="note-box">
+<b>참고</b> — 한국 기업의 화남(华南) 지역 거점은 광저우·둥관·선전에 나뉘어 있고, 기업별 진출 형태와 규모는 시기에 따라 변동이 큽니다. 특정 기업의 현지 법인 현황은 해당 기업 공시나 KOTRA 자료로 확인하는 것이 정확합니다.
+</div>
+<h3>여행자를 위한 참고</h3>
+<ul class="plain">
+<li>홍콩에서 <b>육로로 국경을 넘어</b> 선전에 들어가는 경로(뤄후·푸톈·선전만 통상구)가 널리 이용된다. 중국 비자 또는 해당 시점의 통과·면제 제도를 미리 확인해야 한다</li>
+<li>선전 시내 결제는 사실상 <b>모바일 QR 결제 중심</b>이다. 현금·해외 신용카드 사용이 제한되는 곳이 많다</li>
+<li>구글·카카오톡 등 일부 해외 서비스는 중국 내에서 접속이 제한된다</li>
+</ul>
+</section>
+
+<section id="s10">
+<h2>10. 문화·풍습·음식</h2>
+<p>선전 토착 주민은 <b>광부(广府, 광둥계)</b>와 <b>객가(客家)</b> 두 민계로 나뉜다. 대체로 서부(바오안·광밍·난산·푸톈·뤄후)가 광부계, 동부(룽강·핑산·다펑)가 객가계 거주지였고, 중서부에는 두 계통이 섞인 형태가 많다. 경제특구 이후 전국에서 사람이 몰려들면서, 오늘날 선전 문화는 토착 문화와 이주민 문화가 겹쳐진 구조다.</p>
+
+<h3>문화재(문물보호단위)</h3>
+<div class="term-box">
+<span class="tt">문물보호단위(文物保护单位)</span>
+중국의 문화재 지정 제도로, <b>전국중점 → 성급 → 시급 → 구급</b>의 위계를 갖는다. 우리나라의 국가지정문화유산·시도지정문화유산에 대응한다. ‘제○차(批次)’는 지정이 이뤄진 회차를 가리킨다.
+</div>
+<p>선전시 문화광전여유체육국 자료에 따르면 전국중점 문물보호단위 3건, 성급 11건, 시급 42건이 지정돼 있다.</p>
+<table class="data">
+<tbody>
+<tr><th style="width:80px">사진</th><th style="width:150px">명칭</th><th style="width:90px">위치</th><th style="width:80px">등급</th><th>내용</th></tr>
+<tr><td><img alt="다펑소성" class="thumb-img" src="https://commons.wikimedia.org/wiki/Special:FilePath/Dapeng_Fortress%2C_Shenzhen.jpg?width=300"></td><td><b>다펑소성</b><br>(大鹏所城)</td><td>다펑신구</td><td>전국중점<br><span class="yr">제5차</span></td><td>정식 명칭은 ‘대붕수어천호소성’. 1394년(홍무 27년) 축조된 명·청대 해안 방어 요새로, 면적 약 11만㎡. 별칭 ‘펑청’의 유래다</td></tr>
+<tr><td><img alt="중잉제 계비" class="thumb-img" src="https://commons.wikimedia.org/wiki/Special:FilePath/Chung_Ying_Street%2C_25_May_2011.jpg?width=300"></td><td><b>중잉제 계비</b><br>(中英街界碑)</td><td>옌톈구</td><td>전국중점<br><span class="yr">제8차</span></td><td>1899년 3월 18일 영국과 청이 신제 북쪽 경계를 정하며 사터우자오의 마른 하천 바닥 중앙선을 경계로 삼았다. 현재 8기의 계비가 남아 있다</td></tr>
+<tr><td><div class="thumb">사진 자리</div></td><td>투양촌 둥장종대<br>사령부 옛터</td><td>다펑신구</td><td>전국중점<br><span class="yr">제8차</span></td><td>1912년 지어진 건물로, 1943~1945년 항일 유격부대 둥장종대의 사령부로 쓰였다. 연면적 400㎡, 서양식 외관</td></tr>
+<tr><td><img alt="허후신쥐" class="thumb-img" src="https://commons.wikimedia.org/wiki/Special:FilePath/Crane_Lake_Wei_%28Longgang_Museum_of_Hakka_Culture%29_1.jpg?width=300"></td><td>허후신쥐<br>(鹤湖新居)</td><td>룽강구</td><td>성급<br><span class="yr">제4차</span></td><td>청대에 지어진 대형 객가 위옥. 현재 룽강 객가민속박물관으로 쓰인다</td></tr>
+<tr><td><div class="thumb">사진 자리</div></td><td>난터우 고성벽<br>(南头古城垣)</td><td>난산구</td><td>성급<br><span class="yr">제4차</span></td><td>명대 성벽. 331년 이래 이 지역 행정 중심이던 난터우의 흔적</td></tr>
+<tr><td><div class="thumb">사진 자리</div></td><td>다완스쥐<br>(大万世居)</td><td>핑산구</td><td>성급<br><span class="yr">제4차</span></td><td>청대 객가 위옥. 규모가 15,000㎡를 넘는다</td></tr>
+</tbody>
+</table>
+<h4>중잉제(中英街)</h4>
+<p>길이 250m, 가장 넓은 곳도 폭 5m에 지나지 않는 거리지만, <b>거리 한가운데가 중국과 홍콩의 경계</b>다. 계비의 선전 쪽 면에는 “광서 24년 중영 지계 제○호”, 홍콩 쪽 면에는 “ANGLO-CHINESE BOUNDARY 1898 NO ○”가 새겨져 있다. 길 건너편으로 가려면 공안국에서 발급하는 통행증이 필요했다.</p>
+
+<h3>무형문화유산</h3>
+<div class="term-box">
+<span class="tt">비물질문화유산(非物质文化遗产)</span>
+우리나라의 <b>무형문화유산</b>에 해당하는 중국 제도. 국가급·성급·시급·구급으로 나뉘어 지정되며, 국가급은 여러 차례에 걸쳐 목록이 발표된다(제1~5차 등).
+</div>
+<p>선전 사지관 기록에 따르면 선전의 각급 무형문화유산은 모두 57항목이며, 이 가운데 국가급은 자료에 따라 7~8건으로 집계된다. 성급 22항목, 시급 28항목이다.</p>
+<table class="data">
+<tbody>
+<tr><th style="width:80px; text-align:center;">등급</th><th style="width:200px;">명칭</th><th>내용</th></tr>
+<tr><td style="text-align:center; font-weight:600;">국가급</td><td><b>사터우자오 위덩우</b><br>(沙头角鱼灯舞)</td><td>물고기 모양 등(燈)을 들고 추는 남성 군무. 청 강희 연간에 시작돼 300여 년 역사를 갖는다. 광둥 보뤄에서 사터우자오로 이주한 우씨 일족이 정월대보름 등불 놀이 풍습과 해상 어로 경험을 결합해 만든 것으로 전한다. 2008년 국가급 제2차 목록 등재</td></tr>
+<tr><td style="text-align:center; font-weight:600;">국가급</td><td><b>쑹강 치싱스우</b><br>(松岗七星狮舞)</td><td>바오안구 쑹강 일대의 사자춤. ‘더우서(逗蛇)’ 대목에서 연희자가 <b>살아 있는 코브라</b>와 오랜 시간 겨루는 형식이 다른 사자춤에서는 보기 드물다. 2011년 국가급 제3차 목록 등재</td></tr>
+<tr><td style="text-align:center; font-weight:600;">국가급</td><td><b>다촨컹 우치린</b><br>(大船坑舞麒麟)</td><td>기린(麒麟) 탈을 쓰고 추는 객가 전통 춤. 명 가정 연간에 시작돼 400여 년 역사를 갖는다. 길이 약 6m의 기린을 앞세워 배전당·주대위·쌍린회·채청 등의 순서로 진행된다. 2011년 국가급 제3차 목록 등재</td></tr>
+<tr><td style="text-align:center; font-weight:600;">국가급</td><td>샤사 제조 습속<br>(下沙祭祖习俗)</td><td>푸톈구 샤사촌의 문중 제사 풍습</td></tr>
+<tr><td style="text-align:center; font-weight:600;">국가급</td><td>반톈 융성탕 우치린<br>(坂田永胜堂麒麟舞)</td><td>룽강구 반톈의 기린춤</td></tr>
+<tr><td style="text-align:center; font-weight:600;">국가급</td><td>자씨 점혈요법 외 2건</td><td>자씨 점혈요법(贾氏点穴疗法), 핑러 궈씨 정골 의술(平乐郭氏正骨医术), 안치 광둥식 월병 제작기예 등 전통 의술·식품 제조 기예</td></tr>
+<tr><td style="text-align:center; font-weight:600;">성급</td><td>단자 혼례 습속 외</td><td>단자(疍家) 혼례 습속, 간컹 객가 량마오(삿갓) 제작기예, 상촨 황롄성 싱스우, 룽강 우룽, 푸융 싱스우, 홍유 채자기 소성기예, 선전 윈폔가오 제작기예 등</td></tr>
+</tbody>
+</table>
+
+<h3>풍습</h3>
+<h4>츠사 마조 제전(辞沙祭妈祖大典)</h4>
+<p>난산구 츠완 톈허우궁(赤湾天后宫)에서 음력 3월 23일 마조 탄신일에 열리는 제사다. 명대부터 츠완을 지나거나 동남아로 나가는 조정 관리들이 배를 세우고 톈허우궁에 참배하며 항해의 안전을 빌었다. 돼지·소·양의 배를 비우고 풀을 채워 해변 모래사장에서 제사를 지낸 뒤 바다에 가라앉히는 것이 <b>‘츠사(辞沙, 모래에 고한다)’</b> 의식이다.</p>
+<div class="term-box">
+<span class="tt">마조(妈祖)</span>
+중국 동남 연안과 대만·동남아 화교 사회에서 널리 모시는 <b>항해의 수호 여신</b>. 송대 푸젠 메이저우섬의 실존 인물 임묵(林默)에서 유래했다고 전한다. ‘톈허우(天后)’는 마조에게 붙은 존호로, 마조를 모신 사당을 톈허우궁(天后宫)이라 한다.
+</div>
+<h4>단자 혼례</h4>
+<p>옌톈 <b>단자(疍家)</b>의 혼례 풍습은 160여 년의 역사를 갖는다. 단자는 예로부터 배 위에서 생활하던 수상 거주민으로, 약혼·신부 맞이·첫날밤 의식이 모두 배 위에서 이뤄졌다. 이후 육지로 옮겨 살게 되면서, 배 젓는 동작을 흉내 내며 뭍에서 행렬하는 <b>‘영친 춤’</b>이 생겨나는 등 수상·육상 요소가 섞인 형태로 바뀌었다. 옌톈구와 룽강구, 홍콩 신제 사터우자오 해변 일대에서 함께 전한다.</p>
+
+<h3>전통 건축</h3>
+<p>선전에는 <b>광부식·객가식·혼합식·중서 절충식</b> 건축이 남아 있다.</p>
+<h4>광부계 촌위(村围)</h4>
+<p>서부·서남부(바오안·광밍·난산·푸톈·뤄후)에 분포하는 광부계 마을 형식이다. 규모가 크고 인구가 많으며 문중 사당(祠堂)이 많고 단일 성씨로 이뤄진 경우가 많다. 세 칸짜리 평기와집이 주를 이루며, 집들이 앞뒤로 열을 짓고 좌우로 줄을 맞춰 <b>바둑판처럼 배치</b>되는 것이 특징이다. 이 배치는 수 대에서 십수 대에 걸쳐 지켜졌다. 마을 앞에는 대개 반달 모양의 <b>풍수지(风水池)</b>가 있고, 마을 안에는 우물 1~2개와 흙을 다져 쌓은 담장이 있다. 지붕은 뾰족한 박공형, 맞배 모방형, 그리고 <b>솥귀 모양 박공벽(镬耳式)</b> 세 가지가 있다. 문 위 장식인 <b>문짜(门罩)</b>의 문양과 글귀는 저마다 다른 기복(祈福)의 뜻을 담고 있어 광부식 민가의 표지로 꼽힌다.</p>
+<h4>객가 위옥(围屋)</h4>
+<p>동부 객가 지역의 방형·장방형 집합 주거다. 규모가 3,000~5,000㎡에 이르며, <b>허후신쥐</b>와 <b>다완스쥐</b>는 15,000㎡를 넘어 전국적으로도 드문 규모다. 연대가 확실한 객가 위옥이 20여 채 남아 있고, 가장 오래된 것은 1753년(건륭 18년)의 컹쯔 신차오스쥐다.</p>
+<p>기본 구조는 <b>삼당양횡사각루일궈룽(三堂两横四角楼一国龙)</b> 형식이다. 문중 사당이 마을 중심축에 놓이고, 사방을 집채로 둘러싼 뒤 네 모퉁이에 망루(‘각루’)를 세운다. 앞에는 풍수지, 그 뒤에 넓은 마당(禾坪)을 두며, 방어를 위해 바깥에 넓은 물도랑이나 문루를 두기도 했다. 이 때문에 ‘성채형 위옥’이라 불린다. 건축 장식은 사당에 집중돼, 처마 판과 목재 부재의 부조, 실내 벽화(인물·화조·산수), 창살과 칸막이 장식 등이 남아 있다.</p>
+<img alt="허후신쥐(룽강 객가민속박물관)" class="img-block-img" src="https://commons.wikimedia.org/wiki/Special:FilePath/Crane_Lake_Wei_%28Longgang_Museum_of_Hakka_Culture%29_2.jpg?width=900">
+<div class="caption">허후신쥐(鹤湖新居) — 현재 룽강 객가민속박물관</div>
+
+<h3>음식</h3>
+<p>광부계와 객가계 모두 쌀을 주식으로 하며, 잡곡으로는 고구마를 많이 먹었다. 오늘날 선전 외식 문화는 전국 각지 요리가 뒤섞인 형태지만, 토착 음식으로는 다음이 꼽힌다.</p>
+<table class="data">
+<tbody>
+<tr><th style="width:130px">음식</th><th>내용</th></tr>
+<tr><td><b>얌차(饮早茶)</b></td><td>아침에 찻집에 가서 차와 함께 점심(点心)을 먹는 광둥식 습관. 닭발, 사오마이, 갈비찜, 연밥소빵, 차사오빠오, 차오저우 펀궈, 죽 등을 곁들인다</td></tr>
+<tr><td><b>해산물</b></td><td>선전에서는 활어를 첫째로, 냉장 선어를 그다음으로 친다. “동지에는 생선회, 하지에는 개고기”라는 속담이 전한다. 설이나 잔칫날에는 굴을 발채(髮菜)나 상추와 곁들여 먹는데, 발음이 ‘발재호시(發財好市, 돈 벌고 장사 잘되기를)’와 닮았기 때문이다. 사징과 난터우의 굴 요리가 특히 알려져 있다</td></tr>
+<tr><td><b>펀차이(盆菜)</b></td><td>큰 대야(盆) 하나에 해산물·고기·채소 등 12~15가지를 층층이 담아 여럿이 둘러앉아 먹는 잔치 음식. 본래 광부계 명절 음식이었으나 객가계도 받아들여 산나물·산짐승 재료를 넣은 ‘객가 펀차이’를 만들었다. 푸톈구 <b>샤사촌</b>의 대형 펀차이 연회가 유명하며, 2002년 정월대보름에는 5,319상을 차려 6만 명이 참석한 기록이 있다</td></tr>
+<tr><td><b>윈폔가오(云片糕)</b></td><td>청 말 선전쉬의 ‘허청호(合成号)’ 과자점에서 처음 만든 것으로 전하는 떡. 떡가루·설탕·돼지기름으로 만들며, 22cm 길이 한 덩이를 120~140장으로 썰어 종이처럼 얇다</td></tr>
+</tbody>
+</table>
+<div class="note-box">
+<b>개고기에 관한 기록</b> — 옛 문헌에는 선전 객가 지역에서 개고기를 겨울철 보양식으로 먹었다는 기록이 있습니다. 다만 <b>2020년 5월, 선전은 중국 도시 가운데 처음으로 개·고양이 식용을 금지하는 조례를 시행</b>했으므로, 현재 선전에서 이는 합법적인 식문화가 아닙니다.
+</div>
+
+<h3>지역 상징</h3>
+<table class="data">
+<tbody>
+<tr><th style="width:80px">사진</th><th style="width:110px">구분</th><th>내용</th></tr>
+<tr><td><img alt="여지나무" class="thumb-img" src="https://commons.wikimedia.org/wiki/Special:FilePath/Twin_lychees_%28Litchi_chinensis%29.JPG?width=300"></td><td>시나무(市树)</td><td><b>여지나무(荔枝树)</b> — 1986년 시민 투표로 선정. 난산 여지 등 오랜 재배 전통을 반영</td></tr>
+<tr><td><img alt="맹그로브" class="thumb-img" src="https://commons.wikimedia.org/wiki/Special:FilePath/%E4%B8%80%E9%A2%97%E7%94%9F%E9%95%BF%E5%9C%A8%E6%B7%B1%E5%9C%B3%E6%B9%BE%E7%9A%84%E7%BA%A2%E6%A0%91.jpg?width=300"></td><td>제2 시나무</td><td><b>홍수(红树, 맹그로브)</b> — 2007년 추가 선정. 선전은 <b>도심 중심부에 맹그로브 군락이 자라는 드문 도시</b>다</td></tr>
+<tr><td><img alt="삼각매" class="thumb-img" src="https://commons.wikimedia.org/wiki/Special:FilePath/Pink_paperflowers_%28Bougainvillea_glabra%29.jpg?width=300"></td><td>시꽃(市花)</td><td><b>러두쥐안(勒杜鹃)</b> — 삼각매(三角梅), 곧 부겐빌레아. 1986년 선정. 선전 기후에서 잘 자라고 꽃이 오래 핀다</td></tr>
+</tbody>
+</table>
+
+<h3>특산물</h3>
+<table class="data">
+<tbody>
+<tr><th style="width:150px">이름</th><th>내용</th></tr>
+<tr><td><b>사징 굴</b> (沙井蚝)</td><td>바오안구 사징의 굴밭은 바닷물과 민물이 만나는 곳에 있어 굴이 플랑크톤을 많이 먹는다. 다른 지역 굴보다 크고 맛이 진하다고 알려져 있다</td></tr>
+<tr><td><b>난산 여지</b> (南山荔枝)</td><td>국가 지리적표시 상품. 사료에 따르면 1,700여 년 전부터 난산 일대에서 대규모로 재배됐다. 페이쯔샤오·구이웨이·눠미츠 등이 주요 품종이다</td></tr>
+<tr><td><b>시리 망고</b> (西丽芒果)</td><td>기후·일조·강수 조건이 망고 생육에 맞고 토양이 비옥해 열매가 크고 달다</td></tr>
+<tr><td>그 밖의 특산</td><td>난산 복숭아, 다펑 윈우차, 궁밍 사오어(구운 거위), 시샹 새우, 스옌 배, 난아오 전복·성게, 핑산 금귀귤, 푸융 황유게·숭어, 쑹강 오리포, 룽강 삼황계, 광밍 유즈비둘기, 룽화 감</td></tr>
+</tbody>
+</table>
+
+<h3>디자인 도시</h3>
+<p>2008년 11월 21일 선전은 <b>유네스코 창의도시 네트워크</b>에 가입해 ‘디자인 도시(City of Design)’ 칭호를 받았다. 유네스코가 지정한 여섯 번째 디자인 도시이자 중국에서는 첫 사례다.</p>
+</section>
+
+<section id="s11">
+<h2>11. 인구·민족·방언</h2>
+<h3>인구</h3>
+<p>선전시가 2026년 5월 25일 발표한 〈2025년 국민경제·사회발전 통계공보〉에 따르면, 2025년 말 상주인구는 <b>1,824.85만 명</b>으로 전년 말보다 25.90만 명 늘었다. 이 가운데 도시 상주인구가 1,820.96만 명으로 99.79%를 차지한다. 2004년 행정상 농촌이 사라진 결과다.</p>
+<table class="data">
+<tbody>
+<tr><th style="width:120px">시점</th><th style="width:170px">상주인구</th><th>내용</th></tr>
+<tr><td>2024년 말</td><td>1,798.95만 명</td><td>전년 대비 +19.94만 명. 호적인구 631.01만(35.1%), 비호적인구 1,167.94만(64.9%)</td></tr>
+<tr><td>2025년 말</td><td><b>1,824.85만 명</b></td><td>전년 대비 +25.90만 명. 도시 상주인구 1,820.96만(99.79%)</td></tr>
+</tbody>
+</table>
+<p>이와 별도로 2024년 말 <b>사구(社区) 등기 총인구</b>는 2,237.88만 명(전년 대비 +74.11만 명)으로 집계됐다. 상주인구 통계에 잡히지 않는 단기 체류자를 포함하면 실제로 선전에서 생활하는 사람이 2,300만 명을 넘는다는 추계도 있다.</p>
+<p>2025년 말 기준 인구밀도는 <b>7,422명/㎢</b>로, 중국 대·중도시 가운데 가장 높다.</p>
+<div class="term-box">
+<span class="tt">호적인구와 비호적인구 — 선전을 이해하는 핵심</span>
+<p style="margin:6px 0 0; font-size:13px;">중국은 <b>호구(戶口, 후커우)</b> 제도로 국민의 등록지를 관리한다. 어느 도시에 살고 있어도 그 도시의 호적이 없으면 <b>비호적 상주인구</b>로 분류된다.</p>
+<dl>
+<dt>왜 중요한가</dt><dd>호적 유무에 따라 <b>공립학교 배정, 의료보험, 주택 청약, 일부 사회보장</b>의 조건이 달라진다. 자녀 교육 문제로 다시 고향으로 돌아가는 사례가 생기는 배경이다.</dd>
+<dt>선전의 경우</dt><dd>2024년 말 기준 상주인구의 <b>64.9%(1,167.94만 명)가 비호적 인구</b>다. 이 비중은 중국 대도시 가운데 매우 높은 편으로, 선전이 짧은 기간에 외지 인구 유입으로 성장한 ‘이민 도시’임을 보여 준다.</dd>
+</dl>
+</div>
+<p>제7차 전국 인구조사(2020년) 결과를 보면 선전 상주인구의 성비는 남성 55.04% / 여성 44.96%이고, 평균 연령은 <b>32.5세</b>로 중국 대도시 중 젊은 축에 속한다. 기대수명은 83.54세, 노동연령 인구의 평균 교육 연수는 11.86년이며, 호적인구 가운데 전문대 이상 학력자가 44%를 넘는다.</p>
+
+<h3>민족</h3>
+<p>선전은 2002년 시점에 이미 55개 소수민족이 모두 거주해, <b>베이징에 이어 56개 민족이 모두 모인 두 번째 대도시</b>가 됐다. 국가가 지정한 소수민족 유동인구 서비스·관리 체계 구축 시범도시 12곳 가운데 하나다.</p>
+<p>2013년 기준 인구 1만 명이 넘는 소수민족이 12개였으며, 상주인구 중에서는 <b>좡족</b>이 가장 많고 이어 투자족·먀오족·둥족·야오족·후이족·부이족·만주족·이족·조선족·몽골족·리족 순이었다. 2021년 기준 소수민족 인구는 124.3만 명으로, 호적 20.7만 명·비호적 103.6만 명이다.</p>
+<p>선전 소수민족의 특징은 <b>연령대가 젊고 학력이 높으며, 특정 지역에 모여 사는 집거구가 없다</b>는 점이다. 일자리를 따라 개별적으로 이주한 결과다.</p>
+
+<h3>종교</h3>
+<p>불교·도교·이슬람교·천주교·개신교의 5대 종교가 있다. 2021년 말 기준 시급 민족·종교 단체 7개, 구급 6개가 있고 개방된 종교 활동 장소는 43곳이다. 시 불교협회, 시 기독교협회 및 삼자애국운동위원회, 시 천주교애국회, 시 이슬람교협회, 시 도교협회가 조직돼 있다.</p>
+
+<h3>방언</h3>
+<p>선전의 공용어는 <b>표준중국어(보통화)</b>와 규범 한자다. 대부분의 공공기관과 상업 시설에서는 영어도 어느 정도 통한다.</p>
+<p>토착 방언은 크게 두 갈래다.</p>
+<ul class="plain">
+<li><b>웨(粤)방언</b> — 광둥어 계통. 선전 서부의 후베이·황베이링·뤄후·쑨강·차이우웨이 등 옛 마을에서는 <b>완바오웨어(莞宝粤语)</b>를 썼다. 이 방언에서도 하천을 ‘전(圳)’이라 부르는 용법이 있어, 지명 ‘선전’의 유래와 이어진다</li>
+<li><b>객가 방언</b> — 청 초 천계령 이후 이주해 온 객가계 주민의 말. 주로 동부에 분포한다</li>
+<li>이 밖에 <b>다펑 쥔화(大鹏军话)</b>가 있다. 명대 다펑소성에 주둔한 수비군의 말에서 비롯한 것으로 전하는, 소성 일대에만 남은 독특한 방언이다</li>
+</ul>
+<p>경제특구 설립 이후 전국에서 인구가 유입되면서 쓰촨 말, 후난 말, 민난 말 등 각지 방언이 뒤섞인 언어 환경이 형성됐다. 이 때문에 지역 방언보다 보통화가 공통어로 자리 잡았고, 여행자나 사업 목적 방문자가 언어로 큰 불편을 겪는 일은 드물다.</p>
+</section>
+
+<section id="s12">
+<h2>12. 주요 관광지</h2>
+<p>선전의 볼거리는 <b>대형 테마파크, 해안·산지 자연, 옛 성곽과 마을, 접경지 명소</b>로 나뉜다. 선전시에는 A급 관광지 20곳(5A 5곳, 4A 8곳, 3A 7곳)이 지정돼 있다.</p>
+<div class="term-box">
+<span class="tt">‘A급 관광지’ 등급</span>
+중국이 관광지를 시설·서비스·접근성 등으로 평가해 부여하는 등급으로, <b>1A부터 5A까지</b> 있으며 5A가 가장 높다. 우리나라에는 대응하는 제도가 없어, ‘국가가 인증한 관광지 등급’ 정도로 이해하면 된다. 참고로 선전의 5A 다섯 곳 가운데 네 곳(세계지창, 진슈중화 민속문화촌, 환러구, 환러하이안)은 모두 <b>화차오청 관광휴양구</b>라는 하나의 지정 단위 안에 묶여 있다.
+</div>
+<table class="data">
+<tbody>
+<tr><th style="width:80px">사진</th><th style="width:150px">관광지</th><th style="width:60px">등급</th><th>소개 · 위치</th></tr>
+<tr><td><img alt="세계지창" class="thumb-img" src="https://commons.wikimedia.org/wiki/Special:FilePath/WINDOWS_OF_THE_WORLD_SHENZHEN_%2837%29.jpg?width=300"></td><td><b>세계지창</b><br>(世界之窗)</td><td>5A</td><td>1994년 개장한 세계 축소 모형 테마파크. 난산구 화차오청에 있으며 부지 48만㎡. 세계광장·아시아·오세아니아·유럽·아프리카·아메리카·조각공원·국제거리 8개 구역에 50여 개국 130여 곳의 명소 모형이 있다 <span class="mini-map"><iframe loading="lazy" src="https://maps.google.com/maps?q=%E6%B7%B1%E5%9C%B3%E4%B8%96%E7%95%8C%E4%B9%8B%E7%AA%97&amp;z=14&amp;hl=ko&amp;output=embed"></iframe></span></td></tr>
+<tr><td><img alt="진슈중화" class="thumb-img" src="https://commons.wikimedia.org/wiki/Special:FilePath/Night_at_Splendid_China_Folk_Village_01.JPG?width=300"></td><td><b>진슈중화·<br>민속문화촌</b><br>(锦绣中华)</td><td>5A</td><td>중국 각지의 명승과 소수민족 마을을 축소 재현한 테마파크. 세계지창 바로 옆에 있다 <span class="mini-map"><iframe loading="lazy" src="https://maps.google.com/maps?q=%E9%94%A6%E7%BB%A3%E4%B8%AD%E5%8D%8E%E6%B0%91%E4%BF%97%E6%9D%91&amp;z=14&amp;hl=ko&amp;output=embed"></iframe></span></td></tr>
+<tr><td><div class="thumb">사진 자리</div></td><td><b>환러구</b><br>(欢乐谷)</td><td>5A</td><td>1998년 개장한 놀이공원. 부지 35만㎡, 9개 테마 구역과 40여 개 시설을 갖췄다. 워터파크 ‘마야수공원’이 함께 있다 <span class="mini-map"><iframe loading="lazy" src="https://maps.google.com/maps?q=%E6%B7%B1%E5%9C%B3%E6%AC%A2%E4%B9%90%E8%B0%B7&amp;z=14&amp;hl=ko&amp;output=embed"></iframe></span></td></tr>
+<tr><td><div class="thumb">사진 자리</div></td><td><b>관란후 관광휴양구</b><br>(观澜湖)</td><td>5A</td><td>1992년 조성된 골프·휴양 복합 단지. 룽화구에 있으며 골프장 12곳·216홀 규모다. 2011년 5A 지정 <span class="mini-map"><iframe loading="lazy" src="https://maps.google.com/maps?q=%E6%B7%B1%E5%9C%B3%E8%A7%82%E6%BE%9C%E6%B9%96&amp;z=13&amp;hl=ko&amp;output=embed"></iframe></span></td></tr>
+<tr><td><img alt="셴후식물원" class="thumb-img" src="https://commons.wikimedia.org/wiki/Special:FilePath/FAIRYLAKE_BOTANICAL_GARDEN_MAIN_GATE.jpg?width=300"></td><td><b>셴후식물원</b><br>(仙湖植物园)</td><td>4A</td><td>1988년 개방한 식물원. 뤄후구 우퉁산 자락에 있으며 부지 668㏊에 보육 식물 약 1.2만 종을 보유한다. 소철·난과 식물 수집으로 알려져 있고 선전 고생물박물관이 안에 있다 <span class="mini-map"><iframe loading="lazy" src="https://maps.google.com/maps?q=%E6%B7%B1%E5%9C%B3%E4%BB%99%E6%B9%96%E6%A4%8D%E7%89%A9%E5%9B%AD&amp;z=14&amp;hl=ko&amp;output=embed"></iframe></span></td></tr>
+<tr><td><img alt="다펑소성" class="thumb-img" src="https://commons.wikimedia.org/wiki/Special:FilePath/Dapeng_Fortress%2C_Shenzhen.jpg?width=300"></td><td><b>다펑소성</b><br>(大鹏所城)</td><td>—</td><td>1394년 축조된 명·청대 해안 요새. 성벽과 골목, 장군 저택이 남아 있는 옛 마을 형태다. 전국중점 문물보호단위 <span class="mini-map"><iframe loading="lazy" src="https://maps.google.com/maps?q=%E5%A4%A7%E9%B9%8F%E6%89%80%E5%9F%8E&amp;z=14&amp;hl=ko&amp;output=embed"></iframe></span></td></tr>
+<tr><td><img alt="중잉제" class="thumb-img" src="https://commons.wikimedia.org/wiki/Special:FilePath/Chung_Ying_Street%2C_25_May_2011.jpg?width=300"></td><td><b>중잉제</b><br>(中英街)</td><td>—</td><td>길 한가운데가 중국·홍콩 경계인 250m 거리. 1898년 신제 조차의 흔적인 계비 8기가 남아 있다. 옌톈구 사터우자오 <span class="mini-map"><iframe loading="lazy" src="https://maps.google.com/maps?q=%E4%B8%AD%E8%8B%B1%E8%A1%97&amp;z=15&amp;hl=ko&amp;output=embed"></iframe></span></td></tr>
+<tr><td><div class="thumb">사진 자리</div></td><td>둥부화차오청<br>(东部华侨城)</td><td>4A</td><td>옌톈구 다메이사에 있는 산악형 휴양·테마 단지 <span class="mini-map"><iframe loading="lazy" src="https://maps.google.com/maps?q=%E4%B8%9C%E9%83%A8%E5%8D%8E%E4%BE%A8%E5%9F%8E&amp;z=13&amp;hl=ko&amp;output=embed"></iframe></span></td></tr>
+<tr><td><div class="thumb">사진 자리</div></td><td>선전 야생동물원</td><td>4A</td><td>난산구 시리후 동쪽. 방사형 사육 방식의 동물원 <span class="mini-map"><iframe loading="lazy" src="https://maps.google.com/maps?q=%E6%B7%B1%E5%9C%B3%E9%87%8E%E7%94%9F%E5%8A%A8%E7%89%A9%E5%9B%AD&amp;z=14&amp;hl=ko&amp;output=embed"></iframe></span></td></tr>
+<tr><td><div class="thumb">사진 자리</div></td><td>다메이사·<br>샤오메이사</td><td>—</td><td>옌톈구의 대표적인 해수욕장. 다펑만에 면해 있다 <span class="mini-map"><iframe loading="lazy" src="https://maps.google.com/maps?q=%E6%B7%B1%E5%9C%B3%E5%A4%A7%E6%A2%85%E6%B2%99%E6%B5%B7%E6%BB%A8%E5%85%AC%E5%9B%AD&amp;z=13&amp;hl=ko&amp;output=embed"></iframe></span></td></tr>
+<tr><td><div class="thumb">사진 자리</div></td><td>우퉁산<br>(梧桐山)</td><td>—</td><td>해발 943.7m의 선전 최고봉. 국가삼림공원으로 지정돼 있으며 시내에서 접근이 쉬운 등산지다 <span class="mini-map"><iframe loading="lazy" src="https://maps.google.com/maps?q=%E6%A2%A7%E6%A1%90%E5%B1%B1&amp;z=13&amp;hl=ko&amp;output=embed"></iframe></span></td></tr>
+<tr><td><div class="thumb">사진 자리</div></td><td>난터우 고성<br>(南头古城)</td><td>—</td><td>331년 이래 이 지역 행정 중심이던 옛 성터. 명대 성벽 일부가 남아 있고 주변이 문화 거리로 정비됐다 <span class="mini-map"><iframe loading="lazy" src="https://maps.google.com/maps?q=%E5%8D%97%E5%A4%B4%E5%8F%A4%E5%9F%8E&amp;z=15&amp;hl=ko&amp;output=embed"></iframe></span></td></tr>
+</tbody>
+</table>
+<h3>‘선전 8경’</h3>
+<p>2004년 시민 투표로 선정된 여덟 경관은 <b>다펑소성(大鹏所城)</b>, 선난일채(深南溢彩, 선난대로의 야경), 차오청진슈(侨城锦绣, 화차오청 일대), 롄산춘자오(莲山春早, 롄화산 공원), 우퉁옌위(梧桐烟雨, 우퉁산의 안개비), 메이사타랑(梅沙踏浪, 메이사 해변), 이제양제(一街两制, 중잉제), 양타이뎨추이(阳台叠翠, 양타이산)다. 이 가운데 롄화산 공원의 주봉은 해발 100m 안팎으로, 산 정상에서 푸톈 중심업무지구를 내려다볼 수 있어 시민 산책로로 널리 쓰인다.</p>
+<img alt="롄화산 공원에서 본 푸톈 시민센터와 중심업무지구" class="img-block-img" src="https://commons.wikimedia.org/wiki/Special:FilePath/Civic_Center%2C_Shenzhen_Lianhuashan_Park_%282018.9%29_Daytime.jpg?width=1000">
+<div class="caption">롄화산 공원에서 내려다본 푸톈 시민센터와 중심업무지구(CBD)</div>
+
+<h3>박물관</h3>
+<p>선전박물관(深圳博物馆)은 1981년 설립된 국가 1급 박물관으로, 역사민속관·고대예술관·둥장유격대 지휘부 옛터 기념관·선전개혁개방전람관 등 4개 관을 운영한다. 총 건축면적은 5만㎡가 넘는다. 이 밖에 중잉제 역사박물관, 선전(바오안) 노무공박물관, 난산박물관, 룽강구 객가민속박물관, 자오상국 역사박물관 등이 있으며 대부분 무료다.</p>
+<div class="note-box">
+<b>선전(바오안) 노무공박물관</b> — 개혁·개방기에 전국에서 몰려든 <b>이주 노동자(농민공)</b>의 생활과 노동을 다룬 박물관으로, 바오안구 스옌가도의 옛 공장 건물에 있습니다. 선전의 성장 이면을 이해하는 데 참고가 되는 곳입니다.
+</div>
+</section>
+
+<section id="s13">
+<h2>13. 주요 제도·정책 연혁</h2>
+<p>선전은 중국의 여러 제도 실험이 처음 적용된 도시여서, 도시의 성격 변화가 제도 지정 이력과 함께 움직였다. 아래는 그 주요 연혁이다.</p>
+<table class="data">
+<tbody>
+<tr><th style="width:110px; text-align:center;">연도</th><th style="width:230px;">제도·지정</th><th>내용</th></tr>
+<tr><td style="text-align:center; font-weight:600;">1979</td><td>선전시 설치</td><td>3월 5일 국무원 승인. 바오안현이 선전시로 개편</td></tr>
+<tr><td style="text-align:center; font-weight:600;">1980</td><td><b>경제특구 지정</b></td><td>8월 26일 출범. 주하이·산터우·샤먼과 함께 중국 첫 4개 경제특구</td></tr>
+<tr><td style="text-align:center; font-weight:600;">1982</td><td>외자은행 지점 개설</td><td>1월, 개혁·개방 후 첫 외자계 은행 지점(난양상업은행 선전지점)</td></tr>
+<tr><td style="text-align:center; font-weight:600;">1988</td><td><b>계획단열시 지정</b></td><td>10월. 국가 계획에서 성을 거치지 않고 항목을 세우는 도시로, 성급에 준하는 경제 관리 권한 부여</td></tr>
+<tr><td style="text-align:center; font-weight:600;">1990~91</td><td>선전증권거래소</td><td>1990년 12월 시범 영업, 1991년 7월 정식 개업</td></tr>
+<tr><td style="text-align:center; font-weight:600;">1992</td><td>경제특구 입법권</td><td>7월 1일. 전국 최초로 경제특구 차원의 입법 권한 부여</td></tr>
+<tr><td style="text-align:center; font-weight:600;">1994</td><td><b>부성급시 지정</b></td><td>2월. 행정 등급이 일반 지급시보다 한 단계 상향</td></tr>
+<tr><td style="text-align:center; font-weight:600;">2004</td><td>농촌 도시화 완료</td><td>12월. 관내 농촌 호적이 도시 호적으로 전환돼 행정상 농촌이 사라짐</td></tr>
+<tr><td style="text-align:center; font-weight:600;">2008</td><td>유네스코 디자인 도시</td><td>11월 21일. 창의도시 네트워크 가입, 중국 최초</td></tr>
+<tr><td style="text-align:center; font-weight:600;">2010</td><td>특구 범위 확대</td><td>7월 1일. 도심 일부에 한정됐던 경제특구가 시 전역으로 확대</td></tr>
+<tr><td style="text-align:center; font-weight:600;">2015</td><td>자유무역시험구</td><td>중국(광둥) 자유무역시험구 첸하이·셔코우 편구 지정</td></tr>
+<tr><td style="text-align:center; font-weight:600;">2018</td><td>특구 관리선 폐지</td><td>1월. 특구 안팎을 가르던 검문선(이른바 ‘얼셴관’)이 국무원 승인으로 공식 폐지</td></tr>
+<tr><td style="text-align:center; font-weight:600;">2019</td><td><b>대만구·선행시범구</b></td><td>2월 〈웨강아오 대만구 발전계획강요〉에서 대만구 중심 도시의 하나로 규정. 8월 ‘중국특색 사회주의 선행시범구’ 건설 착수</td></tr>
+<tr><td style="text-align:center; font-weight:600;">2023</td><td>특대도시 획정</td><td>11월. 성구(도심) 상주인구 기준 충족</td></tr>
+</tbody>
+</table>
+<div class="note-box">
+<b>도시 순위 자료에 대해</b> — 중국 도시 항목에는 각종 기관이 발표한 순위(‘○○ 100강 △위’)가 길게 나열되는 경우가 많습니다. 이런 순위는 발표 기관과 평가 방식이 제각각이고 상업적 성격을 띤 것도 있어, 이 항목에서는 목록으로 싣지 않았습니다. 참고로 선전시 통계공보가 밝힌 대표적 수치로는 <b>수출액 33년 연속 중국 본토 대·중도시 1위</b>, <b>인구밀도 중국 대·중도시 1위</b> 등이 있습니다.
+</div>
+</section>
+
+<section id="s14">
+<h2>14. 유명 인물</h2>
+<h3>역사 인물</h3>
+<p>《선전시지(2000)》 인물지는 동진부터 2000년까지 선전 지역과 관련된 인물 68명을 수록하고 있다. 그 가운데 대표적인 인물은 다음과 같다.</p>
+<table class="data">
+<tbody>
+<tr><th style="width:70px">사진</th><th style="width:140px">이름</th><th style="width:110px">시대</th><th style="width:100px">연고</th><th>소개</th></tr>
+<tr><td><div class="thumb">사진 자리</div></td><td>황석(黄石)</td><td>남송<br>(1221~?)</td><td>샤사촌<br>(오늘날 푸톈구)</td><td>1252년 향시에 급제하고 1259년 진사가 됐다. <b>선전 지역 역사상 첫 진사</b>로 기록된다</td></tr>
+<tr><td><img alt="문천상" class="thumb-img" src="https://commons.wikimedia.org/wiki/Special:FilePath/%E6%96%87%E5%A4%A9%E7%A5%A5%E8%82%96%E5%83%8F.jpg?width=300"></td><td>문천상(文天祥)</td><td>남송<br>(1236~1283)</td><td>—<br><span class="yr">(장시성 출신)</span></td><td>남송 말 재상·시인. 1278년 원군에 붙잡혀 링딩양(오늘날 선전 네이링딩다오 인근 해역)을 두 차례 지나며 〈과영정양(過零丁洋)〉을 지었다. 동생 문벽의 후손이 오늘날 바오안구에 산다</td></tr>
+<tr><td><div class="thumb">사진 자리</div></td><td>정육수(郑毓秀)</td><td>청 말~현대<br>(1891~1959)</td><td>신안현 시샹<br>(오늘날 바오안구)</td><td>중국 최초의 여성 법학박사이자 여성 변호사. 1908년 도쿄에서 중국동맹회에 가입했고, 1919년 파리강화회의 중국 대표단 수행원으로 활동했다. 1925년 베이징여자사범대학 총장, 1928년 입법위원을 지냈다</td></tr>
+<tr><td><div class="thumb">사진 자리</div></td><td>능도양(凌道扬)</td><td>근현대<br>(1888~1993)</td><td>신안현 부지<br>(오늘날 룽강구)</td><td>임학자·교육자. 1914년 예일대에서 석사 학위를 받고 귀국해, 1915년 한안 등과 함께 <b>식수절(植樹節)</b> 제정을 제안했다. 중화삼림회 창설과 첫 임학 학술지 발간, 대학 임학과 개설, 첫 삼림법 제정에 참여했으며 홍콩중문대 설립에도 관여했다</td></tr>
+<tr><td><div class="thumb">사진 자리</div></td><td>증생(曾生)</td><td>현대<br>(1910~1995)</td><td>귀선현 핑산<br>(오늘날 핑산구)</td><td>1936년 중국공산당에 입당했고 1943년 <b>둥장종대(东江纵队)</b> 사령원을 맡아 화남 지역 항일 무장 활동을 이끌었다. 1955년 소장 계급을 받았고 1978년 교통부장을 지냈다</td></tr>
+<tr><td><div class="thumb">사진 자리</div></td><td>남조(蓝造)</td><td>현대<br>(1917~1990)</td><td>룽강구 쿠이충</td><td>1938년 입당. 다펑 구위 서기, 후이양현위 서기 등을 거쳐 1949년 웨간샹 변종대 둥장 제1지대 사령원을 맡았다</td></tr>
+</tbody>
+</table>
+
+<h3>현대 인물</h3>
+<div class="note-box">
+선전은 <b>외지 출신 창업자가 현지에서 기업을 세운 사례가 많은 도시</b>입니다. 아래 인물 대부분은 선전 태생이 아니라 다른 지역에서 이주해 선전에서 활동한 경우로, 이 점이 ‘이민 도시’로서 선전의 성격을 보여 줍니다.
+</div>
+<table class="data">
+<tbody>
+<tr><th style="width:70px">사진</th><th style="width:150px">이름</th><th style="width:170px">소속·창업</th><th>소개</th></tr>
+<tr><td><img alt="위안겅 동상(셔코우)" class="thumb-img" src="https://commons.wikimedia.org/wiki/Special:FilePath/SZ_Shenzhen_Nanshan_Shekou_1187_Wanghai_Road_Sea_World_Culture_and_Arts_Center_outdoor_statue_Yuan_Geng_April_2025_R12S_01.jpg?width=300"></td><td>위안겅 (袁庚)<br><span class="yr">1917~2016</span></td><td>자오상국 셔코우 공업구</td><td>바오안 출신. 1979년 셔코우 공업구 개발을 주도했다. ‘시간은 곧 돈, 효율은 곧 생명(时间就是金钱, 效率就是生命)’이라는 표어로 알려져 있다. <span class="yr">(사진은 셔코우에 세워진 동상)</span></td></tr>
+<tr><td><img alt="런정페이" class="thumb-img" src="https://commons.wikimedia.org/wiki/Special:FilePath/Ren_Zhengfei_%282016%29.jpg?width=300"></td><td>런정페이 (任正非)<br><span class="yr">1944~</span></td><td>화웨이 창업자</td><td>구이저우 출신. 1987년 선전에서 화웨이를 창업했다</td></tr>
+<tr><td><img alt="마화텅" class="thumb-img" src="https://commons.wikimedia.org/wiki/Special:FilePath/%E9%A9%AC%E5%8C%96%E8%85%BE_Pony_Ma_2019.jpg?width=300"></td><td>마화텅 (马化腾)<br><span class="yr">1971~</span></td><td>텐센트 창업자</td><td>광둥 산터우 출신, 선전대학 졸업. 1998년 텐센트를 창업했다</td></tr>
+<tr><td><img alt="왕촨푸" class="thumb-img" src="https://commons.wikimedia.org/wiki/Special:FilePath/Wang_Chuanfu_%28cropped%29.jpg?width=300"></td><td>왕촨푸 (王传福)<br><span class="yr">1966~</span></td><td>BYD 창업자</td><td>안후이 출신. 1995년 선전에서 배터리 회사로 BYD를 창업해 완성차로 확장했다</td></tr>
+<tr><td><div class="thumb">사진 자리<br>(편집 모드에서 추가)</div></td><td>마밍저 (马明哲)<br><span class="yr">1955~</span></td><td>중국핑안 창업자</td><td>1988년 셔코우에서 핑안보험을 설립해 종합 금융그룹으로 키웠다</td></tr>
+<tr><td><img alt="왕스" class="thumb-img" src="https://commons.wikimedia.org/wiki/Special:FilePath/Wang_Shi%2C_founder_of_China_Vanke.jpg?width=300"></td><td>왕스 (王石)<br><span class="yr">1951~</span></td><td>완커 창업자</td><td>1984년 선전에서 창업, 완커를 중국 대표 주택개발 기업으로 성장시켰다</td></tr>
+<tr><td><div class="thumb">사진 자리<br>(편집 모드에서 추가)</div></td><td>왕타오 (汪滔)<br><span class="yr">1980~</span></td><td>DJI 창업자</td><td>저장 항저우 출신. 홍콩과기대 재학 중 연구를 시작해 2006년 선전에서 DJI를 창업했다</td></tr>
+</tbody>
+</table>
+</section>
+
+<div class="cite-box"><div class="naver-cite"><b>[중국 도시 정보 사전]</b> 선전시 [深圳市, Shenzhen] (중국 도시 정보 사전, 부성급시·경제특구 편)</div>
+<div class="imgcredit" style="font-size:12px;color:#888;margin:0 0 10px;"><b style="color: rgb(85, 85, 85); font-size: 13px;">참고 자료</b><br></div>
+<ol>
+<li>선전시 통계국·국가통계국 선전조사대 《2024·2025년 국민경제·사회발전 통계공보》 (2026.5.25 발표)</li>
+<li>제7차 전국 인구조사(2020) 선전시 주요 데이터 공보</li>
+<li>중화인민공화국 민정부 전국 행정구획 조회 플랫폼 (행정구역코드 440300)</li>
+<li>선전시 인민정부 홈페이지 및 규획·자연자원·생태환경·교통운수·문화광전여유체육 등 관련 부문 자료</li>
+<li>선전시 사지관(史志馆) 〈선전 개황〉·〈건치 연혁〉, 《선전시지(2000)》 기초건설권·인물지</li>
+<li>선전시 제3차 전국 국토조사 보고 (기준 시점 2019.12.31)</li>
+<li>국무원 전국중점 문물보호단위 명록 / 국가급 비물질문화유산 명록</li>
+<li>선전시 외사판공실 국제 자매도시·우호교류도시 명단 (2021.12.31 기준)</li>
+</ol>
+<div style="font-size:12px; color:#888; margin-top:10px; line-height:1.7;">
+※ 이 항목의 통계는 <b>선전시가 발표한 공식 수치</b>를 옮긴 것으로, 발표 기관과 기준 연도를 각 문장에 함께 표기했습니다. 중국 통계는 이후 확정치로 수정되는 경우가 있습니다.<br>
+※ 사진은 위키미디어 공용(Wikimedia Commons)의 자유 이용 이미지를 사용했습니다. 지도는 구글 지도 임베드입니다.
+</div>
+</div>
+<div class="demo-note">※ 내부 시연용 목업 (한국 독자용) — 지식백과류 UI를 참고한 자체 디자인입니다.</div>
+</div><!-- /main -->
+
+<aside class="profile">
+<div class="pf-title">선전시 기본 정보</div>
+<img alt="선전 푸톈 중심업무지구" class="pf-img" src="https://commons.wikimedia.org/wiki/Special:FilePath/Shenzhen_CBD_and_River.jpg?width=900">
+<table>
+<tbody>
+<tr><th>공식 명칭</th><td>선전시 (深圳市 / Shenzhen City)</td></tr>
+<tr><th>구분</th><td>광둥성 지급시·부성급시·계획단열시<br>경제특구 <span class="yr">(행정구역코드 440300)</span></td></tr>
+<tr><th>약칭·별칭</th><td>선(深) / 펑청(鹏城)</td></tr>
+<tr><th>시정부 소재</th><td>광둥성 선전시 푸톈구<br><span style="color:#888;">广东省深圳市福田区</span><span class="pf-map"><iframe loading="lazy" src="https://maps.google.com/maps?q=%E6%B7%B1%E5%9C%B3%E5%B8%82%E4%BA%BA%E6%B0%91%E6%94%BF%E5%BA%9C&amp;z=14&amp;hl=ko&amp;output=embed"></iframe></span></td></tr>
+<tr><th>면적</th><td>육지 1,997.47㎢ · 해역 1,145㎢<br><span class="yr">선산특별합작구 포함 시 약 2,465㎢</span></td></tr>
+<tr><th>인구</th><td>상주 1,824.85만 명 <span class="yr">(2025년 말)</span><br>도시화율 99.79% · 특대도시<br>비호적 인구 비중 약 65%</td></tr>
+<tr><th>인구밀도</th><td>7,422명/㎢ <span class="yr">(중국 대·중도시 1위)</span></td></tr>
+<tr><th>GDP</th><td>3조 8,731.80억 위안 (+5.5%) <span class="yr">(2025)</span></td></tr>
+<tr><th>1인당 GDP</th><td>21만 3,763위안 <span class="yr">(2025)</span></td></tr>
+<tr><th>관할</th><td>9개 구 + 1개 신구(다펑)<br>+ 선산특별합작구</td></tr>
+<tr><th>기후</th><td>아열대 계절풍 기후<br>연평균 23.3℃ · 연강수 1,932.9mm</td></tr>
+<tr><th>최고봉</th><td>우퉁산(梧桐山) 943.7m</td></tr>
+<tr><th>언어</th><td>표준중국어<br><span class="yr">(토착 방언: 웨방언·객가어·다펑 쥔화)</span></td></tr>
+<tr><th>차량 번호</th><td>웨B(粤B)</td></tr>
+<tr><th>우편번호</th><td>518000</td></tr>
+<tr><th>전화 구호</th><td>0755 · 755</td></tr>
+<tr><th>공항</th><td>선전 바오안 국제공항(SZX)</td></tr>
+<tr><th>주요 대학</th><td>선전대학 · 남방과기대학</td></tr>
+<tr><th>시나무·시꽃</th><td>여지나무·홍수(맹그로브) / 러두쥐안(삼각매)</td></tr>
+<tr><th>인접</th><td>남: 홍콩 · 북: 둥관·후이저우</td></tr>
+</tbody>
+</table>
+</aside>
+</div><!-- /layout -->
+</div><!-- /wrap -->
+
+<div class="toolbar">
+<div class="save-hint" id="saveHint" style="display: none;"></div>
+<input accept="image/*" class="image-file-input" id="imageInput" onchange="handleImageUpload(event)" type="file">
+<div aria-label="편집 도구" class="edit-tools" id="editTools">
+<div aria-label="글자색" class="edit-group">
+<span class="edit-group-title">글자색</span>
+<div class="color-palette">
+<button class="color-swatch" onclick="applyTextColor('#222222')" onmousedown="event.preventDefault()" style="background:#222222" title="검정" type="button">검정</button>
+<button class="color-swatch" onclick="applyTextColor('#777777')" onmousedown="event.preventDefault()" style="background:#777777" title="회색" type="button">회색</button>
+<button class="color-swatch" onclick="applyTextColor('#d93025')" onmousedown="event.preventDefault()" style="background:#d93025" title="빨강" type="button">빨강</button>
+<button class="color-swatch" onclick="applyTextColor('#f29900')" onmousedown="event.preventDefault()" style="background:#f29900" title="주황" type="button">주황</button>
+<button class="color-swatch" onclick="applyTextColor('#188038')" onmousedown="event.preventDefault()" style="background:#188038" title="초록" type="button">초록</button>
+<button class="color-swatch" onclick="applyTextColor('#1a73e8')" onmousedown="event.preventDefault()" style="background:#1a73e8" title="파랑" type="button">파랑</button>
+<button class="color-swatch" onclick="applyTextColor('#9334e6')" onmousedown="event.preventDefault()" style="background:#9334e6" title="보라" type="button">보라</button>
+</div>
+</div>
+<div aria-label="배경색" class="edit-group">
+<span class="edit-group-title">배경색</span>
+<div class="color-palette">
+<button class="color-swatch is-light" onclick="applyBgColor('#fff3a3')" onmousedown="event.preventDefault()" style="background:#fff3a3" title="노랑" type="button">노랑</button>
+<button class="color-swatch is-light" onclick="applyBgColor('#d9ead3')" onmousedown="event.preventDefault()" style="background:#d9ead3" title="연두" type="button">연두</button>
+<button class="color-swatch is-light" onclick="applyBgColor('#cfe2f3')" onmousedown="event.preventDefault()" style="background:#cfe2f3" title="하늘" type="button">하늘</button>
+<button class="color-swatch is-light" onclick="applyBgColor('#eadcf8')" onmousedown="event.preventDefault()" style="background:#eadcf8" title="연보라" type="button">연보라</button>
+<button class="color-swatch is-light" onclick="applyBgColor('#f4cccc')" onmousedown="event.preventDefault()" style="background:#f4cccc" title="분홍" type="button">분홍</button>
+<button class="color-swatch is-light" onclick="applyBgColor('#eeeeee')" onmousedown="event.preventDefault()" style="background:#eeeeee" title="연회색" type="button">연회색</button>
+<button class="color-swatch is-clear" onclick="clearBgColor()" onmousedown="event.preventDefault()" title="배경색 제거" type="button">없음</button>
+</div>
+</div>
+<label>글자 크기
+      <select id="fontSize" onchange="applyFontSize(this.value)" title="선택한 글자 크기">
+<option value="">크기</option>
+<option value="12px">12px</option>
+<option value="14px">14px</option>
+<option value="15px">15px</option>
+<option value="16px">16px</option>
+<option value="18px">18px</option>
+<option value="20px">20px</option>
+<option value="24px">24px</option>
+</select>
+</label>
+<button class="format-btn" onclick="applyInlineCommand('bold')" title="굵게" type="button"><b>B</b></button>
+<button class="format-btn" onclick="applyInlineCommand('underline')" title="밑줄" type="button"><u>U</u></button>
+<button class="clear-format" onclick="clearSelectionFormatting()" title="선택한 글자 서식 지우기" type="button">서식 지우기</button>
+</div>
+<button class="btn-edit" id="editBtn" onclick="toggleEdit()">편집 모드</button>
+<button class="btn-save" id="saveBtn" onclick="saveHtml()">저장(다운로드)</button>
+<button class="btn-print" onclick="window.print()">PDF로 인쇄</button>
+</div>
+<script>
+let savedRange = null;
+let currentImageTarget = null;
+
+function editableAreas(){
+  return document.querySelectorAll('.main, .profile, .summary, .headword, .cite-box');
+}
+
+function isEditing(){
+  return document.body.classList.contains('editing');
+}
+
+function isSelectionInEditable(){
+  const sel = window.getSelection();
+  if (!sel || sel.rangeCount === 0) return false;
+  const node = sel.anchorNode;
+  const el = node && (node.nodeType === Node.ELEMENT_NODE ? node : node.parentElement);
+  return !!(el && el.closest('[contenteditable="true"]'));
+}
+
+function saveSelection(){
+  if (!isEditing() || !isSelectionInEditable()) return;
+  const sel = window.getSelection();
+  savedRange = sel.rangeCount ? sel.getRangeAt(0).cloneRange() : null;
+}
+
+function restoreSelection(){
+  if (!savedRange) return false;
+  const sel = window.getSelection();
+  sel.removeAllRanges();
+  sel.addRange(savedRange);
+  return true;
+}
+
+function ensureEditableSelection(){
+  if (!isEditing()){
+    showHint('먼저 편집 모드를 켠 뒤 글자를 선택하세요.');
+    return false;
+  }
+  restoreSelection();
+  if (!isSelectionInEditable()){
+    showHint('수정할 글자를 드래그해서 선택한 뒤 적용하세요.');
+    return false;
+  }
+  return true;
+}
+
+function applyInlineCommand(command, value=null){
+  if (!ensureEditableSelection()) return;
+  document.execCommand(command, false, value);
+  saveSelection();
+}
+
+function applyTextColor(color){
+  applyInlineCommand('foreColor', color);
+}
+
+function applyBgColor(color){
+  if (!ensureEditableSelection()) return;
+  if (!document.execCommand('hiliteColor', false, color)){
+    document.execCommand('backColor', false, color);
+  }
+  saveSelection();
+}
+
+function clearBgColor(){
+  if (!ensureEditableSelection()) return;
+  if (!document.execCommand('hiliteColor', false, 'transparent')){
+    document.execCommand('backColor', false, 'transparent');
+  }
+  document.querySelectorAll('[style]').forEach(el=>{
+    if (el.style.backgroundColor === 'transparent') el.style.backgroundColor = '';
+    if (!el.getAttribute('style')) el.removeAttribute('style');
+  });
+  saveSelection();
+}
+
+function applyFontSize(size){
+  if (!size || !ensureEditableSelection()) return;
+  document.execCommand('fontSize', false, '7');
+  document.querySelectorAll('font[size="7"]').forEach(font=>{
+    const span = document.createElement('span');
+    span.style.fontSize = size;
+    while (font.firstChild) span.appendChild(font.firstChild);
+    font.replaceWith(span);
+  });
+  saveSelection();
+  const select = document.getElementById('fontSize');
+  if (select) select.value = '';
+}
+
+function clearSelectionFormatting(){
+  applyInlineCommand('removeFormat');
+}
+
+function imageTargets(){
+  return Array.from(document.querySelectorAll('img.pf-img, img.img-block-img, img.thumb-img, img.logo-img, .img-block, .thumb, .img-strip .cell, .profile .img-placeholder, .logo-ph'))
+    .filter(el=> !el.closest('.toolbar') && !el.closest('.image-edit-wrap'));
+}
+
+function imageWrapClass(target){
+  const small = target.classList.contains('thumb') || target.classList.contains('thumb-img') || target.classList.contains('logo-img') || target.classList.contains('logo-ph');
+  const logo = target.classList.contains('logo-img') || target.classList.contains('logo-ph');
+  const inline = small || target.tagName === 'SPAN';
+  return 'image-edit-wrap' + (inline ? ' is-inline' : '') + (small ? ' is-small' : '') + (logo ? ' is-logo' : '');
+}
+
+function addImageButton(target){
+  const wrapper = document.createElement(target.tagName === 'SPAN' ? 'span' : 'div');
+  wrapper.className = imageWrapClass(target);
+  target.parentNode.insertBefore(wrapper, target);
+  wrapper.appendChild(target);
+
+  const button = document.createElement('button');
+  button.type = 'button';
+  button.className = 'image-upload-btn';
+  button.textContent = '이미지 선택';
+  button.contentEditable = 'false';
+  button.addEventListener('mousedown', event=> event.preventDefault());
+  button.addEventListener('click', event=>{
+    event.preventDefault();
+    event.stopPropagation();
+    currentImageTarget = wrapper.querySelector('img, .img-block, .thumb, .cell, .img-placeholder, .logo-ph');
+    const input = document.getElementById('imageInput');
+    if (input) input.click();
+  });
+  wrapper.appendChild(button);
+}
+
+function prepareImageEditors(){
+  imageTargets().forEach(addImageButton);
+}
+
+function cleanupImageEditors(){
+  document.querySelectorAll('.image-upload-btn').forEach(button=> button.remove());
+  document.querySelectorAll('.image-edit-wrap').forEach(wrapper=>{
+    const parent = wrapper.parentNode;
+    while (wrapper.firstChild) parent.insertBefore(wrapper.firstChild, wrapper);
+    wrapper.remove();
+  });
+  currentImageTarget = null;
+  const input = document.getElementById('imageInput');
+  if (input) input.value = '';
+}
+
+function imageClassForTarget(target){
+  if (target.classList.contains('img-placeholder')) return 'pf-img';
+  if (target.classList.contains('img-block')) return 'img-block-img';
+  if (target.classList.contains('thumb')) return 'thumb-img';
+  if (target.classList.contains('logo-ph')) return 'logo-img';
+  if (target.classList.contains('cell')) return 'strip-img';
+  return target.className || 'img-block-img';
+}
+
+function replaceImageTarget(target, dataUrl, fileName){
+  if (!target) return;
+  if (target.tagName === 'IMG'){
+    target.src = dataUrl;
+    target.removeAttribute('srcset');
+    if (!target.alt) target.alt = fileName;
+    return;
+  }
+
+  const img = document.createElement('img');
+  img.src = dataUrl;
+  img.alt = fileName;
+  img.className = imageClassForTarget(target);
+
+  if (target.classList.contains('cell')){
+    target.innerHTML = '';
+    target.appendChild(img);
+    currentImageTarget = img;
+    return;
+  }
+
+  target.replaceWith(img);
+  currentImageTarget = img;
+}
+
+function handleImageUpload(event){
+  const file = event.target.files && event.target.files[0];
+  if (!file || !currentImageTarget) return;
+  if (!file.type.startsWith('image/')){
+    showHint('이미지 파일만 선택할 수 있습니다.');
+    event.target.value = '';
+    return;
+  }
+  const reader = new FileReader();
+  reader.onload = e=>{
+    replaceImageTarget(currentImageTarget, e.target.result, file.name.replace(/\.[^.]+$/, ''));
+    showHint('선택한 이미지로 교체했습니다. 저장 버튼을 눌러 HTML에 반영하세요.');
+    event.target.value = '';
+  };
+  reader.readAsDataURL(file);
+}
+
+function toggleEdit(){
+  const on = document.body.classList.toggle('editing');
+  editableAreas().forEach(el=>{
+    el.contentEditable = on;
+  });
+  const b = document.getElementById('editBtn');
+  b.classList.toggle('on', on);
+  b.textContent = on ? '편집 완료' : '편집 모드';
+  if (on){
+    prepareImageEditors();
+    showHint('글자 선택 후 색상·크기를 바꾸거나, 이미지 위 버튼으로 사진을 교체할 수 있습니다.');
+  } else {
+    savedRange = null;
+    window.getSelection().removeAllRanges();
+    cleanupImageEditors();
+  }
+}
+
+function showHint(msg){
+  const h = document.getElementById('saveHint');
+  h.textContent = msg;
+  h.style.display = 'block';
+  clearTimeout(h._t);
+  h._t = setTimeout(()=>{ h.style.display='none'; }, 4000);
+}
+
+function saveHtml(){
+  const wasEditing = document.body.classList.contains('editing');
+  if (wasEditing) toggleEdit();
+
+  const clone = document.documentElement.cloneNode(true);
+  clone.querySelectorAll('[contenteditable]').forEach(el=> el.removeAttribute('contenteditable'));
+  clone.querySelectorAll('.save-hint').forEach(el=>{ el.textContent=''; el.style.display='none'; });
+  clone.querySelectorAll('#fontSize, #imageInput').forEach(el=>{ el.value=''; });
+  clone.querySelectorAll('.image-upload-btn').forEach(el=> el.remove());
+  clone.querySelectorAll('.image-edit-wrap').forEach(wrapper=>{
+    const parent = wrapper.parentNode;
+    while (wrapper.firstChild) parent.insertBefore(wrapper.firstChild, wrapper);
+    wrapper.remove();
+  });
+
+  const html = '<!DOCTYPE html>\n' + clone.outerHTML;
+  const blob = new Blob([html], {type:'text/html;charset=utf-8'});
+  const url = URL.createObjectURL(blob);
+
+  const now = new Date();
+  const pad = n=> String(n).padStart(2,'0');
+  const stamp = now.getFullYear()+pad(now.getMonth()+1)+pad(now.getDate())+'_'+pad(now.getHours())+pad(now.getMinutes());
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = '선전시_지식백과_'+stamp+'.html';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  setTimeout(()=> URL.revokeObjectURL(url), 1000);
+
+  showHint('편집한 내용을 HTML 파일로 저장했습니다. 다운로드 폴더를 확인하세요.');
+}
+
+document.addEventListener('selectionchange', saveSelection);
+
+window.addEventListener('beforeunload', function(e){
+  if (document.body.classList.contains('editing')){
+    e.preventDefault();
+    e.returnValue = '';
+  }
+});
+</script>
+<div id="extension-mmplj"></div>
+<style id="cw-addon-style">
+img.thumb-img,img.img-block-img,img.pf-img,img.strip-img{cursor:zoom-in}
+#cw-lb-ov{display:none;position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.82);align-items:center;justify-content:center;padding:24px;cursor:zoom-out}
+#cw-lb-im{max-width:94vw;max-height:92vh;box-shadow:0 10px 40px rgba(0,0,0,.5);border-radius:6px}
+#cw-lb-cap{position:fixed;bottom:18px;left:0;right:0;text-align:center;color:#fff;font-size:14px}
+#cw-lb-dl{position:fixed;top:18px;right:18px;z-index:100000;display:flex;align-items:center;justify-content:center;width:44px;height:44px;padding:0;border:none;border-radius:50%;background:rgba(255,255,255,.92);color:#1a1a1a;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.35)}
+#cw-lb-dl:hover{background:#fff}
+.ph-box{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;border:2px dashed #c9ccd1;border-radius:10px;background:#f6f7f9;color:#8a9099;padding:20px 14px;margin:10px 0;text-align:center;min-height:110px}
+.ph-box .ph-cap{font-weight:600;color:#5b616b;font-size:13px}
+.ph-box .ph-sub{font-size:11.5px;color:#9aa0a8}
+.ph-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:10px 0}
+.ph-box.ph-sm{min-height:64px;padding:10px 8px;margin:0}
+.ph-hint{font-size:11px;opacity:.6}
+</style>
+<div id="cw-lb-ov" style="display: none;"><button id="cw-lb-dl" type="button" title="download" aria-label="download"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v13"></path><path d="M7 12l5 5 5-5"></path><path d="M5 21h14"></path></svg></button><img id="cw-lb-im" src="" alt="image19"><div id="cw-lb-cap"></div></div>
+<script>
+(function(){
+  var sel='img.thumb-img,img.img-block-img,img.pf-img,img.strip-img';
+  var ov=document.getElementById('cw-lb-ov'),im=document.getElementById('cw-lb-im'),cp=document.getElementById('cw-lb-cap'),dl=document.getElementById('cw-lb-dl');var curName='image';
+  function close(){ov.style.display='none';im.src='';cp.textContent='';}
+  ov.addEventListener('click',close);
+  dl.addEventListener('click',function(e){
+    e.preventDefault();e.stopPropagation();
+    var src=im.src; if(!src)return;
+    var base=curName||'image';
+    fetch(src).then(function(r){return r.blob();}).then(function(b){
+      var ext=(b.type&&b.type.indexOf('/')>-1)?'.'+b.type.split('/')[1].split('+')[0]:'';
+      var fn=/\.[a-z0-9]+$/i.test(base)?base:base+ext;
+      var u=URL.createObjectURL(b),a=document.createElement('a');
+      a.href=u;a.download=fn;document.body.appendChild(a);a.click();a.remove();
+      setTimeout(function(){URL.revokeObjectURL(u);},1500);
+    }).catch(function(){
+      var a=document.createElement('a');a.href=src;a.download=base;a.target='_blank';
+      document.body.appendChild(a);a.click();a.remove();
+    });
+  });
+  document.addEventListener('click',function(e){
+    var t=e.target;
+    if(document.body.classList.contains('editing'))return;
+    if(t&&t.tagName==='IMG'&&t.matches&&t.matches(sel)){
+      var _l=Array.prototype.slice.call(document.querySelectorAll(sel));curName='image'+(_l.indexOf(t)+1);
+      var s=t.src.replace(/([?&]width=)\d+/,'$11400');
+      im.src=s;im.alt=curName;cp.textContent=curName;ov.style.display='flex';
+    }
+  });
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});
+})();
+</script>
+</body></html>
