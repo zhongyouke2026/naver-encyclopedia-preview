@@ -807,6 +807,8 @@
 
     const adminColors = isIframe ? lightAdminColors : darkAdminColors;
 
+    const unifiedLandColor = new THREE.Color('#e5e9f0');
+
     // Water & Dimming colors adapt to mode (Dark theme vs Light transparent theme)
     const waterColorAdmin = isIframe ? new THREE.Color('#f4f6f9') : new THREE.Color('#101f35');
     const waterColorPhys = isIframe ? new THREE.Color('#eef2f6') : new THREE.Color('#0e1b2e');
@@ -1083,7 +1085,11 @@
           if (distIdx === -1) {
             baseColor.copy(waterColorAdmin);
           } else {
-            baseColor.copy(adminColors[distIdx]);
+            if (isIframe && focusedDistrictId === 'all') {
+              baseColor.copy(unifiedLandColor);
+            } else {
+              baseColor.copy(adminColors[distIdx]);
+            }
             
             // Add subtle shaded feedback based on real topography to enhance depth
             const shade = 0.7 + (rawH / 943) * 0.38;
