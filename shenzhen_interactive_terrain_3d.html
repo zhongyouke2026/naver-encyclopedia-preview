@@ -1062,6 +1062,12 @@
 
     // 3. Bilinear Interpolation for Height at arbitrary (x, z)
     function getElevation(x, z) {
+      // Reclaimed water check based on current year
+      const reclaimState = checkReclaimed(x, z, currentYear);
+      if (reclaimState === 'water') {
+        return -1.2 / (scaleY * exaggeration);
+      }
+
       const u = (x / bounds.width) + 0.5;
       const v = (z / bounds.depth) + 0.5;
       
