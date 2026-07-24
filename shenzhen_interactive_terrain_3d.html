@@ -603,6 +603,145 @@
         padding: 10px 14px;
       }
     }
+    
+    /* Iframe embedded styles */
+    body.in-iframe {
+      background: transparent !important;
+    }
+    body.in-iframe::before {
+      display: none !important;
+    }
+    body.in-iframe .app {
+      width: 100%;
+      margin: 0;
+      min-height: 100vh;
+      grid-template-rows: 1fr;
+      gap: 0;
+    }
+    body.in-iframe .topbar,
+    body.in-iframe .regions,
+    body.in-iframe .footer {
+      display: none !important;
+    }
+    body.in-iframe .main {
+      border-radius: 0;
+      border: none;
+      min-height: 100vh;
+    }
+
+    /* Tab System */
+    .panel-tabs {
+      display: flex;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      margin-bottom: 12px;
+      gap: 12px;
+    }
+    
+    .tab-btn {
+      background: none !important;
+      border: none !important;
+      color: var(--sub) !important;
+      padding: 0 0 6px 0 !important;
+      font-size: 13px !important;
+      font-weight: 600 !important;
+      cursor: pointer !important;
+      border-bottom: 2px solid transparent !important;
+      border-radius: 0 !important;
+      box-shadow: none !important;
+      min-height: auto !important;
+      transition: all 0.2s !important;
+    }
+    
+    .tab-btn:hover {
+      color: var(--text) !important;
+      transform: none !important;
+      background: none !important;
+    }
+    
+    .tab-btn.active {
+      color: var(--accent) !important;
+      border-bottom-color: var(--accent) !important;
+    }
+    
+    .tab-content {
+      display: none;
+    }
+    
+    .tab-content.active {
+      display: block;
+    }
+    
+    /* Climate Panel details */
+    .climate-stats {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    
+    .climate-stat-row {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      font-size: 12px;
+    }
+    
+    .climate-icon {
+      font-size: 16px;
+      margin-top: 1px;
+    }
+    
+    .climate-info-text {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    
+    .climate-lbl {
+      color: var(--text);
+      font-weight: 600;
+    }
+    
+    .climate-val {
+      color: var(--accent);
+      font-weight: 700;
+    }
+    
+    .climate-desc {
+      color: var(--sub);
+      font-size: 11px;
+      line-height: 1.4;
+    }
+    
+    /* Visual indicators */
+    .temp-bar-container, .rain-bar-container, .sun-bar-container {
+      width: 100%;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 2px;
+      position: relative;
+      margin-top: 4px;
+      overflow: hidden;
+    }
+    
+    .temp-bar {
+      height: 100%;
+      background: linear-gradient(90deg, #58a6ff, #e74c3c);
+      position: absolute;
+      border-radius: 2px;
+    }
+    
+    .rain-bar {
+      height: 100%;
+      background: #58a6ff;
+      border-radius: 2px;
+    }
+    
+    .sun-bar {
+      height: 100%;
+      background: #f1c40f;
+      border-radius: 2px;
+    }
   </style>
 </head>
 <body>
@@ -649,11 +788,61 @@
         </div>
       </div>
 
-      <!-- Legend Panel -->
+      <!-- Legend & Climate Tab Panel -->
       <div class="panel legend" id="legendPanel">
-        <div class="kicker">시각화 범례</div>
-        <div id="legendContent">
-          <!-- Populated dynamically via JS -->
+        <div class="panel-tabs">
+          <button class="tab-btn active" id="tabBtnLegend">범례</button>
+          <button class="tab-btn" id="tabBtnClimate">기후 정보</button>
+        </div>
+        
+        <div class="tab-content active" id="tabContentLegend">
+          <div id="legendContent">
+            <!-- Populated dynamically via JS -->
+          </div>
+        </div>
+
+        <div class="tab-content" id="tabContentClimate">
+          <div class="climate-stats">
+            <div class="climate-stat-row">
+              <span class="climate-icon">🌡️</span>
+              <div class="climate-info-text">
+                <div class="climate-lbl">연평균 기온 : <span class="climate-val">23.3°C</span></div>
+                <div class="climate-desc">1월 평균 15.7°C (서울보다 18°C↑)<br>7월 평균 29.0°C (최대 38.7°C)</div>
+                <div class="temp-bar-container">
+                  <div class="temp-bar" style="left: 35%; width: 45%;"></div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="climate-stat-row">
+              <span class="climate-icon">🌧️</span>
+              <div class="climate-info-text">
+                <div class="climate-lbl">연강수량 : <span class="climate-val">1,932.9mm</span></div>
+                <div class="climate-desc">연강수의 86%가 4~9월 우기에 집중</div>
+                <div class="rain-bar-container">
+                  <div class="rain-bar" style="width: 78%;"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="climate-stat-row">
+              <span class="climate-icon">☀️</span>
+              <div class="climate-info-text">
+                <div class="climate-lbl">연일조시간 : <span class="climate-val">1,853시간</span></div>
+                <div class="sun-bar-container">
+                  <div class="sun-bar" style="width: 65%;"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="climate-stat-row">
+              <span class="climate-icon">📅</span>
+              <div class="climate-info-text">
+                <div class="climate-lbl">여름 길이 : <span class="climate-val">평균 202일</span></div>
+                <div class="climate-desc">연중 온난다습한 아열대 계절풍 기후</div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       
@@ -703,6 +892,11 @@
   </script>
 
   <script type="module">
+    // Check if running inside an iframe
+    if (window.self !== window.top) {
+      document.body.classList.add('in-iframe');
+    }
+
     import * as THREE from 'three';
     import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
@@ -1788,6 +1982,26 @@
       // Stop transitions when dragging manually
       controls.addEventListener('start', () => {
         isTransitioning = false;
+      });
+
+      // Tab switching events for right panel (Legend vs Climate)
+      const tabBtnLegend = document.getElementById('tabBtnLegend');
+      const tabBtnClimate = document.getElementById('tabBtnClimate');
+      const tabContentLegend = document.getElementById('tabContentLegend');
+      const tabContentClimate = document.getElementById('tabContentClimate');
+
+      tabBtnLegend.addEventListener('click', () => {
+        tabBtnLegend.classList.add('active');
+        tabBtnClimate.classList.remove('active');
+        tabContentLegend.classList.add('active');
+        tabContentClimate.classList.remove('active');
+      });
+
+      tabBtnClimate.addEventListener('click', () => {
+        tabBtnClimate.classList.add('active');
+        tabBtnLegend.classList.remove('active');
+        tabContentClimate.classList.add('active');
+        tabContentLegend.classList.remove('active');
       });
     }
 
