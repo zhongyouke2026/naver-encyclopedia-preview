@@ -19,8 +19,8 @@ body { padding: 0 !important; margin: 0 !important; }
 
 content = content.replace('</head>', hide_css)
 
-# Adjust camera position for smaller height
-content = content.replace('camera.position.set(-20, 110, 155);', 'camera.position.set(-8, 50, 75);')
+# Adjust camera position for smaller height - zooming out a bit from previous attempt
+content = content.replace('camera.position.set(-20, 110, 155);', 'camera.position.set(-15, 90, 125);')
 
 # Hide GridHelper
 content = content.replace('scene.add(grid);', '// scene.add(grid);')
