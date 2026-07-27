@@ -561,8 +561,9 @@
           bubblesLayer.appendChild(bubble);
           
           let dx = 0;
-          if (count === 2) {
-            dx = spIdx === 0 ? -6.2 : 6.2; // slightly wider offset for larger size
+          if (count > 1) {
+            const spacing = count === 2 ? 12.4 : 17.0;
+            dx = -spacing / 2 + (spIdx / (count - 1)) * spacing;
           }
           
           data._bubbles.push({
