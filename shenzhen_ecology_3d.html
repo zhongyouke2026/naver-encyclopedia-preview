@@ -250,19 +250,17 @@
     .species-bubble {
       position: absolute;
       transform: translate(-50%, -100%);
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
-      border: 2px solid white;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.18);
-      background-size: cover;
-      background-position: center;
+      width: 52px;
+      height: 52px;
+      background-size: contain;
+      background-position: bottom center;
       background-repeat: no-repeat;
       pointer-events: none;
       z-index: 3;
       transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
       opacity: 0;
       transform: translate(-50%, -100%) scale(0.5);
+      filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.22));
     }
     .species-bubble.active {
       opacity: 1;
@@ -270,20 +268,36 @@
     }
     .species-bubble-badge {
       position: absolute;
-      bottom: -3px;
-      right: -3px;
-      width: 16px;
-      height: 16px;
+      top: 0;
+      right: 0;
+      width: 14px;
+      height: 14px;
       border-radius: 50%;
       background: #10b981;
       color: white;
-      font-size: 8px;
+      font-size: 7.5px;
       font-weight: 800;
       display: flex;
       align-items: center;
       justify-content: center;
       border: 1px solid white;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.12);
+    }
+    .species-bubble-name {
+      position: absolute;
+      bottom: -18px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 8.5px;
+      font-weight: 800;
+      color: #1f2937;
+      background: rgba(255, 255, 255, 0.95);
+      border: 1px solid rgba(0, 0, 0, 0.08);
+      padding: 1px 5px;
+      border-radius: 4px;
+      white-space: nowrap;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.06);
+      pointer-events: none;
     }
   </style>
 </head>
@@ -481,19 +495,27 @@
         validSpecies.forEach((sp, spIdx) => {
           const bubble = document.createElement('div');
           bubble.className = 'species-bubble';
-          bubble.style.backgroundImage = 'url("./images/' + sp.img + '")';
+          // Use transparent PNG
+          const pngImg = sp.img.replace('.jpg', '.png');
+          bubble.style.backgroundImage = 'url("./images/' + pngImg + '")';
           
           // Rank badge
           const badge = document.createElement('div');
           badge.className = 'species-bubble-badge';
           badge.textContent = sp.badge;
           bubble.appendChild(badge);
+
+          // Name tag below the image bubble
+          const nameTag = document.createElement('div');
+          nameTag.className = 'species-bubble-name';
+          nameTag.textContent = sp.name.split(' ')[0]; // E.g., "검은황새"
+          bubble.appendChild(nameTag);
           
           bubblesLayer.appendChild(bubble);
           
           let dx = 0;
           if (count === 2) {
-            dx = spIdx === 0 ? -5.2 : 5.2;
+            dx = spIdx === 0 ? -6.2 : 6.2; // slightly wider offset for larger size
           }
           
           data._bubbles.push({
