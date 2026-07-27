@@ -280,25 +280,6 @@
       
       <!-- Right: Info Panel -->
       <div class="details-panel">
-        <!-- 2025 Port Statistics Card -->
-        <div class="stats-card">
-          <div class="stats-title">📊 2025 선전항 물류 통계</div>
-          <div class="stats-grid">
-            <div class="stat-box">
-              <div class="stat-label">연간 화물 처리량</div>
-              <div class="stat-value">3억 3,402만 톤</div>
-            </div>
-            <div class="stat-box">
-              <div class="stat-label">컨테이너 처리량</div>
-              <div class="stat-value">3,540만 TEU</div>
-            </div>
-            <div class="stat-box" style="grid-column: span 2;">
-              <div class="stat-label">생산성 선석 수</div>
-              <div class="stat-value" style="font-size:12.5px;">총 144개 (1만 톤급 이상 75개)</div>
-            </div>
-          </div>
-        </div>
-        
         <!-- Port Detail Card -->
         <div class="port-info-card" id="portDetailCard">
           <div class="port-group-badge" id="portGroupBadge">항구 그룹</div>
@@ -359,7 +340,7 @@
         groupClass: 'pgb-east',
         icon: '⚡',
         func: '청정에너지(LNG) 수입 및 수상 관광 레저',
-        desc: '선전 동남부 다펑 반도에 위치한 에너지 중심 포트. 중국 최대의 천연가스(LNG) 수입 터미널이 있으며, 수심이 깊고 맑은 환경을 활용한 마리나 요트 클럽 및 해양 관광 여객항이 공존합니다.'
+        desc: '선전 동남부 다펑 반도에 위치한 에너지 중심 포트. 중국 최대의 천연가스(LNG) 수입 터미널이 있으며, 수심이 깊고 맑은 환경을 활용한 마리나 요트 클럽 및 해양 관광 여객항이 공존합니다.<div style="margin-top: 12px; padding: 10px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px;"><div style="font-size: 10.5px; font-weight: 700; color: #1e293b; margin-bottom: 6px; display: flex; align-items: center; gap: 4px;">📊 2025 선전항 물류 통계 (전체)</div><div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px; font-size: 9.5px;"><div style="background: #ffffff; padding: 6px; border-radius: 8px; border: 1px solid #f1f5f9;"><span style="color: #94a3b8; display: block; font-size: 8px; margin-bottom: 1px;">연간 화물 처리량</span><span style="font-weight: 700; color: #0f172a;">3억 3,402만 톤</span></div><div style="background: #ffffff; padding: 6px; border-radius: 8px; border: 1px solid #f1f5f9;"><span style="color: #94a3b8; display: block; font-size: 8px; margin-bottom: 1px;">컨테이너 처리량</span><span style="font-weight: 700; color: #0f172a;">3,540.8만 TEU</span></div><div style="background: #ffffff; padding: 6px; border-radius: 8px; border: 1px solid #f1f5f9; grid-column: span 2;"><span style="color: #94a3b8; display: block; font-size: 8px; margin-bottom: 1px;">생산성 선석 수</span><span style="font-weight: 700; color: #0f172a;">총 144개 (1만 톤급 이상 75개)</span></div></div></div>'
       }
     };
 
@@ -381,7 +362,7 @@
       
       document.getElementById('portTitle').innerHTML = data.icon + ' ' + data.name;
       document.getElementById('portFunc').textContent = data.func;
-      document.getElementById('portDesc').textContent = data.desc;
+      document.getElementById('portDesc').innerHTML = data.desc;
       
       // Toggle card border highlighting
       card.className = 'port-info-card';
