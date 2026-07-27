@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>선전시 2D 인터랙티브 기후 대시보드</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+  
+  <style>
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: transparent;
+      user-select: none;
+    }
+
+    .climate-dashboard {
+      width: 100%;
+      height: 100%;
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 16px;
+      padding: 12px;
+      position: relative;
+    }
+
+    @media (max-width: 768px) {
+      .climate-dashboard {
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr 180px;
+        gap: 8px;
+        padding: 6px;
+      }
+    }
+
+    /* Left Chart Card */
+    .chart-card {
+      background: rgba(255, 255, 255, 0.55);
+      border: 1px solid rgba(0, 0, 0, 0.06);
+      border-radius: 20px;
+      padding: 16px 20px 60px 20px; /* space at bottom for timeline */
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+    }
+    
+    .chart-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    .chart-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #334155;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .chart-legend {
+      display: flex;
+      gap: 12px;
+      font-size: 10px;
+      font-weight: 600;
+      color: #64748b;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .color-dot-temp {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #ef4444;
+    }
+    .color-dot-rain {
+      width: 8px;
+      height: 8px;
+      border-radius: 2px;
+      background: #3b82f6;
+    }
+
+    /* SVG Chart Viewport */
+    .chart-svg-container {
+      flex: 1;
+      width: 100%;
+      position: relative;
+    }
+    #climateSvg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    /* Interactive Timeline Controls */
+    .timeline-bar {
+      position: absolute;
+      bottom: 14px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 5;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(0, 0, 0, 0.08);
+      border-radius: 999px;
+      padding: 6px 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+      max-width: 95%;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .timeline-bar::-webkit-scrollbar {
+      display: none;
+    }
+
+    .play-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: none;
+      background: #2563eb;
+      color: white;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+      flex-shrink: 0;
+      box-shadow: 0 4px 10px rgba(37, 99, 235, 0.25);
+    }
+    .play-btn:hover {
+      background: #1d4ed8;
+      transform: scale(1.05);
+    }
+    .play-btn svg {
+      width: 14px;
+      height: 14px;
+      fill: currentColor;
+    }
+
+    .months-list {
+      display: flex;
+      gap: 4px;
+    }
+
+    .month-chip {
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      background: transparent;
+      color: #64748b;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+    .month-chip:hover {
+      background: rgba(0, 0, 0, 0.04);
+      color: #334155;
+    }
+    .month-chip.active {
+      background: #2563eb;
+      color: white;
+      box-shadow: 0 3px 8px rgba(37, 99, 235, 0.2);
+    }
+
+    /* Details Panel on Right */
+    .details-card {
+      background: rgba(255, 255, 255, 0.88);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(0, 0, 0, 0.08);
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow-y: auto;
+    }
+
+    @media (max-width: 768px) {
+      .details-card {
+        padding: 12px;
+        border-radius: 16px;
+      }
+    }
+
+    .card-header {
+      margin-bottom: 12px;
+    }
+    .kicker {
+      font-family: 'Outfit', sans-serif;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      color: #2563eb;
+      margin-bottom: 4px;
+    }
+    .month-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 26px;
+      font-weight: 800;
+      color: #0f172a;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .month-season {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: #eff6ff;
+      color: #1d4ed8;
+    }
+
+    /* Interactive Vector Weather Icons */
+    .weather-illust {
+      width: 100%;
+      height: 120px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 12px;
+      background: radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(248,250,252,0.8) 100%);
+      border-radius: 16px;
+      border: 1px solid rgba(0, 0, 0, 0.03);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Icon Animation CSS */
+    .icon-box {
+      width: 64px;
+      height: 64px;
+      position: relative;
+    }
+
+    /* Sun Animation */
+    .sun-icon {
+      width: 48px;
+      height: 48px;
+      background: #f59e0b;
+      border-radius: 50%;
+      box-shadow: 0 0 20px rgba(245, 158, 11, 0.5);
+      animation: pulse-sun 2s infinite alternate ease-in-out;
+      position: absolute;
+      top: 8px;
+      left: 8px;
+    }
+    @keyframes pulse-sun {
+      0% { transform: scale(0.9); box-shadow: 0 0 10px rgba(245, 158, 11, 0.4); }
+      100% { transform: scale(1.05); box-shadow: 0 0 25px rgba(245, 158, 11, 0.7); }
+    }
+    
+    /* Sun Rays */
+    .sun-ray-container {
+      width: 64px;
+      height: 64px;
+      position: absolute;
+      animation: spin-rays 16s linear infinite;
+    }
+    @keyframes spin-rays {
+      100% { transform: rotate(360deg); }
+    }
+    .sun-ray {
+      position: absolute;
+      width: 4px;
+      height: 10px;
+      background: rgba(245, 158, 11, 0.6);
+      border-radius: 2px;
+      left: 30px;
+      transform-origin: 2px 32px;
+    }
+
+    /* Cloud base */
+    .cloud-icon {
+      width: 46px;
+      height: 26px;
+      background: #cbd5e1;
+      border-radius: 20px;
+      position: absolute;
+      bottom: 12px;
+      left: 9px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+      animation: float-cloud 3s infinite alternate ease-in-out;
+    }
+    .cloud-icon::before {
+      content: '';
+      position: absolute;
+      width: 24px;
+      height: 24px;
+      background: #cbd5e1;
+      border-radius: 50%;
+      top: -12px;
+      left: 8px;
+    }
+    .cloud-icon::after {
+      content: '';
+      position: absolute;
+      width: 18px;
+      height: 18px;
+      background: #cbd5e1;
+      border-radius: 50%;
+      top: -8px;
+      left: 24px;
+    }
+    @keyframes float-cloud {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(-4px); }
+    }
+
+    /* Raining Drops */
+    .rain-container {
+      position: absolute;
+      bottom: 2px;
+      left: 18px;
+      width: 32px;
+      height: 16px;
+      display: flex;
+      justify-content: space-around;
+    }
+    .drop {
+      width: 2px;
+      height: 8px;
+      background: #3b82f6;
+      border-radius: 1px;
+      transform: rotate(15deg);
+      animation: fall-rain 0.8s infinite linear;
+      opacity: 0;
+    }
+    .d1 { animation-delay: 0.1s; }
+    .d2 { animation-delay: 0.4s; }
+    .d3 { animation-delay: 0.2s; }
+    @keyframes fall-rain {
+      0% { transform: translateY(-10px) rotate(15deg); opacity: 0; }
+      30% { opacity: 1; }
+      100% { transform: translateY(10px) rotate(15deg); opacity: 0; }
+    }
+
+    /* Fog Lines */
+    .fog-container {
+      position: absolute;
+      bottom: 6px;
+      left: 6px;
+      width: 52px;
+      height: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .fog-line {
+      height: 3px;
+      background: #94a3b8;
+      border-radius: 2px;
+      animation: drift-fog 2.5s infinite alternate ease-in-out;
+      opacity: 0.7;
+    }
+    .f1 { width: 38px; animation-delay: 0s; }
+    .f2 { width: 48px; margin-left: 6px; animation-delay: 0.5s; }
+    .f3 { width: 34px; margin-left: 12px; animation-delay: 1s; }
+    @keyframes drift-fog {
+      0% { transform: translateX(-4px); opacity: 0.4; }
+      100% { transform: translateX(6px); opacity: 0.8; }
+    }
+
+    /* Stats Grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+    .stat-box {
+      background: rgba(0, 0, 0, 0.015);
+      border: 1px solid rgba(0, 0, 0, 0.03);
+      padding: 10px;
+      border-radius: 10px;
+    }
+    .stat-lbl {
+      font-size: 9px;
+      color: #64748b;
+      margin-bottom: 2px;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+    }
+    .stat-val {
+      font-family: 'Outfit', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      color: #1e293b;
+    }
+
+    .desc-box {
+      font-size: 12px;
+      line-height: 1.55;
+      color: #475569;
+      background: rgba(37, 99, 235, 0.015);
+      border-left: 3px solid #2563eb;
+      padding: 8px 12px;
+      border-radius: 0 8px 8px 0;
+      margin-bottom: 12px;
+    }
+
+    .wind-card {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: rgba(0,0,0,0.012);
+      border: 1px dashed rgba(0,0,0,0.08);
+      padding: 10px 12px;
+      border-radius: 10px;
+      font-size: 11px;
+      color: #475569;
+    }
+    .wind-icon {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: #eff6ff;
+      color: #2563eb;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="climate-dashboard">
+    <!-- Left Panel: SVG Interactive Chart -->
+    <div class="chart-card">
+      <div class="chart-header">
+        <div class="chart-title">📊 선전시 연간 기후 변화 추이</div>
+        <div class="chart-legend">
+          <div class="legend-item"><span class="color-dot-temp"></span>평균 기온 (℃)</div>
+          <div class="legend-item"><span class="color-dot-rain"></span>평균 강수량 (mm)</div>
+        </div>
+      </div>
+      
+      <!-- Interactive SVG Chart Container -->
+      <div class="chart-svg-container" id="svgContainer">
+        <svg id="climateSvg" viewBox="0 0 600 300" preserveAspectRatio="none">
+          <defs>
+            <!-- Gradient for temperature curve area -->
+            <linearGradient id="tempAreaGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#ef4444" stop-opacity="0.16" />
+              <stop offset="100%" stop-color="#3b82f6" stop-opacity="0.01" />
+            </linearGradient>
+            <!-- Drop shadow for the active chart line -->
+            <filter id="shadow" x="-5%" y="-5%" width="110%" height="110%">
+              <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#ef4444" flood-opacity="0.15" />
+            </filter>
+          </defs>
+          <!-- Grid lines, bars, paths, and points rendered dynamically -->
+          <g id="gridGroup"></g>
+          <g id="barsGroup"></g>
+          <g id="tempLineGroup"></g>
+          <g id="pointsGroup"></g>
+          <g id="interactiveOverlayGroup"></g>
+        </svg>
+      </div>
+
+      <!-- Timeline Controller Overlay -->
+      <div class="timeline-bar">
+        <button class="play-btn" id="btnPlay" title="연간 변화 자동 재생">
+          <svg viewBox="0 0 24 24" id="playSvg"><path d="M8 5v14l11-7z"/></svg>
+        </button>
+        <div class="months-list" id="monthChips">
+          <!-- Rendered dynamically -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Panel: Detailed Climatology Information -->
+    <div class="details-card">
+      <div class="card-header">
+        <div class="kicker">선전의 계절적 특징</div>
+        <div class="month-title">
+          <span id="txtMonth">7월</span>
+          <span class="month-season" id="txtSeason">한여름 (우기)</span>
+        </div>
+      </div>
+
+      <!-- Animated Flat Weather Icon Illustration -->
+      <div class="weather-illust" id="weatherIllust">
+        <!-- Rendered dynamically depending on weather type -->
+      </div>
+
+      <div>
+        <div class="stats-grid">
+          <div class="stat-box">
+            <div class="stat-lbl">평균 기온</div>
+            <div class="stat-val" id="txtTemp" style="color: #ef4444;">29.0℃</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-lbl">평균 강수량</div>
+            <div class="stat-val" id="txtRain" style="color: #3b82f6;">320mm</div>
+          </div>
+        </div>
+
+        <div class="desc-box" id="txtDesc">
+          연중 기온이 가장 높은 시기입니다. 강렬한 직사광선이 내리쬐며, 대기 불안정으로 인한 열대성 소나기 및 남중국해발 태풍의 영향을 직접적으로 받기 시작합니다.
+        </div>
+      </div>
+
+      <div class="wind-card">
+        <div class="wind-icon">💨</div>
+        <div>
+          <strong style="display:block;margin-bottom:2px;">계절풍 성향</strong>
+          <span id="txtWind" style="font-size:10px;color:#64748b;">남풍 (3.2m/s)</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // 12 Months Climate Dataset of Shenzhen
+    const CLIMATE_DATA = [
+      { name: '1월', temp: 15.7, rain: 26, season: '겨울 (건조기)', wind: '북동 계절풍 (2.8m/s)', desc: '연중 가장 온화하고 건조한 달입니다. 맑고 상쾌한 날씨가 지속되며 차가운 대륙성 북동 계절풍이 주로 불어 습도가 낮습니다.' },
+      { name: '2월', temp: 16.8, rain: 48, season: '겨울 (건조기)', wind: '북동 계절풍 (2.7m/s)', desc: '기온이 점차 오르기 시작하지만 여전히 선선하고 강수량이 적어 야외 활동에 적합합니다. 일교차가 다소 큽니다.' },
+      { name: '3월', temp: 19.8, rain: 66, season: '봄 (환절기)', wind: '동풍 계열 (2.6m/s)', desc: '겨울에서 봄으로 넘어가는 환절기입니다. 따뜻하고 다습한 남동 기류가 유입되면서 밤낮으로 짙은 봄철 해무(안개)가 잦아집니다.' },
+      { name: '4월', temp: 23.9, rain: 162, season: '봄 (우기 돌입)', wind: '남동 계절풍 (2.7m/s)', desc: '남서 계절풍의 유입과 함께 본격적인 전선성 우기가 시작됩니다. 비 오는 날이 급격히 늘어나며 강수량이 큰 폭으로 상승합니다.' },
+      { name: '5월', temp: 27.0, rain: 238, season: '초여름 (우기)', wind: '남풍 계열 (3.0m/s)', desc: '기온과 습도가 급상승하여 후텁지근한 무더위가 체감됩니다. 국지성 스콜 및 돌발성 집중호우가 내리기 시작합니다.' },
+      { name: '6월', temp: 28.5, rain: 346, season: '여름 (우기)', wind: '남풍 계열 (3.2m/s)', desc: '연중 비가 가장 거세게 쏟아지는 본격적인 장마철입니다. 남중국해에서 유입되는 강한 수증기로 대규모 호우 전선이 형성됩니다.' },
+      { name: '7월', temp: 29.0, rain: 320, season: '한여름 (우기)', wind: '남풍 계열 (3.2m/s)', desc: '연중 평균 기온이 최고조에 달하는 한여름입니다. 태양이 뜨겁게 내리쬐며, 열대성 저기압(태풍)의 빈도가 잦아집니다.' },
+      { name: '8월', temp: 28.9, rain: 354, season: '한여름 (우기)', wind: '남풍 계열 (2.9m/s)', desc: '덥고 습한 고온다습 날씨가 최절정을 이루며, 강우량 수치도 연중 최고치를 기록합니다. 잦은 대형 소나기와 태풍 내습이 이어집니다.' },
+      { name: '9월', temp: 28.0, rain: 254, season: '늦여름 (우기)', wind: '남동풍 계열 (2.8m/s)', desc: '늦여름 우기의 기후 성향을 보입니다. 폭염의 강도는 약간 누그러지지만 강우의 집중도는 여전히 높고 가을 태풍이 종종 찾아옵니다.' },
+      { name: '10월', temp: 25.5, rain: 63, season: '가을 (건조기)', wind: '북동 계절풍 (2.9m/s)', desc: '긴 여름 우기가 종식되고 쾌적하고 맑은 가을에 접어듭니다. 북동 계절풍이 대륙에서 불어와 습도가 쾌적하게 떨어집니다.' },
+      { name: '11월', temp: 21.6, rain: 36, season: '늦가을 (건조기)', wind: '북동 계절풍 (3.0m/s)', desc: '야외 나들이와 여행을 즐기기에 선전에서 가장 아름답고 온화한 날씨입니다. 하늘이 맑고 건조하여 청명합니다.' },
+      { name: '12월', temp: 17.5, rain: 26, season: '겨울 (건조기)', wind: '북동 계절풍 (3.1m/s)', desc: '선선하고 건조한 아열대성 겨울철 기후를 띱니다. 강우가 매우 적으며, 낮에는 풍부한 햇살 덕분에 온화하게 보낼 수 있습니다.' }
+    ];
+
+    let activeMonthIdx = 6; // Default to July (7월)
+    let isPlaying = false;
+    let playInterval = null;
+
+    // SVG Chart Geometry Helpers
+    const svgWidth = 600;
+    const svgHeight = 300;
+    const paddingLeft = 45;
+    const paddingRight = 45;
+    const paddingTop = 30;
+    const paddingBottom = 40;
+
+    const chartW = svgWidth - paddingLeft - paddingRight;
+    const chartH = svgHeight - paddingTop - paddingBottom;
+
+    // Data Ranges
+    const minTemp = 10;
+    const maxTemp = 32;
+    const minRain = 0;
+    const maxRain = 400;
+
+    // Helper functions to convert data value to SVG coordinate
+    function getX(index) {
+      return paddingLeft + (index / 11) * chartW;
+    }
+
+    function getTempY(temp) {
+      const ratio = (temp - minTemp) / (maxTemp - minTemp);
+      return paddingTop + chartH - ratio * chartH;
+    }
+
+    // Y values for rain bars
+    function getRainY(rain) {
+      const ratio = (rain - minRain) / (maxRain - minRain);
+      return paddingTop + chartH - ratio * chartH;
+    }
+
+    // Initialize UI and SVG
+    function init() {
+      initUI();
+      renderChart();
+      updateInfoCard();
+    }
+
+    function initUI() {
+      // Month chips timeline
+      const chipsList = document.getElementById('monthChips');
+      chipsList.innerHTML = '';
+      CLIMATE_DATA.forEach((d, idx) => {
+        const chip = document.createElement('button');
+        chip.className = `month-chip ${idx === activeMonthIdx ? 'active' : ''}`;
+        chip.textContent = d.name;
+        chip.addEventListener('click', () => {
+          stopPlay();
+          selectMonth(idx);
+        });
+        chipsList.appendChild(chip);
+      });
+
+      document.getElementById('btnPlay').addEventListener('click', togglePlay);
+    }
+
+    function selectMonth(idx) {
+      activeMonthIdx = idx;
+
+      // Update chips UI
+      const chips = document.querySelectorAll('.month-chip');
+      chips.forEach((c, i) => {
+        c.classList.toggle('active', i === idx);
+      });
+
+      // Update Chart selection UI
+      updateChartSelection();
+
+      // Update detail card
+      updateInfoCard();
+    }
+
+    function updateInfoCard() {
+      const d = CLIMATE_DATA[activeMonthIdx];
+      document.getElementById('txtMonth').textContent = d.name;
+      document.getElementById('txtSeason').textContent = d.season;
+      document.getElementById('txtTemp').textContent = d.temp.toFixed(1) + '℃';
+      document.getElementById('txtRain').textContent = d.rain + 'mm';
+      document.getElementById('txtDesc').textContent = d.desc;
+      document.getElementById('txtWind').textContent = d.wind;
+
+      // Render weather illustration dynamically
+      renderWeatherIllustration(d);
+    }
+
+    // Draw animated vector weather icons
+    function renderWeatherIllustration(data) {
+      const container = document.getElementById('weatherIllust');
+      container.innerHTML = '';
+
+      const iconBox = document.createElement('div');
+      iconBox.className = 'icon-box';
+
+      // Decide icon based on rainfall and month
+      if (data.rain >= 150) {
+        // Rainy Season Icon (우기/장마)
+        iconBox.innerHTML = `
+          <div class="cloud-icon" style="background:#64748b;"></div>
+          <div class="cloud-icon" style="background:#475569; transform:scale(0.85) translate(14px, -8px); z-index:-1; animation-delay:-0.5s;"></div>
+          <div class="rain-container">
+            <div class="drop d1"></div>
+            <div class="drop d2"></div>
+            <div class="drop d3"></div>
+          </div>
+        `;
+      } else if (data.name === '3월') {
+        // Fog/Spring transition (봄철 안개)
+        iconBox.innerHTML = `
+          <div class="cloud-icon" style="background:#cbd5e1;"></div>
+          <div class="fog-container">
+            <div class="fog-line f1"></div>
+            <div class="fog-line f2"></div>
+            <div class="fog-line f3"></div>
+          </div>
+        `;
+      } else {
+        // Clear/Dry Season Icon (맑고 건조함)
+        // Draw sun and rotating rays
+        let rayHtml = '';
+        for (let i = 0; i < 8; i++) {
+          const rotation = i * 45;
+          rayHtml += '<div class="sun-ray" style="transform: rotate(' + rotation + 'deg);"></div>';
+        }
+        iconBox.innerHTML = `
+          <div class="sun-ray-container">${rayHtml}</div>
+          <div class="sun-icon"></div>
+        `;
+      }
+
+      container.appendChild(iconBox);
+    }
+
+    // Auto Play loop
+    function togglePlay() {
+      const btn = document.getElementById('btnPlay');
+      if (isPlaying) {
+        stopPlay();
+      } else {
+        isPlaying = true;
+        btn.innerHTML = '<svg viewBox="0 0 24 24" style="width:14px;height:14px;fill:currentColor;"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>';
+        btn.style.background = '#e74c3c';
+        btn.style.boxShadow = '0 4px 10px rgba(231, 76, 60, 0.25)';
+        
+        playInterval = setInterval(() => {
+          let nextIdx = (activeMonthIdx + 1) % 12;
+          selectMonth(nextIdx);
+        }, 2200);
+      }
+    }
+
+    function stopPlay() {
+      if (!isPlaying) return;
+      isPlaying = false;
+      const btn = document.getElementById('btnPlay');
+      btn.innerHTML = '<svg viewBox="0 0 24 24" style="width:14px;height:14px;fill:currentColor;"><path d="M8 5v14l11-7z"/></svg>';
+      btn.style.background = '#2563eb';
+      btn.style.boxShadow = '0 4px 10px rgba(37, 99, 235, 0.25)';
+      clearInterval(playInterval);
+    }
+
+    // Render interactive SVG Chart elements
+    function renderChart() {
+      const gridG = document.getElementById('gridGroup');
+      const barsG = document.getElementById('barsGroup');
+      const lineG = document.getElementById('tempLineGroup');
+      const pointsG = document.getElementById('pointsGroup');
+      const overlayG = document.getElementById('interactiveOverlayGroup');
+
+      gridG.innerHTML = '';
+      barsG.innerHTML = '';
+      lineG.innerHTML = '';
+      pointsG.innerHTML = '';
+      overlayG.innerHTML = '';
+
+      // 1. Render Grid Lines and Labels
+      // Horizontal grid lines (4 intervals)
+      for (let i = 0; i <= 4; i++) {
+        const ratio = i / 4;
+        const y = paddingTop + chartH * ratio;
+        
+        // Grid Line
+        const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        line.setAttribute('x1', paddingLeft);
+        line.setAttribute('y1', y);
+        line.setAttribute('x2', paddingLeft + chartW);
+        line.setAttribute('y2', y);
+        line.setAttribute('stroke', 'rgba(0, 0, 0, 0.04)');
+        line.setAttribute('stroke-width', '1');
+        gridG.appendChild(line);
+
+        // Temp Label (left axis)
+        const tVal = maxTemp - ratio * (maxTemp - minTemp);
+        const tempText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        tempText.setAttribute('x', paddingLeft - 8);
+        tempText.setAttribute('y', y + 3.5);
+        tempText.setAttribute('font-size', '9px');
+        tempText.setAttribute('font-weight', '600');
+        tempText.setAttribute('fill', '#ef4444');
+        tempText.setAttribute('text-anchor', 'end');
+        tempText.textContent = Math.round(tVal) + '°C';
+        gridG.appendChild(tempText);
+
+        // Rain Label (right axis)
+        const rVal = maxRain - ratio * (maxRain - minRain);
+        const rainText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        rainText.setAttribute('x', paddingLeft + chartW + 8);
+        rainText.setAttribute('y', y + 3.5);
+        rainText.setAttribute('font-size', '9px');
+        rainText.setAttribute('font-weight', '600');
+        rainText.setAttribute('fill', '#3b82f6');
+        rainText.setAttribute('text-anchor', 'start');
+        rainText.textContent = Math.round(rVal) + 'mm';
+        gridG.appendChild(rainText);
+      }
+
+      // X Axis Month Labels
+      CLIMATE_DATA.forEach((d, i) => {
+        const x = getX(i);
+        const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        text.setAttribute('x', x);
+        text.setAttribute('y', paddingTop + chartH + 18);
+        text.setAttribute('font-size', '9.5px');
+        text.setAttribute('font-weight', '600');
+        text.setAttribute('fill', '#64748b');
+        text.setAttribute('text-anchor', 'middle');
+        text.textContent = d.name;
+        gridG.appendChild(text);
+      });
+
+      // 2. Render Precipitation Bars (Rain)
+      CLIMATE_DATA.forEach((d, i) => {
+        const x = getX(i);
+        const y = getRainY(d.rain);
+        const h = (paddingTop + chartH) - y;
+        const width = 16;
+
+        const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+        rect.setAttribute('x', x - width / 2);
+        rect.setAttribute('y', y);
+        rect.setAttribute('width', width);
+        rect.setAttribute('height', Math.max(2, h));
+        rect.setAttribute('rx', '4'); // rounded top corners
+        rect.setAttribute('fill', '#3b82f6');
+        rect.setAttribute('fill-opacity', '0.62');
+        rect.setAttribute('style', 'transition: all 0.3s ease;');
+        rect.className.baseVal = 'rain-bar bar-' + i;
+        
+        barsG.appendChild(rect);
+      });
+
+      // 3. Render Smooth Temperature Area & Line
+      let pathD = '';
+      let areaD = 'M ' + getX(0) + ' ' + (paddingTop + chartH) + ' ';
+
+      CLIMATE_DATA.forEach((d, i) => {
+        const x = getX(i);
+        const y = getTempY(d.temp);
+        if (i === 0) {
+          pathD += 'M ' + x + ' ' + y + ' ';
+        } else {
+          // calculate smooth control points
+          const prevX = getX(i - 1);
+          const prevY = getTempY(CLIMATE_DATA[i - 1].temp);
+          const cpX1 = prevX + (x - prevX) / 2;
+          const cpY1 = prevY;
+          const cpX2 = prevX + (x - prevX) / 2;
+          const cpY2 = y;
+          pathD += 'C ' + cpX1 + ' ' + cpY1 + ', ' + cpX2 + ' ' + cpY2 + ', ' + x + ' ' + y + ' ';
+        }
+        areaD += 'L ' + x + ' ' + y + ' ';
+      });
+      areaD += 'L ' + getX(11) + ' ' + (paddingTop + chartH) + ' Z';
+
+      // Area fill
+      const areaPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      areaPath.setAttribute('d', areaD);
+      areaPath.setAttribute('fill', 'url(#tempAreaGrad)');
+      lineG.appendChild(areaPath);
+
+      // Line stroke
+      const linePath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      linePath.setAttribute('d', pathD);
+      linePath.setAttribute('fill', 'none');
+      linePath.setAttribute('stroke', '#ef4444');
+      linePath.setAttribute('stroke-width', '3');
+      linePath.setAttribute('filter', 'url(#shadow)');
+      lineG.appendChild(linePath);
+
+      // 4. Render Temperature Points (Dots)
+      CLIMATE_DATA.forEach((d, i) => {
+        const x = getX(i);
+        const y = getTempY(d.temp);
+
+        // Outer glow
+        const glow = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        glow.setAttribute('cx', x);
+        glow.setAttribute('cy', y);
+        glow.setAttribute('r', '7');
+        glow.setAttribute('fill', '#ef4444');
+        glow.setAttribute('fill-opacity', '0');
+        glow.setAttribute('style', 'transition: all 0.3s ease;');
+        glow.className.baseVal = 'point-glow glow-' + i;
+        pointsG.appendChild(glow);
+
+        // Inner solid dot
+        const dot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        dot.setAttribute('cx', x);
+        dot.setAttribute('cy', y);
+        dot.setAttribute('r', '4');
+        dot.setAttribute('fill', '#ffffff');
+        dot.setAttribute('stroke', '#ef4444');
+        dot.setAttribute('stroke-width', '2.5');
+        dot.setAttribute('style', 'transition: all 0.3s ease;');
+        dot.className.baseVal = 'point-dot dot-' + i;
+        pointsG.appendChild(dot);
+      });
+
+      // 5. Render Vertical Selection Guide Line
+      const guideLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      guideLine.setAttribute('id', 'guideLine');
+      guideLine.setAttribute('x1', getX(activeMonthIdx));
+      guideLine.setAttribute('y1', paddingTop);
+      guideLine.setAttribute('x2', getX(activeMonthIdx));
+      guideLine.setAttribute('y2', paddingTop + chartH);
+      guideLine.setAttribute('stroke', '#64748b');
+      guideLine.setAttribute('stroke-width', '1.5');
+      guideLine.setAttribute('stroke-dasharray', '4, 4');
+      guideLine.setAttribute('style', 'transition: all 0.3s ease;');
+      overlayG.appendChild(guideLine);
+
+      // 6. Interactive Click Overlays
+      CLIMATE_DATA.forEach((d, i) => {
+        const x = getX(i);
+        
+        // Large transparent rectangle overlay for hover/click capture
+        const captureRect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+        captureRect.setAttribute('x', x - chartW / 24);
+        captureRect.setAttribute('y', paddingTop);
+        captureRect.setAttribute('width', chartW / 12);
+        captureRect.setAttribute('height', chartH);
+        captureRect.setAttribute('fill', 'transparent');
+        captureRect.setAttribute('style', 'cursor: pointer;');
+        
+        captureRect.addEventListener('click', () => {
+          stopPlay();
+          selectMonth(i);
+        });
+
+        captureRect.addEventListener('mouseover', () => {
+          if (!isPlaying) {
+            highlightHovered(i);
+          }
+        });
+
+        captureRect.addEventListener('mouseout', () => {
+          if (!isPlaying) {
+            updateChartSelection();
+          }
+        });
+
+        overlayG.appendChild(captureRect);
+      });
+
+      // Initial active month highlights
+      updateChartSelection();
+    }
+
+    // Highlight hovered element
+    function highlightHovered(idx) {
+      CLIMATE_DATA.forEach((d, i) => {
+        const bar = document.querySelector('.bar-' + i);
+        const dot = document.querySelector('.dot-' + i);
+        const glow = document.querySelector('.glow-' + i);
+        
+        if (bar && dot && glow) {
+          const isTarget = i === idx;
+          bar.setAttribute('fill-opacity', isTarget ? '0.85' : '0.42');
+          glow.setAttribute('fill-opacity', isTarget ? '0.22' : '0');
+          dot.setAttribute('r', isTarget ? '5.5' : '4');
+        }
+      });
+      
+      const guideLine = document.getElementById('guideLine');
+      if (guideLine) {
+        guideLine.setAttribute('x1', getX(idx));
+        guideLine.setAttribute('x2', getX(idx));
+      }
+    }
+
+    // Sync visual highlights with activeMonthIdx
+    function updateChartSelection() {
+      CLIMATE_DATA.forEach((d, i) => {
+        const bar = document.querySelector('.bar-' + i);
+        const dot = document.querySelector('.dot-' + i);
+        const glow = document.querySelector('.glow-' + i);
+        
+        if (bar && dot && glow) {
+          const isActive = i === activeMonthIdx;
+          bar.setAttribute('fill-opacity', isActive ? '0.85' : '0.5');
+          glow.setAttribute('fill-opacity', isActive ? '0.25' : '0');
+          dot.setAttribute('r', isActive ? '5.5' : '4');
+        }
+      });
+
+      const guideLine = document.getElementById('guideLine');
+      if (guideLine) {
+        guideLine.setAttribute('x1', getX(activeMonthIdx));
+        guideLine.setAttribute('x2', getX(activeMonthIdx));
+      }
+    }
+
+    // Run
+    window.addEventListener('resize', () => {
+      // Re-render chart on resize to preserve shapes
+      renderChart();
+    });
+
+    init();
+  </script>
+</body>
+</html>
