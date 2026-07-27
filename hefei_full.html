@@ -1,0 +1,923 @@
+<meta charset="utf-8">
+<title>허페이 인터랙티브 사전 — 목업</title>
+<style>
+/* ─── tokens ─── */
+:root{
+  --bg:#fbfbf8; --surface:#ffffff; --ink:#17201a; --ink2:#4d5a52; --muted:#88938b;
+  --line:#e4e8e1; --line2:#d3dad2;
+  --accent:#0aa04f; --accent-deep:#077a3d; --accent-soft:#e6f5ec;
+  --blue:#2b7fb8; --blue-soft:#e8f1f8; --amber:#d98e2b; --amber-soft:#faf1e2;
+  --night:#0d1420; --night2:#131c2c;
+  --c1:#0aa04f; --c2:#2b7fb8; --c3:#d98e2b;
+  --shadow:0 2px 14px rgba(23,32,26,.07);
+  --r:14px;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --bg:#101512; --surface:#171d19; --ink:#eef3ef; --ink2:#adb8b0; --muted:#79847c;
+    --line:#26302a; --line2:#33402f;
+    --accent:#17a856; --accent-deep:#5ecf90; --accent-soft:#16281d;
+    --blue:#4696cf; --blue-soft:#152634; --amber:#bd7f27; --amber-soft:#2b2214;
+    --c1:#17a856; --c2:#4696cf; --c3:#bd7f27;
+    --shadow:0 2px 14px rgba(0,0,0,.35);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#101512; --surface:#171d19; --ink:#eef3ef; --ink2:#adb8b0; --muted:#79847c;
+  --line:#26302a; --line2:#33402f;
+  --accent:#17a856; --accent-deep:#5ecf90; --accent-soft:#16281d;
+  --blue:#4696cf; --blue-soft:#152634; --amber:#bd7f27; --amber-soft:#2b2214;
+  --c1:#17a856; --c2:#4696cf; --c3:#bd7f27;
+  --shadow:0 2px 14px rgba(0,0,0,.35);
+}
+:root[data-theme="light"]{
+  --bg:#fbfbf8; --surface:#ffffff; --ink:#17201a; --ink2:#4d5a52; --muted:#88938b;
+  --line:#e4e8e1; --line2:#d3dad2;
+  --accent:#0aa04f; --accent-deep:#077a3d; --accent-soft:#e6f5ec;
+  --blue:#2b7fb8; --blue-soft:#e8f1f8; --amber:#d98e2b; --amber-soft:#faf1e2;
+  --c1:#0aa04f; --c2:#2b7fb8; --c3:#d98e2b;
+  --shadow:0 2px 14px rgba(23,32,26,.07);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;overflow-anchor:none}
+body{
+  background:var(--bg); color:var(--ink);
+  font-family:'Apple SD Gothic Neo','Pretendard Variable',Pretendard,'Noto Sans KR','Malgun Gothic',sans-serif;
+  line-height:1.65; -webkit-font-smoothing:antialiased;
+}
+.hanzi{font-family:'Songti SC','STSong','Noto Serif CJK SC','SimSun',serif}
+.num{font-variant-numeric:tabular-nums}
+a{color:var(--accent-deep)}
+button{font:inherit;cursor:pointer}
+
+/* ─── header ─── */
+header.top{
+  position:sticky;top:0;z-index:60;background:var(--bg);
+  border-bottom:1px solid var(--line);
+}
+.top-in{max-width:1080px;margin:0 auto;padding:10px 20px;display:flex;align-items:center;gap:16px}
+.logo{font-weight:900;font-size:17px;letter-spacing:-.3px;white-space:nowrap}
+.logo b{color:var(--accent)}
+.searchbox{flex:1;max-width:340px;display:flex;align-items:center;gap:8px;
+  border:2px solid var(--accent);border-radius:999px;padding:6px 14px;background:var(--surface)}
+.searchbox input{border:0;outline:0;background:none;color:var(--ink);width:100%;font-size:14px}
+.navchips{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;margin-left:auto}
+.navchips::-webkit-scrollbar{display:none}
+.navchips a{
+  font-size:13px;color:var(--ink2);text-decoration:none;padding:5px 10px;border-radius:8px;white-space:nowrap
+}
+.navchips a.on{background:var(--accent-soft);color:var(--accent-deep);font-weight:700}
+@media(max-width:760px){.navchips{display:none}}
+
+/* ─── section frame ─── */
+main{display:block}
+section.wrap{max-width:1080px;margin:0 auto;padding:64px 20px 8px}
+.sec-head{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:6px}
+.sec-no{font-size:13px;font-weight:800;color:var(--accent);letter-spacing:.12em}
+h2{font-size:26px;font-weight:900;letter-spacing:-.4px;text-wrap:balance}
+.tech{
+  margin-left:auto;font-size:12px;color:var(--muted);
+  border:1px dashed var(--line2);border-radius:8px;padding:3px 10px;white-space:nowrap
+}
+.tech b{color:var(--ink2);font-weight:700}
+.sec-desc{color:var(--ink2);max-width:66ch;margin-bottom:26px}
+
+/* reveal */
+.rv{opacity:0;transform:translateY(18px);transition:opacity .7s ease,transform .7s ease}
+.rv.in{opacity:1;transform:none}
+
+/* ─── hero ─── */
+.hero{position:relative;height:92vh;min-height:560px;overflow:hidden;background:var(--night)}
+.hero svg.sky{position:absolute;inset:0;width:100%;height:100%}
+.hero-grad{position:absolute;inset:0;background:linear-gradient(180deg,rgba(13,20,32,0) 40%,rgba(13,20,32,.82) 100%)}
+.hero-copy{position:absolute;left:0;right:0;bottom:110px;max-width:1080px;margin:0 auto;padding:0 24px;color:#f2f5f0}
+.crumb{font-size:13px;color:#9fb4c8;margin-bottom:10px}
+.crumb b{color:#cfe0d2}
+.h-title{display:flex;align-items:flex-end;gap:18px;flex-wrap:wrap}
+.h-title h1{font-size:clamp(44px,7vw,76px);font-weight:900;letter-spacing:-2px;line-height:1.05}
+.h-hanzi{font-size:clamp(22px,3vw,34px);color:#b9cdb9;line-height:1.3;padding-bottom:10px}
+.say{
+  display:inline-flex;align-items:center;gap:7px;margin-bottom:14px;
+  background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);color:#eef5ee;
+  border-radius:999px;padding:7px 14px;font-size:13px;backdrop-filter:blur(4px)
+}
+.say:hover{background:rgba(255,255,255,.2)}
+.h-sub{margin-top:12px;font-size:15px;color:#c3d2c6;max-width:60ch}
+.video-hint{
+  position:absolute;top:20px;right:20px;display:flex;align-items:center;gap:8px;
+  font-size:12px;color:#c8d6c9;background:rgba(10,16,26,.55);border:1px dashed rgba(255,255,255,.3);
+  border-radius:10px;padding:7px 12px;backdrop-filter:blur(3px)
+}
+.pulse{width:8px;height:8px;border-radius:50%;background:#ff5f56;animation:blink 1.6s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+/* ticker */
+.ticker{
+  position:absolute;left:0;right:0;bottom:0;background:rgba(9,14,23,.86);backdrop-filter:blur(6px);
+  border-top:1px solid rgba(255,255,255,.12);color:#dfe8df
+}
+.ticker-in{max-width:1080px;margin:0 auto;padding:12px 24px;display:flex;gap:26px;align-items:center;overflow-x:auto;scrollbar-width:none}
+.ticker-in::-webkit-scrollbar{display:none}
+.tk{display:flex;align-items:center;gap:8px;font-size:13.5px;white-space:nowrap}
+.tk .lb{color:#8fa3b8;font-size:12px}
+.tk .vl{font-weight:800}
+.aqi{padding:1px 8px;border-radius:6px;background:#e8b93e;color:#1c1a10;font-weight:800;font-size:12px}
+.livebadge{display:flex;align-items:center;gap:6px;font-size:11px;color:#ff8c85;font-weight:800;letter-spacing:.08em}
+.scrolldown{position:absolute;bottom:64px;left:50%;transform:translateX(-50%);color:#9fb0a3;font-size:12px;animation:updown 2s infinite}
+@keyframes updown{0%,100%{transform:translate(-50%,0)}50%{transform:translate(-50%,7px)}}
+.skyline-lights rect{animation:blink 3s infinite}
+.skyline-lights rect:nth-child(3n){animation-delay:1s}
+.skyline-lights rect:nth-child(3n+1){animation-delay:2s}
+
+/* ─── stat tiles ─── */
+.toggle-row{display:flex;align-items:center;gap:10px;margin-bottom:18px;font-size:14px;color:var(--ink2)}
+.sw{position:relative;width:46px;height:26px;border-radius:999px;background:var(--line2);transition:.25s;border:0}
+.sw::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:var(--surface);transition:.25s;box-shadow:0 1px 4px rgba(0,0,0,.25)}
+body.compare .sw{background:var(--accent)}
+body.compare .sw::after{left:23px}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+.tile{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:20px 22px;box-shadow:var(--shadow)}
+.tile .lb{font-size:13px;color:var(--muted);font-weight:700;letter-spacing:.04em}
+.tile .big{font-size:30px;font-weight:900;letter-spacing:-.5px;margin:4px 0 2px}
+.tile .big small{font-size:16px;font-weight:700;color:var(--ink2);margin-left:2px}
+.tile .sub{font-size:13px;color:var(--ink2)}
+.tile .sub .cmp{display:none;color:var(--accent-deep);font-weight:700}
+body.compare .tile .sub .base{display:none}
+body.compare .tile .sub .cmp{display:inline}
+
+/* ─── map scrolly ─── */
+.scrolly{position:relative;background:var(--night);color:#dfe7df}
+.scrolly-sticky{position:sticky;top:0;height:100vh;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.scrolly svg{width:100%;height:100%;display:block}
+#mapG{transition:transform 1.4s cubic-bezier(.4,.1,.2,1);transform-origin:0 0;will-change:transform}
+.mlyr{opacity:0;transition:opacity .9s ease}
+.mlyr.show{opacity:1}
+.steps{position:relative;z-index:5;max-width:1080px;margin:0 auto;padding:0 24px}
+.step{min-height:95vh;display:flex;align-items:center}
+.step-card{
+  background:rgba(12,18,28,.88);border:1px solid rgba(255,255,255,.14);backdrop-filter:blur(6px);
+  border-radius:16px;padding:22px 26px;max-width:380px;box-shadow:0 8px 30px rgba(0,0,0,.4)
+}
+.step-card .no{font-size:12px;font-weight:800;color:#5ecf90;letter-spacing:.14em}
+.step-card h3{font-size:20px;font-weight:900;margin:4px 0 8px;color:#f0f5ef}
+.step-card p{font-size:14px;color:#b9c6bb}
+.map-note{position:absolute;top:16px;left:0;right:0;text-align:center;font-size:12px;color:#7d8fa5;z-index:6}
+
+/* ─── history ─── */
+.timeline{display:flex;gap:14px;overflow-x:auto;padding:6px 2px 18px;scroll-snap-type:x mandatory}
+.timeline::-webkit-scrollbar{height:8px}
+.timeline::-webkit-scrollbar-thumb{background:var(--line2);border-radius:8px}
+.era{
+  scroll-snap-align:start;flex:0 0 240px;background:var(--surface);border:1px solid var(--line);
+  border-radius:var(--r);padding:18px;box-shadow:var(--shadow)
+}
+.era .yr{display:inline-block;font-size:12px;font-weight:800;color:var(--accent-deep);background:var(--accent-soft);border-radius:6px;padding:2px 8px;margin-bottom:8px}
+.era h4{font-size:16px;font-weight:800;margin-bottom:6px}
+.era p{font-size:13px;color:var(--ink2)}
+.hint{font-size:12.5px;color:var(--muted);margin:8px 0 26px}
+/* satellite slider */
+.sat{position:relative;border-radius:var(--r);overflow:hidden;border:1px solid var(--line);user-select:none;touch-action:none;cursor:ew-resize;box-shadow:var(--shadow)}
+.sat svg{display:block;width:100%;height:auto}
+.sat .after{position:absolute;inset:0;clip-path:inset(0 0 0 50%)}
+.sat .bar{position:absolute;top:0;bottom:0;left:50%;width:3px;background:#fff;box-shadow:0 0 8px rgba(0,0,0,.5);transform:translateX(-50%)}
+.sat .knob{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:42px;height:42px;border-radius:50%;
+  background:#fff;color:#333;display:flex;align-items:center;justify-content:center;font-weight:900;
+  box-shadow:0 2px 10px rgba(0,0,0,.45);font-size:15px
+}
+.sat .tag{position:absolute;top:12px;font-size:12px;font-weight:800;color:#fff;background:rgba(0,0,0,.55);border-radius:6px;padding:3px 10px}
+.sat .tag.l{left:12px}.sat .tag.r{right:12px}
+
+/* ─── climate chart ─── */
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:22px;box-shadow:var(--shadow)}
+.legend{display:flex;gap:14px;align-items:center;margin-bottom:8px;flex-wrap:wrap}
+.lg{display:flex;align-items:center;gap:7px;font-size:13px;color:var(--ink2);border:0;background:none;padding:4px 8px;border-radius:8px}
+.lg:hover{background:var(--accent-soft)}
+.lg .dot{width:10px;height:10px;border-radius:3px}
+.lg.off{opacity:.35}
+.chart-wrap{position:relative}
+.tip{
+  position:absolute;pointer-events:none;background:var(--ink);color:var(--bg);font-size:12.5px;
+  border-radius:8px;padding:7px 11px;opacity:0;transition:opacity .15s;white-space:nowrap;z-index:5;transform:translate(-50%,-110%)
+}
+.tip b{font-weight:800}
+
+/* ─── economy ─── */
+.eco-grid{display:grid;grid-template-columns:340px 1fr;gap:14px}
+@media(max-width:860px){.eco-grid{grid-template-columns:1fr}}
+.donut-center{font-weight:900;font-size:20px}
+.bars{display:flex;align-items:flex-end;gap:18px;height:190px;padding-top:10px}
+.bar{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;justify-content:flex-end;height:100%}
+.bar .col{width:100%;max-width:64px;background:var(--c1);border-radius:4px 4px 0 0;height:0;transition:height 1.1s cubic-bezier(.3,.7,.3,1)}
+.bar .v{font-size:12.5px;font-weight:800;color:var(--ink2)}
+.bar .y{font-size:12px;color:var(--muted)}
+.firms{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;margin-top:14px}
+.firm{perspective:800px;height:120px}
+.firm-in{position:relative;width:100%;height:100%;transition:transform .6s;transform-style:preserve-3d}
+.firm:hover .firm-in,.firm.flip .firm-in{transform:rotateY(180deg)}
+.ff,.fb{
+  position:absolute;inset:0;backface-visibility:hidden;border-radius:12px;border:1px solid var(--line);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:12px;text-align:center
+}
+.ff{background:var(--surface);box-shadow:var(--shadow)}
+.ff .nm{font-weight:900;font-size:16px;letter-spacing:-.3px}
+.ff .fd{font-size:12px;color:var(--accent-deep);background:var(--accent-soft);padding:2px 9px;border-radius:6px;font-weight:700}
+.fb{background:var(--accent-soft);transform:rotateY(180deg);font-size:12.5px;color:var(--ink2);border-color:var(--accent)}
+.fb b{color:var(--accent-deep)}
+
+/* ─── transport ─── */
+.tr-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:860px){.tr-grid{grid-template-columns:1fr}}
+.metro-list{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.mline{display:flex;align-items:center;gap:6px;font-size:12.5px;border:1px solid var(--line);border-radius:999px;padding:4px 11px;background:var(--surface);color:var(--ink2)}
+.mline .sw2{width:14px;height:5px;border-radius:3px}
+.mline:hover{border-color:var(--ink2)}
+#metroSvg path.dim{opacity:.12}
+
+/* ─── tour ─── */
+.tour{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px}
+.spot{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow);transition:transform .25s,box-shadow .25s}
+.spot:hover{transform:translateY(-4px);box-shadow:0 10px 26px rgba(23,32,26,.14)}
+.spot svg{display:block;width:100%;height:130px}
+.spot .bd{padding:14px 16px}
+.spot h4{font-size:15.5px;font-weight:800;display:flex;align-items:center;gap:7px}
+.badge{font-size:11px;font-weight:800;border-radius:5px;padding:1px 7px}
+.b5{background:var(--amber-soft);color:var(--amber)}
+.b4{background:var(--blue-soft);color:var(--blue)}
+.b360{background:var(--accent-soft);color:var(--accent-deep)}
+.spot p{font-size:12.5px;color:var(--ink2);margin-top:5px}
+
+/* ─── news ─── */
+.news{display:flex;flex-direction:column;gap:0;border:1px solid var(--line);border-radius:var(--r);overflow:hidden;background:var(--surface);box-shadow:var(--shadow)}
+.news-head{display:flex;align-items:center;gap:10px;padding:14px 18px;border-bottom:1px solid var(--line);background:var(--accent-soft)}
+.live-dot{width:9px;height:9px;border-radius:50%;background:#e5484d;animation:blink 1.4s infinite}
+.news-head b{font-size:14px}
+.news-head span{font-size:12px;color:var(--muted);margin-left:auto}
+.nitem{display:flex;gap:12px;align-items:baseline;padding:13px 18px;border-bottom:1px solid var(--line);font-size:14.5px}
+.nitem:last-child{border-bottom:0}
+.nitem .src{font-size:12px;color:var(--muted);white-space:nowrap}
+.nitem .tt{flex:1}
+.nitem .ago{font-size:12px;color:var(--muted);white-space:nowrap}
+.nitem:hover{background:var(--bg)}
+
+/* ─── quiz ─── */
+.quiz{display:grid;gap:14px}
+.q{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:20px 22px;box-shadow:var(--shadow)}
+.q h4{font-size:15.5px;margin-bottom:12px}
+.q .ops{display:flex;flex-wrap:wrap;gap:8px}
+.q .op{border:1.5px solid var(--line2);background:var(--bg);border-radius:10px;padding:8px 16px;font-size:14px;color:var(--ink)}
+.q .op:hover{border-color:var(--accent)}
+.q .op.ok{background:var(--accent-soft);border-color:var(--accent);color:var(--accent-deep);font-weight:800}
+.q .op.no{background:#fdecec;border-color:#e5484d;color:#c62f34}
+:root[data-theme="dark"] .q .op.no,:root:not([data-theme="light"]) .q .op.no{background:#3a1d1e}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]) .q .op.no{background:#fdecec}}
+.q .ex{display:none;margin-top:10px;font-size:13px;color:var(--ink2);background:var(--bg);border-radius:8px;padding:10px 14px}
+.q .ex.show{display:block}
+.score{font-size:14px;font-weight:800;color:var(--accent-deep)}
+
+/* ─── people ─── */
+.people{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:12px}
+.pcard{perspective:800px;height:200px}
+.pcard-in{position:relative;width:100%;height:100%;transition:transform .6s;transform-style:preserve-3d}
+.pcard:hover .pcard-in{transform:rotateY(180deg)}
+.pf,.pb{position:absolute;inset:0;backface-visibility:hidden;border-radius:var(--r);border:1px solid var(--line)}
+.pf{background:var(--surface);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;box-shadow:var(--shadow)}
+.pf .era2{font-size:11.5px;color:var(--muted)}
+.pf .nm{font-weight:900;font-size:18px}
+.pf .hz{color:var(--ink2);font-size:14px}
+.pb{background:var(--accent-soft);transform:rotateY(180deg);padding:16px;font-size:12.5px;color:var(--ink2);display:flex;align-items:center;border-color:var(--accent)}
+
+/* ─── impl guide ─── */
+.impl{width:100%;border-collapse:collapse;font-size:13.5px;background:var(--surface);border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow)}
+.impl th,.impl td{padding:11px 16px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+.impl th{background:var(--accent-soft);color:var(--accent-deep);font-size:12.5px;letter-spacing:.04em}
+.impl td:first-child{font-weight:700;white-space:nowrap}
+.impl td:last-child{color:var(--ink2)}
+.tbl-scroll{overflow-x:auto}
+footer{max-width:1080px;margin:0 auto;padding:40px 20px 60px;color:var(--muted);font-size:12.5px;border-top:1px solid var(--line);margin-top:70px}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  html{scroll-behavior:auto}
+  .rv{opacity:1;transform:none}
+}
+</style>
+
+<header class="top">
+  <div class="top-in">
+    <div class="logo">중국도시 <b>정보사전</b></div>
+    <div class="searchbox"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg><input placeholder="사전 전체 검색 (목업)"></div>
+    <nav class="navchips" id="navchips">
+      <a href="#glance">한눈에</a><a href="#geo">지리</a><a href="#history">역사</a><a href="#climate">기후</a>
+      <a href="#economy">경제</a><a href="#transport">교통</a><a href="#tour">관광</a><a href="#news">속보</a><a href="#quiz">퀴즈</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+<!-- ══════════ HERO ══════════ -->
+<div class="hero" id="hero">
+  <svg class="sky" viewBox="0 0 1440 810" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+    <defs>
+      <linearGradient id="skyG" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#0b1626"/><stop offset=".45" stop-color="#14283e"/>
+        <stop offset=".75" stop-color="#3d4a63"/><stop offset="1" stop-color="#8a6a55"/>
+      </linearGradient>
+      <radialGradient id="sunG" cx=".5" cy=".5" r=".5">
+        <stop offset="0" stop-color="#ffd9a0" stop-opacity=".9"/><stop offset="1" stop-color="#ffd9a0" stop-opacity="0"/>
+      </radialGradient>
+    </defs>
+    <rect width="1440" height="810" fill="url(#skyG)"/>
+    <circle cx="1080" cy="600" r="190" fill="url(#sunG)"/>
+    <!-- far skyline -->
+    <g fill="#232f44" opacity=".85">
+      <rect x="60" y="520" width="46" height="290"/><rect x="130" y="560" width="60" height="250"/>
+      <rect x="230" y="480" width="38" height="330"/><rect x="300" y="545" width="70" height="265"/>
+      <rect x="420" y="500" width="44" height="310"/><rect x="540" y="560" width="80" height="250"/>
+      <rect x="700" y="470" width="40" height="340"/><rect x="820" y="530" width="66" height="280"/>
+      <rect x="1000" y="500" width="46" height="310"/><rect x="1120" y="555" width="72" height="255"/>
+      <rect x="1280" y="510" width="50" height="300"/><rect x="1370" y="565" width="46" height="245"/>
+    </g>
+    <!-- near skyline -->
+    <g fill="#141d2e">
+      <rect x="0" y="620" width="90" height="190"/><rect x="110" y="580" width="70" height="230"/>
+      <polygon points="235,560 265,560 275,810 225,810"/>
+      <rect x="320" y="640" width="100" height="170"/><rect x="450" y="600" width="56" height="210"/>
+      <polygon points="560,530 575,500 590,530 596,810 554,810"/>
+      <rect x="640" y="615" width="86" height="195"/><rect x="760" y="575" width="52" height="235"/>
+      <rect x="850" y="640" width="110" height="170"/><rect x="990" y="590" width="64" height="220"/>
+      <polygon points="1100,545 1130,545 1142,810 1088,810"/>
+      <rect x="1190" y="625" width="92" height="185"/><rect x="1310" y="585" width="60" height="225"/>
+    </g>
+    <!-- window lights -->
+    <g class="skyline-lights" fill="#ffd98c" opacity=".8">
+      <rect x="126" y="600" width="5" height="7"/><rect x="146" y="640" width="5" height="7"/><rect x="160" y="612" width="5" height="7"/>
+      <rect x="340" y="662" width="5" height="7"/><rect x="372" y="690" width="5" height="7"/><rect x="396" y="668" width="5" height="7"/>
+      <rect x="462" y="628" width="5" height="7"/><rect x="480" y="672" width="5" height="7"/>
+      <rect x="565" y="580" width="5" height="7"/><rect x="572" y="640" width="5" height="7"/>
+      <rect x="656" y="640" width="5" height="7"/><rect x="690" y="668" width="5" height="7"/><rect x="708" y="636" width="5" height="7"/>
+      <rect x="772" y="600" width="5" height="7"/><rect x="790" y="650" width="5" height="7"/>
+      <rect x="874" y="664" width="5" height="7"/><rect x="912" y="690" width="5" height="7"/><rect x="936" y="660" width="5" height="7"/>
+      <rect x="1004" y="616" width="5" height="7"/><rect x="1030" y="660" width="5" height="7"/>
+      <rect x="1108" y="580" width="5" height="7"/><rect x="1120" y="630" width="5" height="7"/>
+      <rect x="1206" y="650" width="5" height="7"/><rect x="1240" y="680" width="5" height="7"/><rect x="1330" y="620" width="5" height="7"/>
+    </g>
+  </svg>
+  <div class="hero-grad"></div>
+  <div class="video-hint"><span class="pulse"></span>실제 구현 시: 4K 드론 항공영상 루프 재생 (지금은 일러스트 대체)</div>
+
+  <div class="hero-copy">
+    <div class="crumb">지식백과 › 지역 › 중국 › 안후이성(安徽省) › <b>성회(省会)</b></div>
+    <button class="say" id="sayBtn" aria-label="중국어 발음 듣기">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3a4.5 4.5 0 0 0-2.5-4v8a4.5 4.5 0 0 0 2.5-4z"/></svg>
+      Héféi 발음 듣기
+    </button>
+    <div class="h-title">
+      <h1>허페이시</h1>
+      <div class="h-hanzi hanzi">合肥市 · Hefei</div>
+    </div>
+    <p class="h-sub">반도체·전기차·AI가 자라는 중국의 신흥 혁신도시. 서울에서 비행기로 2시간, 인구 1,000만의 안후이성 성도(省都).</p>
+  </div>
+
+  <div class="scrolldown">스크롤 ▾</div>
+
+  <div class="ticker">
+    <div class="ticker-in num">
+      <span class="livebadge"><span class="live-dot"></span>LIVE</span>
+      <span class="tk"><span class="lb">허페이 현지시각</span><span class="vl" id="clock">--:--:--</span></span>
+      <span class="tk"><span class="lb">날씨</span><span class="vl">28.3℃ 구름많음</span></span>
+      <span class="tk"><span class="lb">대기질</span><span class="aqi">AQI 82 보통</span></span>
+      <span class="tk"><span class="lb">환율</span><span class="vl">1위안 = 191.2원</span></span>
+      <span class="tk"><span class="lb">인천→허페이</span><span class="vl">직항 약 2시간</span></span>
+      <span class="tk"><span class="lb" style="font-size:11px">※ 시각은 실시간, 나머지는 시뮬레이션 (실제 구현: 날씨·AQI·환율 API)</span></span>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ 한눈에 보기 ══════════ -->
+<section class="wrap" id="glance">
+  <div class="sec-head rv"><span class="sec-no">01</span><h2>한눈에 보기</h2><span class="tech">실제 구현: <b>CountUp.js</b> + JSON 데이터</span></div>
+  <p class="sec-desc rv">스크롤이 닿으면 숫자가 차오릅니다. 오른쪽 스위치를 켜면 모든 수치가 서울 기준 비교로 바뀝니다 — 한국 독자에게 규모를 직관적으로 전달하는 장치입니다.</p>
+  <div class="toggle-row rv"><button class="sw" id="cmpSw" aria-label="서울과 비교 토글"></button><span><b>서울과 비교</b> 모드</span></div>
+  <div class="tiles num">
+    <div class="tile rv"><div class="lb">인구 (2024)</div><div class="big"><span class="cnt" data-v="10002000"></span><small>명</small></div>
+      <div class="sub"><span class="base">사상 첫 1,000만 돌파 · 특대도시</span><span class="cmp">서울(약 933만)보다 약 67만 명 많음</span></div></div>
+    <div class="tile rv"><div class="lb">면적</div><div class="big"><span class="cnt" data-v="11400"></span><small>㎢</small></div>
+      <div class="sub"><span class="base">안후이성의 약 8.2%</span><span class="cmp">서울(605㎢)의 약 18.8배</span></div></div>
+    <div class="tile rv"><div class="lb">GDP (2025)</div><div class="big"><span class="cnt" data-v="14210"></span><small>억 위안</small></div>
+      <div class="sub"><span class="base">전년 대비 +6.1%</span><span class="cmp">≈ 272조 원, 서울 GRDP의 절반 수준</span></div></div>
+    <div class="tile rv"><div class="lb">지하철</div><div class="big"><span class="cnt" data-v="276"></span><small>km</small></div>
+      <div class="sub"><span class="base">8개 노선 · 215개 역</span><span class="cmp">서울 1~9호선 총연장의 약 80%</span></div></div>
+    <div class="tile rv"><div class="lb">하이테크 기업</div><div class="big"><span class="cnt" data-v="4578"></span><small>개사</small></div>
+      <div class="sub"><span class="base">중국 정부 인증 기준</span><span class="cmp">판교테크노밸리 입주기업의 약 2.6배</span></div></div>
+    <div class="tile rv"><div class="lb">서울에서</div><div class="big"><span class="cnt" data-v="970"></span><small>km</small></div>
+      <div class="sub"><span class="base">비행 약 2시간</span><span class="cmp">서울→제주의 약 2.1배 거리</span></div></div>
+  </div>
+</section>
+
+<!-- ══════════ 지도 스크롤리텔링 ══════════ -->
+<section id="geo" style="margin-top:70px">
+  <div class="sec-head wrap rv" style="padding-bottom:0"><span class="sec-no">02</span><h2>어디에 있는 도시인가</h2><span class="tech">실제 구현: <b>Mapbox GL 3D</b> + Scrollama</span></div>
+  <p class="sec-desc wrap rv" style="padding-top:6px">스크롤을 내리면 지도가 중국 전도 → 안후이성 → 차오후 → 도심 순으로 날아 들어갑니다. (목업은 일러스트 지도, 실제는 3D 위성지도)</p>
+
+  <div class="scrolly">
+    <div class="scrolly-sticky">
+      <div class="map-note">일러스트 지도 (실제 구현: Mapbox 3D 위성지도 + 지형 기복)</div>
+      <svg viewBox="0 0 1000 700" aria-hidden="true">
+        <rect width="1000" height="700" fill="#0d1420"/>
+        <g id="mapG">
+          <!-- sea grid -->
+          <g stroke="#16233a" stroke-width="1"><path d="M0 100H1000M0 250H1000M0 400H1000M0 550H1000M150 0V700M350 0V700M550 0V700M750 0V700M950 0V700"/></g>
+          <!-- china landmass (simplified) -->
+          <path d="M180 330 L150 270 L200 210 L280 170 L360 150 L470 120 L560 90 L640 70 L720 60 L800 90 L840 140 L800 170 L760 160 L720 200 L740 240 L700 260 L720 300 L760 330 L780 380 L760 420 L770 460 L740 500 L700 540 L640 570 L580 590 L520 570 L470 590 L420 570 L380 540 L330 520 L280 470 L240 430 L200 390 Z"
+            fill="#1d2a3d" stroke="#31435f" stroke-width="2" vector-effect="non-scaling-stroke"/>
+          <!-- yangtze -->
+          <path class="mlyr l3" d="M330 460 C 430 450 520 470 610 445 C 680 425 730 440 775 430" fill="none" stroke="#3b6f9e" stroke-width="2.5" vector-effect="non-scaling-stroke" opacity=".8"/>
+          <!-- anhui province -->
+          <g class="mlyr l2">
+            <path d="M660 380 L695 370 L720 385 L728 420 L714 455 L688 470 L662 458 L650 425 Z"
+              fill="rgba(23,168,86,.2)" stroke="#2fbf70" stroke-width="2" vector-effect="non-scaling-stroke"/>
+            <text x="668" y="360" fill="#7fd8a5" font-size="14" font-weight="700">안후이성</text>
+          </g>
+          <!-- chaohu lake + terrain -->
+          <g class="mlyr l3">
+            <ellipse cx="668" cy="452" rx="16" ry="8" fill="#2f6f9e" transform="rotate(-18 668 452)"/>
+            <text x="672" y="468" fill="#7db6dd" font-size="5.5" font-weight="700">차오후(巢湖)</text>
+            <g fill="#24503c" opacity=".75">
+              <ellipse cx="640" cy="470" rx="14" ry="6"/><ellipse cx="630" cy="478" rx="10" ry="5"/><ellipse cx="650" cy="480" rx="9" ry="4"/>
+            </g>
+            <text x="622" y="492" fill="#6fae8b" font-size="5.5">다볘산 지맥</text>
+            <path d="M683 415 C 680 428 676 438 668 446" fill="none" stroke="#5d94c0" stroke-width="1" vector-effect="non-scaling-stroke"/>
+            <text x="685" y="424" fill="#7db6dd" font-size="4.5">난페이허</text>
+          </g>
+          <!-- city detail -->
+          <g class="mlyr l4">
+            <ellipse cx="684" cy="428" rx="13" ry="10" fill="none" stroke="#4a5f7d" stroke-width="1" stroke-dasharray="2 1.4" vector-effect="non-scaling-stroke"/>
+            <circle cx="684" cy="428" r="1.4" fill="#ffd98c"/>
+            <g font-size="2.1" fill="#c6d4c9" font-weight="700">
+              <circle cx="678" cy="425" r=".8" fill="#2fbf70"/><text x="670.5" y="425.8">슈산구</text>
+              <circle cx="690" cy="424" r=".8" fill="#2fbf70"/><text x="691.4" y="424.8">야오하이구</text>
+              <circle cx="686" cy="421.5" r=".8" fill="#2fbf70"/><text x="683.2" y="419.8">루양구</text>
+              <circle cx="687" cy="434" r=".8" fill="#2fbf70"/><text x="688.4" y="436.2">바오허구</text>
+              <circle cx="676" cy="431" r=".8" fill="#e8b93e"/><text x="667" y="433.4">과학섬(EAST)</text>
+              <circle cx="688" cy="440" r=".8" fill="#e8b93e"/><text x="689.4" y="442.4">허페이남역</text>
+            </g>
+          </g>
+          <!-- country-level labels -->
+          <g class="mlyr l1">
+            <circle cx="655" cy="235" r="4" fill="#8fa3b8"/><text x="665" y="240" fill="#aebccb" font-size="15">베이징</text>
+            <circle cx="770" cy="415" r="4" fill="#8fa3b8"/><text x="780" y="420" fill="#aebccb" font-size="15">상하이</text>
+            <text x="430" y="330" fill="#54687f" font-size="20" letter-spacing="6">중  국</text>
+          </g>
+          <!-- hefei marker: always -->
+          <g id="hefeiPin">
+            <circle id="pinPulse" cx="684" cy="428" r="7" fill="rgba(47,191,112,.25)"><animate attributeName="r" values="5;11;5" dur="2.4s" repeatCount="indefinite"/></circle>
+            <circle id="pinDot" cx="684" cy="428" r="3.4" fill="#2fbf70" stroke="#0d1420" stroke-width="1"/>
+            <text class="mlyr l1 show" x="694" y="433" fill="#7fd8a5" font-size="15" font-weight="800">허페이</text>
+          </g>
+        </g>
+      </svg>
+    </div>
+
+    <div class="steps">
+      <div class="step" data-step="0"><div class="step-card">
+        <div class="no">STEP 1 · 중국 전도</div><h3>베이징도 상하이도 아닌, 그 사이</h3>
+        <p>허페이는 중국 내륙 안후이성에 있습니다. 상하이에서 서쪽으로 약 400km — 창장(양쯔강) 삼각주 경제권의 서쪽 관문입니다.</p></div></div>
+      <div class="step" data-step="1"><div class="step-card">
+        <div class="no">STEP 2 · 안후이성</div><h3>안후이성의 성도(省都)</h3>
+        <p>우리나라의 '도청 소재지'에 해당합니다. 면적 1.14만㎢로 성 전체의 8.2%를 차지하며, 4개 구·4개 현·1개 현급시를 관할합니다.</p></div></div>
+      <div class="step" data-step="2"><div class="step-card">
+        <div class="no">STEP 3 · 물과 산</div><h3>중국 5대 호수를 품은 유일한 성도</h3>
+        <p>남동쪽엔 5대 담수호 차오후(巢湖), 남서쪽엔 다볘산 지맥. 도심을 가로지르는 난페이허(67km)가 도시의 젖줄입니다.</p></div></div>
+      <div class="step" data-step="3"><div class="step-card">
+        <div class="no">STEP 4 · 도심</div><h3>4개 구, 그리고 과학섬</h3>
+        <p>슈산·루양·야오하이·바오허 4개 구가 도심을 이룹니다. 서쪽 과학섬에는 '인공태양' EAST가, 남쪽엔 고속철 허브 허페이남역이 있습니다.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 역사 ══════════ -->
+<section class="wrap" id="history">
+  <div class="sec-head rv"><span class="sec-no">03</span><h2>2,100년의 타임라인</h2><span class="tech">실제 구현: <b>TimelineJS</b> + Google Earth Timelapse</span></div>
+  <p class="sec-desc rv">가로로 밀어서 시대를 이동합니다. 아래 위성 비교는 손잡이를 좌우로 드래그해 보세요 — 논밭이던 도시가 40년 만에 어떻게 변했는지 한 컷으로 보여줍니다.</p>
+  <div class="timeline rv num">
+    <div class="era"><span class="yr">BC 122</span><h4>'허페이' 이름의 탄생</h4><p>한 무제가 구강군을 두며 '허페이현' 지명이 처음 등장. 사마천 《사기》에도 기록.</p></div>
+    <div class="era"><span class="yr">215</span><h4>소요진 전투</h4><p>장료가 800명으로 손권의 10만 대군을 격파한 삼국지의 무대. '이소승다'의 대표 사례.</p></div>
+    <div class="era"><span class="yr">999</span><h4>포청천의 고향</h4><p>청렴한 명판관의 상징 포증(包拯)이 여주(허페이)에서 태어남.</p></div>
+    <div class="era"><span class="yr">1853</span><h4>태평천국과 삼하대첩</h4><p>싼허 일대에서 태평군이 상군 6,000명을 격파. 안후이 순무가 허페이에 주재.</p></div>
+    <div class="era"><span class="yr">1952</span><h4>성도가 되다</h4><p>안후이성 재설치와 함께 정식 성회(省会)로. 당시엔 소비도시에 가까운 소도시.</p></div>
+    <div class="era"><span class="yr">2024</span><h4>인구 1,000만 돌파</h4><p>반도체·전기차·AI 산업과 함께 특대도시로. '허페이 모델'이 전국적 주목을 받음.</p></div>
+  </div>
+  <p class="hint rv">◂ 좌우로 스크롤 ▸</p>
+
+  <div class="sat rv" id="sat">
+    <!-- 1984 -->
+    <svg viewBox="0 0 900 380" aria-label="1984년 허페이 (모사)">
+      <rect width="900" height="380" fill="#5a7a44"/>
+      <g opacity=".9">
+        <rect x="0" y="0" width="180" height="90" fill="#6b8a4d"/><rect x="180" y="0" width="200" height="120" fill="#4f7040"/>
+        <rect x="380" y="0" width="160" height="80" fill="#77955a"/><rect x="540" y="0" width="200" height="110" fill="#5d7d47"/>
+        <rect x="740" y="0" width="160" height="140" fill="#6b8a4d"/><rect x="0" y="90" width="140" height="130" fill="#527546"/>
+        <rect x="140" y="120" width="180" height="100" fill="#6f8e51"/><rect x="320" y="80" width="150" height="140" fill="#5a7a44"/>
+        <rect x="470" y="110" width="180" height="90" fill="#77955a"/><rect x="650" y="140" width="130" height="110" fill="#4f7040"/>
+        <rect x="0" y="220" width="200" height="160" fill="#66854c"/><rect x="200" y="220" width="160" height="160" fill="#527546"/>
+        <rect x="360" y="220" width="180" height="160" fill="#6b8a4d"/><rect x="540" y="250" width="150" height="130" fill="#5d7d47"/>
+      </g>
+      <path d="M0 200 C 200 190 400 215 620 195 C 740 185 820 205 900 195" stroke="#7fa8c9" stroke-width="7" fill="none" opacity=".85"/>
+      <g fill="#8d8d7a"><rect x="430" y="165" width="46" height="36"/><rect x="466" y="150" width="30" height="28"/><rect x="410" y="185" width="26" height="22"/></g>
+      <ellipse cx="800" cy="330" rx="130" ry="60" fill="#3f6d94"/>
+    </svg>
+    <!-- 2024 -->
+    <div class="after">
+      <svg viewBox="0 0 900 380" aria-label="2024년 허페이 (모사)">
+        <rect width="900" height="380" fill="#7d8288"/>
+        <g fill="#94999e"><rect x="0" y="0" width="900" height="380"/></g>
+        <g fill="#6f747a">
+          <rect x="20" y="20" width="120" height="70"/><rect x="160" y="14" width="100" height="90"/><rect x="280" y="26" width="130" height="76"/>
+          <rect x="430" y="10" width="110" height="86"/><rect x="560" y="24" width="140" height="72"/><rect x="720" y="16" width="150" height="88"/>
+          <rect x="16" y="120" width="140" height="80"/><rect x="180" y="126" width="120" height="72"/><rect x="320" y="118" width="140" height="84"/>
+          <rect x="480" y="128" width="120" height="70"/><rect x="620" y="120" width="110" height="80"/>
+          <rect x="20" y="230" width="130" height="80"/><rect x="170" y="240" width="140" height="76"/><rect x="330" y="232" width="120" height="84"/>
+          <rect x="470" y="244" width="140" height="72"/>
+        </g>
+        <g stroke="#c9ced3" stroke-width="4"><path d="M0 110H900M0 214H900M150 0V380M310 0V380M460 0V380M610 0V380M760 0V380"/></g>
+        <path d="M0 200 C 200 190 400 215 620 195 C 740 185 820 205 900 195" stroke="#5d92bd" stroke-width="7" fill="none"/>
+        <g fill="#4b5057"><rect x="380" y="140" width="130" height="90" rx="3"/><rect x="500" y="120" width="90" height="70" rx="3"/></g>
+        <g fill="#e8b93e" opacity=".85"><circle cx="420" cy="170" r="3"/><circle cx="460" cy="200" r="3"/><circle cx="530" cy="150" r="3"/><circle cx="620" cy="250" r="3"/><circle cx="250" cy="160" r="3"/><circle cx="700" cy="140" r="3"/></g>
+        <ellipse cx="800" cy="330" rx="130" ry="60" fill="#33648f"/>
+        <g fill="#5a6067"><rect x="640" y="280" width="120" height="60" rx="4"/></g>
+        <text x="652" y="314" fill="#cfd6db" font-size="13" font-weight="700">첨단산업단지</text>
+      </svg>
+    </div>
+    <div class="bar"></div><div class="knob">⇔</div>
+    <span class="tag l num">1984 (모사)</span><span class="tag r num">2024 (모사)</span>
+  </div>
+  <p class="hint rv">실제 구현 시 이 자리에 <b>Google Earth Timelapse</b>의 1984→현재 실위성 영상과 실사진 비교 슬라이더(JuxtaposeJS)가 들어갑니다.</p>
+</section>
+
+<!-- ══════════ 기후 ══════════ -->
+<section class="wrap" id="climate">
+  <div class="sec-head rv"><span class="sec-no">04</span><h2>서울과 겹쳐 본 기후</h2><span class="tech">실제 구현: <b>ECharts</b> + 실시간 날씨 API</span></div>
+  <p class="sec-desc rv">그래프 위에 마우스를 올리면 월별 값이 뜨고, 범례를 눌러 서울 선을 켜고 끌 수 있습니다. 겨울은 서울보다 온화하고, 여름 장마(6~8월)에 비가 몰립니다.</p>
+  <div class="panel rv">
+    <div class="legend">
+      <button class="lg" id="lgHf"><span class="dot" style="background:var(--c1)"></span>허페이 월평균기온</button>
+      <button class="lg" id="lgSe"><span class="dot" style="background:var(--c2)"></span>서울 월평균기온</button>
+      <span style="margin-left:auto;font-size:12px;color:var(--muted)">연평균 16.2℃ · 강수 1,000mm</span>
+    </div>
+    <div class="chart-wrap">
+      <svg id="climSvg" viewBox="0 0 760 300" width="100%" role="img" aria-label="허페이와 서울의 월평균 기온 비교 선그래프"></svg>
+      <div class="tip" id="climTip"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 경제 ══════════ -->
+<section class="wrap" id="economy">
+  <div class="sec-head rv"><span class="sec-no">05</span><h2>움직이는 경제 인포그래픽</h2><span class="tech">실제 구현: <b>ECharts</b> 애니메이션 차트</span></div>
+  <p class="sec-desc rv">서비스업이 61%를 차지하지만, 이 도시의 정체성은 36.7%의 제조업 — 반도체·디스플레이·전기차입니다. 기업 카드에 마우스를 올리면 뒤집힙니다.</p>
+  <div class="eco-grid">
+    <div class="panel rv">
+      <div style="font-size:14px;font-weight:800;margin-bottom:10px">산업 구조 (2025)</div>
+      <svg viewBox="0 0 220 220" width="100%" style="max-width:230px;display:block;margin:0 auto">
+        <g transform="rotate(-90 110 110)">
+          <circle class="dseg" r="80" cx="110" cy="110" fill="none" stroke="var(--c3)" stroke-width="30" stroke-dasharray="0 502.6" data-frac="0.024"/>
+          <circle class="dseg" r="80" cx="110" cy="110" fill="none" stroke="var(--c2)" stroke-width="30" stroke-dasharray="0 502.6" data-off="0.028" data-frac="0.363"/>
+          <circle class="dseg" r="80" cx="110" cy="110" fill="none" stroke="var(--c1)" stroke-width="30" stroke-dasharray="0 502.6" data-off="0.395" data-frac="0.601"/>
+        </g>
+        <text x="110" y="104" text-anchor="middle" class="donut-center num" fill="var(--ink)" font-size="19" font-weight="900">1조 4,210억</text>
+        <text x="110" y="124" text-anchor="middle" fill="var(--muted)" font-size="11">위안 · GDP</text>
+      </svg>
+      <div style="display:flex;justify-content:center;gap:14px;font-size:12.5px;color:var(--ink2);margin-top:8px" class="num">
+        <span><span style="color:var(--c3)">●</span> 1차 2.4%</span>
+        <span><span style="color:var(--c2)">●</span> 2차 36.7%</span>
+        <span><span style="color:var(--c1)">●</span> 3차 60.9%</span>
+      </div>
+    </div>
+    <div class="panel rv">
+      <div style="font-size:14px;font-weight:800;margin-bottom:4px">GDP 성장 추이 <span style="font-weight:400;color:var(--muted);font-size:12px">(조 위안, ≈)</span></div>
+      <div class="bars num" id="gdpBars">
+        <div class="bar"><span class="v">1.14</span><div class="col" data-h="56%"></div><span class="y">2021</span></div>
+        <div class="bar"><span class="v">1.20</span><div class="col" data-h="63%"></div><span class="y">2022</span></div>
+        <div class="bar"><span class="v">1.27</span><div class="col" data-h="71%"></div><span class="y">2023</span></div>
+        <div class="bar"><span class="v">1.35</span><div class="col" data-h="82%"></div><span class="y">2024</span></div>
+        <div class="bar"><span class="v">1.42</span><div class="col" data-h="92%" style="background:var(--accent-deep)"></div><span class="y">2025</span></div>
+      </div>
+      <p style="font-size:12.5px;color:var(--ink2);margin-top:12px">전기차 연 137만 대(중국의 8.3%), 노트북 2,772만 대(8.4%)를 생산합니다. 세계 노트북 8대 중 1대가 허페이산.</p>
+    </div>
+  </div>
+  <div class="firms rv">
+    <div class="firm"><div class="firm-in"><div class="ff"><div class="nm">CXMT</div><div class="fd">D램 반도체</div></div><div class="fb"><span><b>창신메모리.</b> 중국 대표 D램 제조사. 삼성·SK하이닉스의 추격자가 자란 곳이 바로 허페이입니다.</span></div></div></div>
+    <div class="firm"><div class="firm-in"><div class="ff"><div class="nm">BOE</div><div class="fd">디스플레이</div></div><div class="fb"><span><b>징둥팡.</b> 세계 최대급 패널 제조사. 지금 보는 모니터가 BOE 패널일 확률이 꽤 높습니다.</span></div></div></div>
+    <div class="firm"><div class="firm-in"><div class="ff"><div class="nm">iFLYTEK</div><div class="fd">AI 음성인식</div></div><div class="fb"><span><b>아이플라이텍.</b> 중국 음성 AI 1위. 국가 '지능형 음성 클러스터'가 허페이에 있습니다.</span></div></div></div>
+    <div class="firm"><div class="firm-in"><div class="ff"><div class="nm">NIO</div><div class="fd">프리미엄 전기차</div></div><div class="fb"><span><b>니오.</b> '중국의 테슬라'. 중국 본사와 핵심 생산기지가 허페이에 있습니다.</span></div></div></div>
+    <div class="firm"><div class="firm-in"><div class="ff"><div class="nm">Nexchip</div><div class="fd">파운드리</div></div><div class="fb"><span><b>넥스칩.</b> 디스플레이 구동칩 파운드리. 과창판(중국판 나스닥) 상장사.</span></div></div></div>
+    <div class="firm"><div class="firm-in"><div class="ff"><div class="nm">Sungrow</div><div class="fd">태양광·ESS</div></div><div class="fb"><span><b>선그로우.</b> 세계적 태양광 인버터 기업. 한국 태양광 발전소에도 들어가 있습니다.</span></div></div></div>
+    <div class="firm"><div class="firm-in"><div class="ff"><div class="nm">국둔양자</div><div class="fd">양자정보</div></div><div class="fb"><span><b>궈둔양자.</b> 양자통신·양자컴퓨팅. 세계 최초 양자위성 '모쯔호'의 도시다운 기업.</span></div></div></div>
+    <div class="firm"><div class="firm-in"><div class="ff"><div class="nm">VW Anhui</div><div class="fd">전기차</div></div><div class="fb"><span><b>폭스바겐안후이.</b> 폭스바겐이 중국 전기차 거점으로 선택한 곳도 허페이였습니다.</span></div></div></div>
+  </div>
+</section>
+
+<!-- ══════════ 교통 ══════════ -->
+<section class="wrap" id="transport">
+  <div class="sec-head rv"><span class="sec-no">06</span><h2>서울에서 가는 길, 도시 안의 길</h2><span class="tech">실제 구현: 항공경로 지도 + 인터랙티브 노선도</span></div>
+  <div class="tr-grid">
+    <div class="panel rv">
+      <div style="font-size:14px;font-weight:800;margin-bottom:8px">인천 → 허페이 신차오공항</div>
+      <svg viewBox="0 0 460 260" width="100%" aria-label="인천에서 허페이로 가는 비행 경로">
+        <rect width="460" height="260" rx="10" fill="var(--night)"/>
+        <g stroke="#1c2a40" stroke-width="1"><path d="M0 65H460M0 130H460M0 195H460M115 0V260M230 0V260M345 0V260"/></g>
+        <path d="M40 150 L80 110 L150 80 L210 60 L280 55 L330 80 L310 130 L330 170 L290 210 L220 220 L150 200 L90 190 Z" fill="#1d2a3d" stroke="#31435f"/>
+        <path d="M395 70 L420 85 L428 130 L415 175 L398 190 L385 150 L388 105 Z" fill="#22304a" stroke="#31435f"/>
+        <path id="flightPath" d="M400 120 C 330 60 220 70 150 128" fill="none" stroke="#5ecf90" stroke-width="2" stroke-dasharray="6 5"/>
+        <circle cx="400" cy="120" r="5" fill="#e8b93e"/><text x="408" y="112" fill="#e6d9ae" font-size="12" font-weight="700">인천</text>
+        <circle cx="150" cy="128" r="5" fill="#2fbf70"/><text x="112" y="120" fill="#7fd8a5" font-size="12" font-weight="700">허페이</text>
+        <g fill="#f0f5ef"><path d="M0 0 L14 5 L0 10 L3.5 5 Z"><animateMotion dur="5s" repeatCount="indefinite" rotate="auto"><mpath href="#flightPath"/></animateMotion></path></g>
+        <text x="235" y="45" fill="#8fa3b8" font-size="12" text-anchor="middle" class="num">약 970km · 직항 약 2시간</text>
+      </svg>
+      <p style="font-size:12.5px;color:var(--ink2);margin-top:10px">신차오 국제공항은 시내 서북쪽 32km. 공항철도 S1선이 2026년 말 개통 예정입니다.</p>
+    </div>
+    <div class="panel rv">
+      <div style="font-size:14px;font-weight:800;margin-bottom:8px">지하철 8개 노선 · 276km <span style="font-weight:400;font-size:12px;color:var(--muted)">(노선 이름에 마우스를 올려 보세요)</span></div>
+      <svg id="metroSvg" viewBox="0 0 460 220" width="100%" aria-label="허페이 지하철 노선 개념도">
+        <rect width="460" height="220" rx="10" fill="var(--bg)" stroke="var(--line)"/>
+        <path data-l="1" d="M230 15 V205" stroke="#e5484d" stroke-width="5" fill="none" stroke-linecap="round"/>
+        <path data-l="2" d="M25 110 H435" stroke="#2b7fb8" stroke-width="5" fill="none" stroke-linecap="round"/>
+        <path data-l="3" d="M60 195 L390 30" stroke="#0aa04f" stroke-width="5" fill="none" stroke-linecap="round"/>
+        <path data-l="4" d="M55 40 L400 190" stroke="#d98e2b" stroke-width="5" fill="none" stroke-linecap="round"/>
+        <path data-l="5" d="M300 20 V200" stroke="#8e6cc9" stroke-width="5" fill="none" stroke-linecap="round"/>
+        <path data-l="6" d="M40 150 C 150 130 300 95 430 75" stroke="#2aa8a0" stroke-width="5" fill="none" stroke-linecap="round"/>
+        <path data-l="7" d="M150 25 V200" stroke="#d46ba3" stroke-width="5" fill="none" stroke-linecap="round"/>
+        <path data-l="8" d="M35 70 H430" stroke="#7a869b" stroke-width="5" fill="none" stroke-linecap="round"/>
+        <circle cx="230" cy="110" r="7" fill="var(--surface)" stroke="var(--ink)" stroke-width="2.5"/>
+        <text x="240" y="102" font-size="11" fill="var(--ink2)" font-weight="700">환승 허브</text>
+      </svg>
+      <div class="metro-list" id="metroList">
+        <span class="mline" data-l="1"><span class="sw2" style="background:#e5484d"></span>1호선 · 남북 축</span>
+        <span class="mline" data-l="2"><span class="sw2" style="background:#2b7fb8"></span>2호선 · 동서 축</span>
+        <span class="mline" data-l="3"><span class="sw2" style="background:#0aa04f"></span>3호선 · 중국과기대</span>
+        <span class="mline" data-l="4"><span class="sw2" style="background:#d98e2b"></span>4호선 · 신도심</span>
+        <span class="mline" data-l="5"><span class="sw2" style="background:#8e6cc9"></span>5호선 · 차오후 방면</span>
+        <span class="mline" data-l="6"><span class="sw2" style="background:#2aa8a0"></span>6호선 · '25 개통</span>
+        <span class="mline" data-l="7"><span class="sw2" style="background:#d46ba3"></span>7호선 · 무인운행</span>
+        <span class="mline" data-l="8"><span class="sw2" style="background:#7a869b"></span>8호선 · 북부</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 관광 ══════════ -->
+<section class="wrap" id="tour">
+  <div class="sec-head rv"><span class="sec-no">07</span><h2>가볼 만한 곳</h2><span class="tech">실제 구현: 실사진 갤러리 + 360° 파노라마(Pannellum)</span></div>
+  <p class="sec-desc rv">목업에서는 일러스트로 대체했습니다. 실제 버전에서는 고화질 사진 + 일부 명소 360° 파노라마 + 지도 핀 연동이 들어갑니다.</p>
+  <div class="tour">
+    <div class="spot rv"><svg viewBox="0 0 300 130" preserveAspectRatio="xMidYMid slice"><rect width="300" height="130" fill="#2e4a5e"/><rect y="86" width="300" height="44" fill="#233c4e"/><path d="M60 86 Q 90 46 120 86" fill="none" stroke="#d9d2c0" stroke-width="7"/><rect x="150" y="40" width="34" height="46" fill="#e8e2d2"/><path d="M146 40 L167 26 L188 40 Z" fill="#3a3a3a"/><rect x="200" y="50" width="28" height="36" fill="#ded8c8"/><path d="M196 50 L214 38 L232 50 Z" fill="#3a3a3a"/><ellipse cx="150" cy="112" rx="120" ry="10" fill="#5d92bd" opacity=".5"/></svg>
+      <div class="bd"><h4>싼허고진 <span class="badge b5">5A</span><span class="badge b360">360°</span></h4><p>2,500년 수향(水鄕) 마을 · 삼하대첩의 무대 · 양전닝 옛집</p></div></div>
+    <div class="spot rv"><svg viewBox="0 0 300 130" preserveAspectRatio="xMidYMid slice"><rect width="300" height="130" fill="#37503b"/><rect y="95" width="300" height="35" fill="#2b4030"/><rect x="130" y="55" width="40" height="40" fill="#e8e2d2"/><path d="M122 55 L150 34 L178 55 Z" fill="#7c2d2d"/><path d="M128 34 L150 20 L172 34 Z" fill="#7c2d2d" transform="translate(0,4)"/><ellipse cx="150" cy="112" rx="110" ry="9" fill="#5d92bd" opacity=".45"/><circle cx="60" cy="40" r="14" fill="#e8b93e" opacity=".7"/></svg>
+      <div class="bd"><h4>바오궁위안 <span class="badge b4">4A</span></h4><p>포청천을 기리는 도심 공원 · 포공사·청풍각</p></div></div>
+    <div class="spot rv"><svg viewBox="0 0 300 130" preserveAspectRatio="xMidYMid slice"><rect width="300" height="130" fill="#274b66"/><ellipse cx="150" cy="120" rx="170" ry="26" fill="#33648f"/><path d="M110 96 Q 150 62 190 96 Z" fill="#3d5c44"/><rect x="144" y="40" width="12" height="42" fill="#d9d2c0"/><path d="M138 46 H162 M140 56 H160 M142 66 H158" stroke="#8d8674" stroke-width="3"/><path d="M140 40 L150 28 L160 40 Z" fill="#6b6353"/></svg>
+      <div class="bd"><h4>차오후 라오산다오 <span class="badge b4">4A</span></h4><p>호수 한가운데 섬 · 명청대 문봉탑에서 보는 차오후 전망</p></div></div>
+    <div class="spot rv"><svg viewBox="0 0 300 130" preserveAspectRatio="xMidYMid slice"><rect width="300" height="130" fill="#4a3b32"/><rect y="98" width="300" height="32" fill="#3b2f28"/><rect x="118" y="58" width="64" height="40" fill="#8a4436"/><path d="M104 58 L150 30 L196 58 Z" fill="#2f2a24"/><path d="M112 42 L150 20 L188 42 Z" fill="#2f2a24" transform="translate(0,2)"/><rect x="142" y="74" width="16" height="24" fill="#2f2a24"/></svg>
+      <div class="bd"><h4>밍자오사</h4><p>허페이에서 가장 오래된 사찰 · 조조의 교노대 터</p></div></div>
+    <div class="spot rv"><svg viewBox="0 0 300 130" preserveAspectRatio="xMidYMid slice"><rect width="300" height="130" fill="#33523c"/><ellipse cx="150" cy="118" rx="150" ry="22" fill="#4d7ba3"/><path d="M40 118 C 90 84 210 84 260 118" fill="none" stroke="#d9d2c0" stroke-width="6"/><circle cx="80" cy="46" r="16" fill="#5d8a52"/><circle cx="104" cy="38" r="12" fill="#4d7745"/><rect x="96" y="52" width="6" height="26" fill="#5c4a38"/><circle cx="222" cy="42" r="14" fill="#5d8a52"/><rect x="219" y="52" width="6" height="26" fill="#5c4a38"/></svg>
+      <div class="bd"><h4>소요진 공원</h4><p>장료 vs 손권 — 삼국지 소요진 전투의 현장</p></div></div>
+    <div class="spot rv"><svg viewBox="0 0 300 130" preserveAspectRatio="xMidYMid slice"><rect width="300" height="130" fill="#42503f"/><rect y="96" width="300" height="34" fill="#37432f"/><rect x="90" y="52" width="120" height="44" fill="#d9d2c0"/><path d="M82 52 L150 30 L218 52 Z" fill="#5a4a3a"/><rect x="140" y="70" width="20" height="26" fill="#5a4a3a"/><path d="M60 100 H240" stroke="#7fa8c9" stroke-width="5"/></svg>
+      <div class="bd"><h4>유명전 고거</h4><p>대만 초대 순무 유명전의 장원 저택 · 페이시현</p></div></div>
+  </div>
+</section>
+
+<!-- ══════════ 뉴스 ══════════ -->
+<section class="wrap" id="news">
+  <div class="sec-head rv"><span class="sec-no">08</span><h2>지금 허페이에서는</h2><span class="tech">실제 구현: <b>구글 뉴스 RSS</b> + Vercel 서버리스 자동 갱신</span></div>
+  <p class="sec-desc rv">사전이 '박제된 문서'가 아니라 매일 갱신되는 살아있는 페이지라는 인상을 주는 핵심 섹션입니다. 아래는 예시 헤드라인(목업)입니다.</p>
+  <div class="news rv">
+    <div class="news-head"><span class="live-dot"></span><b>허페이 최신 뉴스</b><span>1시간마다 자동 갱신 (목업은 고정)</span></div>
+    <div class="nitem"><span class="src">신화망</span><span class="tt">창신메모리(CXMT), 차세대 D램 라인 증설 착수… 허페이 반도체 클러스터 확대</span><span class="ago num">2시간 전</span></div>
+    <div class="nitem"><span class="src">안후이일보</span><span class="tt">허페이 지하철 S1 공항선 연내 개통 목표 — 신차오공항까지 40분대</span><span class="ago num">5시간 전</span></div>
+    <div class="nitem"><span class="src">펑파이</span><span class="tt">NIO, 허페이 제2공장서 신형 세단 양산 개시</span><span class="ago num">어제</span></div>
+    <div class="nitem"><span class="src">중국신문망</span><span class="tt">'인공태양' EAST, 플라즈마 장시간 운전 신기록 도전</span><span class="ago num">2일 전</span></div>
+  </div>
+</section>
+
+<!-- ══════════ 퀴즈 ══════════ -->
+<section class="wrap" id="quiz">
+  <div class="sec-head rv"><span class="sec-no">09</span><h2>허페이 상식 퀴즈</h2><span class="tech">체류시간·재방문을 만드는 참여 장치</span></div>
+  <p class="sec-desc rv">읽고 끝나는 사전이 아니라, 3문제로 스스로 확인하고 공유하게 만드는 마무리 장치입니다. <span class="score" id="scoreBox"></span></p>
+  <div class="quiz rv" id="quizBox">
+    <div class="q" data-a="1"><h4>Q1. 허페이가 성도(省都)인 성은?</h4>
+      <div class="ops"><button class="op">장쑤성</button><button class="op">안후이성</button><button class="op">후베이성</button></div>
+      <div class="ex">정답: <b>안후이성</b>. 상하이 서쪽 내륙, 창장 삼각주 경제권의 서익입니다.</div></div>
+    <div class="q" data-a="0"><h4>Q2. 800명으로 손권의 10만 대군을 막아낸 소요진 전투의 명장은?</h4>
+      <div class="ops"><button class="op">장료</button><button class="op">관우</button><button class="op">여포</button></div>
+      <div class="ex">정답: <b>장료</b>. 삼국지 '이소승다'의 대표 사례로, 소요진 공원이 지금도 도심에 있습니다.</div></div>
+    <div class="q" data-a="2"><h4>Q3. 중국 본사를 허페이에 둔 프리미엄 전기차 브랜드는?</h4>
+      <div class="ops"><button class="op">BYD</button><button class="op">샤오미</button><button class="op">NIO(니오)</button></div>
+      <div class="ex">정답: <b>NIO</b>. 허페이시가 초기 투자로 지분을 확보하며 유치한 '허페이 모델'의 대표 사례입니다.</div></div>
+  </div>
+</section>
+
+<!-- ══════════ 인물 ══════════ -->
+<section class="wrap" id="people">
+  <div class="sec-head rv"><span class="sec-no">10</span><h2>이 도시가 낳은 사람들</h2><span class="tech">카드를 뒤집어 보세요</span></div>
+  <div class="people">
+    <div class="pcard rv"><div class="pcard-in">
+      <div class="pf"><span class="era2">북송 999–1062</span><span class="nm">포청천</span><span class="hz hanzi">包拯</span></div>
+      <div class="pb">청렴한 명판관의 상징. 여주(허페이) 출신으로, 도심 바오궁위안이 그를 기립니다.</div></div></div>
+    <div class="pcard rv"><div class="pcard-in">
+      <div class="pf"><span class="era2">삼국 175–210</span><span class="nm">주유</span><span class="hz hanzi">周瑜</span></div>
+      <div class="pb">적벽대전을 이끈 오나라의 명장·군사가. 여강군 서현 출신입니다.</div></div></div>
+    <div class="pcard rv"><div class="pcard-in">
+      <div class="pf"><span class="era2">청 말 1823–1901</span><span class="nm">이홍장</span><span class="hz hanzi">李鴻章</span></div>
+      <div class="pb">양무운동을 이끈 청 말 대표 정치가. 허페이 요리 '이홍장대잡회'에 이름이 남았습니다.</div></div></div>
+    <div class="pcard rv"><div class="pcard-in">
+      <div class="pf"><span class="era2">현대 1922–2025</span><span class="nm">양전닝</span><span class="hz hanzi">楊振寧</span></div>
+      <div class="pb">1957년 노벨물리학상. 패리티 비보존을 규명한 이론물리학자. 싼허고진에 옛집이 있습니다.</div></div></div>
+  </div>
+</section>
+
+<!-- ══════════ 구현 가이드 ══════════ -->
+<section class="wrap" id="impl">
+  <div class="sec-head rv"><span class="sec-no">11</span><h2>이 목업 → 실제 구현 매핑</h2><span class="tech">기획 시연용 부록</span></div>
+  <p class="sec-desc rv">각 섹션을 실서비스로 옮길 때 쓰는 기술입니다. 전부 무료 티어로 시작할 수 있고, 정적 사이트(Vercel) 구조를 유지합니다.</p>
+  <div class="tbl-scroll rv"><table class="impl">
+    <tr><th>섹션</th><th>목업에서 보여준 것</th><th>실제 구현 기술</th></tr>
+    <tr><td>히어로</td><td>일러스트 야경 + 발음 버튼</td><td>4K 드론 영상 루프(스톡/자체 촬영) + Web Speech API</td></tr>
+    <tr><td>라이브 티커</td><td>실시간 시계 + 모의 수치</td><td>WAQI(대기질) · OpenWeatherMap/QWeather(날씨) · 환율 API</td></tr>
+    <tr><td>한눈에 보기</td><td>카운트업 + 서울 비교 토글</td><td>CountUp.js + 도시별 JSON 데이터 템플릿</td></tr>
+    <tr><td>지도 스크롤리텔링</td><td>일러스트 지도 4단계 줌</td><td>Mapbox GL JS 3D(지형·위성) + Scrollama / mapbox-storytelling 템플릿</td></tr>
+    <tr><td>역사</td><td>가로 타임라인 + 위성 비교 슬라이더</td><td>TimelineJS + Google Earth Timelapse 임베드 + JuxtaposeJS</td></tr>
+    <tr><td>기후·경제 차트</td><td>SVG 인터랙티브 차트</td><td>ECharts (호버·애니메이션·중국 지도 내장)</td></tr>
+    <tr><td>교통</td><td>비행경로 애니메이션 + 노선 하이라이트</td><td>SVG 애니메이션 유지 (경량이라 그대로 사용 가능)</td></tr>
+    <tr><td>관광</td><td>일러스트 카드</td><td>실사진 + Pannellum 360° 파노라마 + 지도 핀</td></tr>
+    <tr><td>속보</td><td>고정 헤드라인</td><td>구글 뉴스 RSS + Vercel 서버리스 함수(1시간 캐시)</td></tr>
+    <tr><td>퀴즈·인물카드</td><td>완성형 (그대로 사용 가능)</td><td>바닐라 JS — 추가 기술 불필요</td></tr>
+  </table></div>
+</section>
+
+</main>
+
+<footer>
+  중국도시 정보사전 — 인터랙티브 개편 목업 (내부 시연용) · 수치는 허페이시 통계공보 기반, 라이브 티커·뉴스·위성 이미지는 시뮬레이션입니다.<br>
+  대분류·소분류 체계는 기존 사전 구성을 따르며, 본 목업은 그 위에 얹을 인터랙션 레이어의 시안입니다.
+</footer>
+
+<script>
+/* ── clock (real, Asia/Shanghai) ── */
+const clockEl=document.getElementById('clock');
+const fmt=new Intl.DateTimeFormat('ko-KR',{timeZone:'Asia/Shanghai',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false});
+function tick(){clockEl.textContent=fmt.format(new Date());}
+tick();setInterval(tick,1000);
+
+/* ── pronunciation ── */
+document.getElementById('sayBtn').addEventListener('click',()=>{
+  if(!('speechSynthesis' in window))return;
+  const u=new SpeechSynthesisUtterance('合肥');u.lang='zh-CN';u.rate=.8;
+  speechSynthesis.cancel();speechSynthesis.speak(u);
+});
+
+/* ── reveal on scroll ── */
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}}),{threshold:.12});
+document.querySelectorAll('.rv').forEach(el=>io.observe(el));
+
+/* ── count-up ── */
+const cio=new IntersectionObserver(es=>es.forEach(e=>{
+  if(!e.isIntersecting)return;cio.unobserve(e.target);
+  const el=e.target,v=+el.dataset.v,t0=performance.now(),D=1400;
+  (function f(t){const p=Math.min((t-t0)/D,1),ease=1-Math.pow(1-p,3);
+    el.textContent=Math.round(v*ease).toLocaleString('ko-KR');
+    if(p<1)requestAnimationFrame(f);})(t0);
+}),{threshold:.5});
+document.querySelectorAll('.cnt').forEach(el=>cio.observe(el));
+
+/* ── compare toggle ── */
+document.getElementById('cmpSw').addEventListener('click',()=>document.body.classList.toggle('compare'));
+
+/* ── map scrollytelling ── */
+const mapG=document.getElementById('mapG');
+const stepViews=[
+  {s:1,x:500,y:350,layers:['l1'],pin:3.4},
+  {s:2.8,x:690,y:420,layers:['l1','l2'],pin:3.4},
+  {s:6.5,x:672,y:455,layers:['l2','l3'],pin:1.6},
+  {s:14,x:686,y:429,layers:['l4'],pin:0}
+];
+const pinDot=document.getElementById('pinDot'),pinPulse=document.getElementById('pinPulse');
+function setStep(i){
+  const v=stepViews[i];
+  mapG.style.transform=`translate(${500-v.s*v.x}px,${350-v.s*v.y}px) scale(${v.s})`;
+  pinDot.setAttribute('r',Math.max(v.pin,.01));
+  pinDot.setAttribute('stroke-width',(1/v.s).toFixed(2));
+  pinDot.style.opacity=v.pin?1:0;
+  pinPulse.style.opacity=v.s<5?1:0;
+  document.querySelectorAll('.mlyr').forEach(l=>{
+    const on=v.layers.some(c=>l.classList.contains(c));
+    l.classList.toggle('show',on);
+  });
+}
+setStep(0);
+const sio=new IntersectionObserver(es=>es.forEach(e=>{
+  if(e.isIntersecting)setStep(+e.target.dataset.step);
+}),{threshold:.55});
+document.querySelectorAll('.step').forEach(s=>sio.observe(s));
+
+/* ── satellite slider ── */
+const sat=document.getElementById('sat');
+function satMove(clientX){
+  const r=sat.getBoundingClientRect();
+  let p=Math.max(2,Math.min(98,(clientX-r.left)/r.width*100));
+  sat.querySelector('.after').style.clipPath=`inset(0 0 0 ${p}%)`;
+  sat.querySelector('.bar').style.left=p+'%';
+  sat.querySelector('.knob').style.left=p+'%';
+}
+sat.addEventListener('pointerdown',e=>{sat.setPointerCapture(e.pointerId);satMove(e.clientX);});
+sat.addEventListener('pointermove',e=>{if(e.buttons)satMove(e.clientX);});
+
+/* ── climate chart ── */
+(function(){
+  const HF=[0.3,4.2,10.1,16.4,21.8,25.4,28.3,27.5,22.9,17.1,10.4,3.7];
+  const SE=[-2.0,0.7,6.1,12.6,18.2,22.7,25.3,26.1,21.4,14.8,7.2,0.4];
+  const svg=document.getElementById('climSvg'),tip=document.getElementById('climTip');
+  const W=760,H=300,L=44,R=40,T=18,B=34;
+  const x=i=>L+(W-L-R)*i/11, y=v=>T+(H-T-B)*(1-(v+5)/35);
+  const css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+  let showSe=true,showHf=true;
+  function line(d){return d.map((v,i)=>(i?'L':'M')+x(i).toFixed(1)+' '+y(v).toFixed(1)).join(' ');}
+  function draw(){
+    const c1=css('--c1'),c2=css('--c2'),mut=css('--muted'),ln=css('--line');
+    let s=`<g>`;
+    for(const g of [0,10,20,30]) s+=`<line x1="${L}" x2="${W-R}" y1="${y(g)}" y2="${y(g)}" stroke="${ln}" stroke-width="1"/><text x="${L-8}" y="${y(g)+4}" text-anchor="end" font-size="11" fill="${mut}">${g}°</text>`;
+    const M=['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'];
+    M.forEach((m,i)=>{if(i%2==0)s+=`<text x="${x(i)}" y="${H-12}" text-anchor="middle" font-size="11" fill="${mut}">${m}</text>`;});
+    s+=`<rect x="${x(5)}" y="${T}" width="${x(7)-x(5)}" height="${H-T-B}" fill="${c2}" opacity=".06"/><text x="${(x(5)+x(7))/2}" y="${T+14}" text-anchor="middle" font-size="10.5" fill="${mut}">장마 집중</text>`;
+    if(showHf){s+=`<path d="${line(HF)} L ${x(11)} ${y(-5)} L ${x(0)} ${y(-5)} Z" fill="${c1}" opacity=".08"/>`;
+      s+=`<path d="${line(HF)}" fill="none" stroke="${c1}" stroke-width="2.5" stroke-linecap="round"/>`;
+      s+=`<circle cx="${x(6)}" cy="${y(HF[6])}" r="4" fill="${c1}"/><text x="${x(11)+6}" y="${y(HF[11])+4}" font-size="11.5" font-weight="800" fill="${c1}">허페이</text>`;}
+    if(showSe){s+=`<path d="${line(SE)}" fill="none" stroke="${c2}" stroke-width="2" stroke-dasharray="5 4" stroke-linecap="round"/>`;
+      s+=`<text x="${x(11)+6}" y="${y(SE[11])+12}" font-size="11.5" font-weight="800" fill="${c2}">서울</text>`;}
+    s+=`<line id="xh" y1="${T}" y2="${H-B}" stroke="${mut}" stroke-width="1" opacity="0"/></g>`;
+    svg.innerHTML=s;
+  }
+  draw();
+  new MutationObserver(draw).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
+  if(window.matchMedia)matchMedia('(prefers-color-scheme: dark)').addEventListener('change',draw);
+  document.getElementById('lgHf').addEventListener('click',function(){showHf=!showHf;this.classList.toggle('off');draw();});
+  document.getElementById('lgSe').addEventListener('click',function(){showSe=!showSe;this.classList.toggle('off');draw();});
+  svg.addEventListener('pointermove',e=>{
+    const r=svg.getBoundingClientRect(),sx=(e.clientX-r.left)*(W/r.width);
+    const i=Math.max(0,Math.min(11,Math.round((sx-L)/((W-L-R)/11))));
+    const xh=svg.querySelector('#xh');if(xh){xh.setAttribute('x1',x(i));xh.setAttribute('x2',x(i));xh.setAttribute('opacity','.5');}
+    tip.style.opacity=1;
+    tip.style.left=(x(i)/W*r.width)+'px';tip.style.top=(y(Math.max(HF[i],SE[i]))/H*r.height)+'px';
+    tip.innerHTML=`<b>${i+1}월</b> 허페이 ${HF[i]}° · 서울 ${SE[i]}°`;
+  });
+  svg.addEventListener('pointerleave',()=>{tip.style.opacity=0;const xh=svg.querySelector('#xh');if(xh)xh.setAttribute('opacity','0');});
+})();
+
+/* ── donut + gdp bars ── */
+const dio=new IntersectionObserver(es=>es.forEach(e=>{
+  if(!e.isIntersecting)return;dio.unobserve(e.target);
+  e.target.querySelectorAll('.dseg').forEach(seg=>{
+    const C=502.6,f=+seg.dataset.frac,off=+(seg.dataset.off||0);
+    seg.style.transition='stroke-dasharray 1.2s ease';
+    seg.setAttribute('stroke-dashoffset',-off*C);
+    requestAnimationFrame(()=>requestAnimationFrame(()=>seg.setAttribute('stroke-dasharray',`${Math.max(f*C-4,0)} ${C}`)));
+  });
+  e.target.querySelectorAll('.col').forEach(c=>requestAnimationFrame(()=>requestAnimationFrame(()=>c.style.height=c.dataset.h)));
+}),{threshold:.4});
+document.querySelectorAll('.eco-grid .panel').forEach(p=>dio.observe(p));
+
+/* ── metro hover ── */
+const paths=document.querySelectorAll('#metroSvg path[data-l]');
+document.querySelectorAll('.mline').forEach(m=>{
+  m.addEventListener('mouseenter',()=>paths.forEach(p=>p.classList.toggle('dim',p.dataset.l!==m.dataset.l)));
+  m.addEventListener('mouseleave',()=>paths.forEach(p=>p.classList.remove('dim')));
+});
+
+/* ── quiz ── */
+let answered=0,correct=0;
+document.querySelectorAll('#quizBox .q').forEach(q=>{
+  const a=+q.dataset.a;
+  q.querySelectorAll('.op').forEach((op,i)=>op.addEventListener('click',()=>{
+    if(q.dataset.done)return;q.dataset.done=1;answered++;
+    if(i===a){op.classList.add('ok');correct++;}
+    else{op.classList.add('no');q.querySelectorAll('.op')[a].classList.add('ok');}
+    q.querySelector('.ex').classList.add('show');
+    document.getElementById('scoreBox').textContent=`— 현재 ${correct}/${answered} 정답`;
+  }));
+});
+
+/* ── nav scrollspy ── */
+const chips=[...document.querySelectorAll('#navchips a')];
+const secs=chips.map(c=>document.querySelector(c.getAttribute('href')));
+const nio=new IntersectionObserver(es=>es.forEach(e=>{
+  if(!e.isIntersecting)return;
+  chips.forEach(c=>c.classList.toggle('on',c.getAttribute('href')==='#'+e.target.id));
+}),{rootMargin:'-30% 0px -60% 0px'});
+secs.forEach(s=>s&&nio.observe(s));
+
+/* ── hero parallax (subtle) ── */
+const heroSvg=document.querySelector('.hero svg.sky');
+addEventListener('scroll',()=>{
+  const sc=Math.min(scrollY,900);
+  heroSvg.style.transform=`translateY(${sc*.18}px)`;
+},{passive:true});
+</script>
