@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>선전시 주요 개발구 지도</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Outfit:wght@600;800&display=swap" rel="stylesheet">
+  
+  <style>
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: transparent;
+    }
+
+    /* Container holding the map card */
+    .widget-wrapper {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      background: #ffffff;
+      border: 1px solid rgba(0, 0, 0, 0.08);
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+      padding: 16px;
+      position: relative;
+    }
+
+    /* Header title */
+    .widget-header {
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-shrink: 0;
+    }
+    .widget-title {
+      font-size: 15px;
+      font-weight: 800;
+      color: #0f172a;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .widget-title svg {
+      width: 16px;
+      height: 16px;
+      color: #06b6d4;
+    }
+    .widget-subtitle {
+      font-size: 11px;
+      color: #64748b;
+      font-weight: 500;
+    }
+
+    /* Map viewport container */
+    .map-container {
+      width: 100%;
+      flex-grow: 1;
+      position: relative;
+      background: #f8fafc;
+      border-radius: 16px;
+      border: 1px solid rgba(0, 0, 0, 0.05);
+      overflow: hidden;
+    }
+
+    /* Background image stretching to cover container */
+    .map-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      user-select: none;
+      pointer-events: none;
+    }
+
+    /* Overlay Zones (glowing transparent regions) */
+    .zone-overlay {
+      position: absolute;
+      transform: translate(-50%, -50%);
+      cursor: pointer;
+      z-index: 2;
+      transition: all 0.3s ease;
+    }
+
+    /* 1. Qianhai Modern Services Zone (Neon Green) */
+    .zone-qianhai {
+      left: 13.5%;
+      top: 63.5%;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: rgba(16, 185, 129, 0.12);
+      border: 2px dashed #10b981;
+      box-shadow: 0 0 15px rgba(16, 185, 129, 0.2);
+    }
+    .zone-qianhai:hover, .zone-qianhai.active {
+      background: rgba(16, 185, 129, 0.22);
+      box-shadow: 0 0 25px rgba(16, 185, 129, 0.4);
+      border-style: solid;
+    }
+
+    /* 2. Shekou Industrial Zone (Neon Orange) */
+    .zone-shekou {
+      left: 20.0%;
+      top: 77.0%;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: rgba(249, 115, 22, 0.12);
+      border: 2px dashed #f97316;
+      box-shadow: 0 0 15px rgba(249, 115, 22, 0.2);
+    }
+    .zone-shekou:hover, .zone-shekou.active {
+      background: rgba(249, 115, 22, 0.22);
+      box-shadow: 0 0 25px rgba(249, 115, 22, 0.4);
+      border-style: solid;
+    }
+
+    /* 3. Free Trade Zone (Neon Cyan Capsule enclosing both) */
+    .zone-ftz {
+      left: 16.5%;
+      top: 70.0%;
+      width: 90px;
+      height: 140px;
+      border-radius: 45px;
+      background: rgba(6, 182, 212, 0.08);
+      border: 2px solid #06b6d4;
+      box-shadow: 0 0 15px rgba(6, 182, 212, 0.15);
+      transform: translate(-50%, -50%) rotate(-15deg);
+      z-index: 1;
+    }
+    .zone-ftz:hover, .zone-ftz.active {
+      background: rgba(6, 182, 212, 0.16);
+      box-shadow: 0 0 25px rgba(6, 182, 212, 0.35);
+      border-width: 3px;
+    }
+
+    /* 4. Hetao Science and Tech Zone (Neon Purple Capsule) */
+    .zone-hetao {
+      left: 40.0%;
+      top: 74.5%;
+      width: 74px;
+      height: 42px;
+      border-radius: 21px;
+      background: rgba(168, 85, 247, 0.12);
+      border: 2px dashed #a855f7;
+      box-shadow: 0 0 15px rgba(168, 85, 247, 0.2);
+    }
+    .zone-hetao:hover, .zone-hetao.active {
+      background: rgba(168, 85, 247, 0.22);
+      box-shadow: 0 0 25px rgba(168, 85, 247, 0.4);
+      border-style: solid;
+    }
+
+    /* Label Tags on top of the zones */
+    .zone-label {
+      position: absolute;
+      transform: translate(-50%, -50%);
+      padding: 4px 10px;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.94);
+      border: 1px solid rgba(0, 0, 0, 0.08);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+      font-size: 9.5px;
+      font-weight: 800;
+      color: #1e293b;
+      cursor: pointer;
+      z-index: 3;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+    .zone-label:hover {
+      transform: translate(-50%, -50%) scale(1.06);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.12);
+    }
+    .zone-label.active {
+      color: white;
+    }
+    .label-qianhai.active { background: #10b981; border-color: transparent; }
+    .label-shekou.active { background: #f97316; border-color: transparent; }
+    .label-ftz.active { background: #06b6d4; border-color: transparent; }
+    .label-hetao.active { background: #a855f7; border-color: transparent; }
+
+    /* Floating Popover Balloon */
+    .district-popover {
+      position: absolute;
+      width: 290px;
+      background: rgba(255, 255, 255, 0.98);
+      backdrop-filter: blur(12px);
+      border: 1.5px solid rgba(0, 0, 0, 0.12);
+      border-radius: 16px;
+      padding: 14px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+      z-index: 10;
+      pointer-events: auto;
+      transition: opacity 0.25s, transform 0.25s;
+    }
+    .popover-close {
+      position: absolute;
+      top: 10px;
+      right: 12px;
+      font-size: 16px;
+      font-weight: 700;
+      color: #94a3b8;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+    .popover-close:hover {
+      color: #475569;
+    }
+
+    .district-title {
+      font-size: 14.5px;
+      font-weight: 800;
+      color: #0f172a;
+      margin-bottom: 2px;
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+    }
+    .district-hanja {
+      font-size: 11px;
+      font-weight: 600;
+      color: #64748b;
+    }
+    
+    .district-meta {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    .meta-badge {
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 999px;
+    }
+    .badge-code {
+      background: #f1f5f9;
+      color: #475569;
+    }
+    .badge-streets {
+      background: #eff6ff;
+      color: #2563eb;
+    }
+
+    .district-desc {
+      font-size: 11.5px;
+      line-height: 1.6;
+      color: #334155;
+      background: #f8fafc;
+      padding: 10px 12px;
+      border-radius: 8px;
+      border-left: 3px solid #06b6d4;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="widget-wrapper">
+    <!-- Header -->
+    <div class="widget-header">
+      <div class="widget-title">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/>
+        </svg>
+        선전시 주요 개발구 안내 지도
+      </div>
+      <div class="widget-subtitle">각 개발구를 클릭하시면 상세 정보가 표시됩니다</div>
+    </div>
+
+    <!-- Map Viewport -->
+    <div class="map-container" id="mapContainer">
+      <img src="./images/shenzhen_map_base_sophisticated.jpg" alt="선전시 행정구역 기본도" class="map-image">
+
+      <!-- Interactive Neon Zones -->
+      <div class="zone-overlay zone-ftz" id="zone-ftz" onclick="showZone('ftz', event)"></div>
+      <div class="zone-overlay zone-qianhai" id="zone-qianhai" onclick="showZone('qianhai', event)"></div>
+      <div class="zone-overlay zone-shekou" id="zone-shekou" onclick="showCompany('shekou', event)" style="display:none;"></div> <!-- dummy to keep naming consistent -->
+      <div class="zone-overlay zone-shekou" id="zone-shekou-real" onclick="showZone('shekou', event)"></div>
+      <div class="zone-overlay zone-hetao" id="zone-hetao" onclick="showZone('hetao', event)"></div>
+
+      <!-- Labels positioned on top of the zones -->
+      <div class="zone-label label-qianhai" id="label-qianhai" style="left: 13.5%; top: 57.0%;" onclick="showZone('qianhai', event)">
+        첸하이 선강 합작구
+      </div>
+
+      <div class="zone-label label-shekou" id="label-shekou" style="left: 20.0%; top: 83.0%;" onclick="showZone('shekou', event)">
+        셔코우 공업구
+      </div>
+
+      <div class="zone-label label-ftz" id="label-ftz" style="left: 10.0%; top: 73.0%;" onclick="showZone('ftz', event)">
+        자유무역시험구
+      </div>
+
+      <div class="zone-label label-hetao" id="label-hetao" style="left: 40.0%; top: 67.0%;" onclick="showZone('hetao', event)">
+        허타오 과기합작구
+      </div>
+
+      <!-- Floating Popover Balloon -->
+      <div class="district-popover" id="districtPopover" style="display: none;">
+        <div class="popover-close" onclick="closePopover()">×</div>
+        <div class="district-title" id="popoverTitle">개발구명 <span class="district-hanja" id="popoverHanja">한자</span></div>
+        <div class="district-meta">
+          <span class="meta-badge badge-streets" id="popoverCode">출범</span>
+          <span class="meta-badge badge-code" id="popoverStreets">위치</span>
+        </div>
+        <div class="district-desc" id="popoverDesc">개발구 설명</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const ZONES_DATA = {
+      'shekou': {
+        name: '셔코우 공업구',
+        hanja: '蛇口工业区',
+        code: '지정일: 1979년 1월',
+        streets: '위치: 남산구 남단',
+        border: '#f97316',
+        desc: '1979년 자오상국(招商局)이 독자 개발하여 출범한 중국 최초의 대외개방 공업구다. 선전 경제특구(1980년)보다 앞서 착공되어 중국 개혁개방의 기념비적인 성지 역할을 한다.'
+      },
+      'qianhai': {
+        name: '첸하이 선강 현대서비스업 합작구',
+        hanja: '前海深港现代服务业合作区',
+        code: '지정일: 2010년 8월',
+        streets: '위치: 남산구 서부 연안',
+        border: '#10b981',
+        desc: '2010년 국무원 비준으로 출범했다. 홍콩과의 금융, 법률, 물류 협력을 강화하기 위한 국가 전략 구역으로, 금융 시장 개방과 홍콩 기업에 대한 세제/규제 완화의 시험장이다.'
+      },
+      'ftz': {
+        name: '중국(광둥) 자유무역시험구 첸하이·셔코우 편구',
+        hanja: '中国(广东)自由贸易试验区 前海蛇口片区',
+        code: '지정일: 2015년 4월',
+        streets: '위치: 남산구 첸하이 및 셔코우 일대 (28.2㎢)',
+        border: '#06b6d4',
+        desc: '2015년 지정된 국가급 자유무역시험구다. 무역·투자 규제를 국제 수준으로 대폭 완화하는 특구로, 한국의 \'경제자유구역\'과 일치하는 개념의 고도화된 글로벌 비즈니스 거점이다.'
+      },
+      'hetao': {
+        name: '허타오 선강 과기혁신 합작구',
+        hanja: '河套深港科技创新合作区',
+        code: '지정일: 2017년 1월',
+        streets: '위치: 푸톈구 남부 및 홍콩 록마차우 경계',
+        border: '#a855f7',
+        desc: '푸톈구 남부 경계의 허타오(선전측)와 홍콩 록마차우(홍콩측)에 걸친 연구개발 협력 구역이다. 정보통신, 바이오, 반도체 분야 등의 과학기술 연구를 협력하기 위한 초국경 합작구다.'
+      }
+    };
+
+    function showZone(id, event) {
+      if (event) event.stopPropagation();
+      
+      // Deactivate other zones & labels
+      document.querySelectorAll('.zone-overlay').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.zone-label').forEach(p => p.classList.remove('active'));
+      
+      const d = ZONES_DATA[id];
+      if (!d) return;
+
+      // Activate targets
+      const activeZone = document.getElementById('zone-' + id);
+      if (activeZone) activeZone.classList.add('active');
+      if (id === 'shekou') {
+        const extraZone = document.getElementById('zone-shekou-real');
+        if (extraZone) extraZone.classList.add('active');
+      }
+
+      const activeLabel = document.getElementById('label-' + id);
+      if (activeLabel) activeLabel.classList.add('active');
+
+      // Populate popover content
+      document.getElementById('popoverTitle').innerHTML = d.name + ' <span class="district-hanja">' + d.hanja + '</span>';
+      document.getElementById('popoverCode').textContent = d.code;
+      document.getElementById('popoverStreets').textContent = d.streets;
+      
+      // Set indicator border color to match the zone
+      const descBox = document.getElementById('popoverDesc');
+      descBox.textContent = d.desc;
+      descBox.style.borderLeftColor = d.border;
+
+      const popover = document.getElementById('districtPopover');
+      popover.style.display = 'block';
+
+      // Position Popover dynamically next to the clicked spot
+      const container = document.getElementById('mapContainer');
+      const rect = container.getBoundingClientRect();
+      
+      const label = document.getElementById('label-' + id);
+      const leftPct = parseFloat(label.style.left);
+      const topPct = parseFloat(label.style.top);
+
+      const targetX = (leftPct / 100) * rect.width;
+      const targetY = (topPct / 100) * rect.height;
+
+      let popoverX = targetX + 10;
+      let popoverY = targetY - 60;
+
+      if (popoverX + 290 > rect.width) {
+        popoverX = targetX - 300;
+      }
+      if (popoverX < 0) {
+        popoverX = 10;
+      }
+      if (popoverY + 160 > rect.height) {
+        popoverY = rect.height - 170;
+      }
+      if (popoverY < 0) {
+        popoverY = 10;
+      }
+
+      popover.style.left = popoverX + 'px';
+      popover.style.top = popoverY + 'px';
+    }
+
+    function closePopover() {
+      document.getElementById('districtPopover').style.display = 'none';
+      document.querySelectorAll('.zone-overlay').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.zone-label').forEach(p => p.classList.remove('active'));
+    }
+
+    document.getElementById('mapContainer').addEventListener('click', (e) => {
+      if (e.target.className === 'map-image' || e.target.id === 'mapContainer') {
+        closePopover();
+      }
+    });
+
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        showZone('qianhai');
+      }, 300);
+    });
+  </script>
+</body>
+</html>`;
