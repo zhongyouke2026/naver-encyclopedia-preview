@@ -74,6 +74,15 @@
       overflow: hidden;
     }
 
+    /* Zoom Wrapper focusing on the bottom-left cluster area */
+    .zoom-wrapper {
+      position: absolute;
+      width: 220%;
+      height: 220%;
+      left: 0%;
+      top: -115%;
+    }
+
     /* Background image stretching to cover container */
     .map-image {
       width: 100%;
@@ -84,7 +93,52 @@
       pointer-events: none;
     }
 
-    /* Overlay Zones (glowing transparent regions) */
+    /* Minimap Overview Locator */
+    .minimap-card {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      width: 110px;
+      height: 70px;
+      background: rgba(255, 255, 255, 0.94);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+      overflow: hidden;
+      z-index: 4;
+      pointer-events: none;
+    }
+    .minimap-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.85;
+    }
+    .minimap-label {
+      position: absolute;
+      bottom: 2px;
+      left: 4px;
+      font-size: 7.5px;
+      font-weight: 800;
+      color: #94a3b8;
+      background: rgba(255, 255, 255, 0.9);
+      padding: 0.5px 3px;
+      border-radius: 2px;
+    }
+    /* Red rectangular focus area showing current zoom region */
+    .minimap-focus-box {
+      position: absolute;
+      left: 0%;
+      top: 52.2%;
+      width: 45.4%;
+      height: 45.5%;
+      border: 1.5px solid #ef4444;
+      background: rgba(239, 68, 68, 0.06);
+      box-shadow: 0 0 4px rgba(239, 68, 68, 0.2);
+    }
+
+    /* Overlay Zones (scaled up to match zoom resolution) */
     .zone-overlay {
       position: absolute;
       transform: translate(-50%, -50%);
@@ -97,8 +151,8 @@
     .zone-qianhai {
       left: 13.5%;
       top: 63.5%;
-      width: 60px;
-      height: 60px;
+      width: 90px;
+      height: 90px;
       border-radius: 50%;
       background: rgba(16, 185, 129, 0.12);
       border: 2px dashed #10b981;
@@ -114,8 +168,8 @@
     .zone-shekou {
       left: 20.0%;
       top: 77.0%;
-      width: 50px;
-      height: 50px;
+      width: 80px;
+      height: 80px;
       border-radius: 50%;
       background: rgba(249, 115, 22, 0.12);
       border: 2px dashed #f97316;
@@ -131,9 +185,9 @@
     .zone-ftz {
       left: 16.5%;
       top: 70.0%;
-      width: 90px;
-      height: 140px;
-      border-radius: 45px;
+      width: 130px;
+      height: 210px;
+      border-radius: 65px;
       background: rgba(6, 182, 212, 0.08);
       border: 2px solid #06b6d4;
       box-shadow: 0 0 15px rgba(6, 182, 212, 0.15);
@@ -150,9 +204,9 @@
     .zone-hetao {
       left: 40.0%;
       top: 74.5%;
-      width: 74px;
-      height: 42px;
-      border-radius: 21px;
+      width: 110px;
+      height: 60px;
+      border-radius: 30px;
       background: rgba(168, 85, 247, 0.12);
       border: 2px dashed #a855f7;
       box-shadow: 0 0 15px rgba(168, 85, 247, 0.2);
@@ -167,12 +221,12 @@
     .zone-label {
       position: absolute;
       transform: translate(-50%, -50%);
-      padding: 4px 10px;
+      padding: 5px 12px;
       border-radius: 6px;
       background: rgba(255, 255, 255, 0.94);
       border: 1px solid rgba(0, 0, 0, 0.08);
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
-      font-size: 9.5px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+      font-size: 10px;
       font-weight: 800;
       color: #1e293b;
       cursor: pointer;
@@ -181,8 +235,8 @@
       white-space: nowrap;
     }
     .zone-label:hover {
-      transform: translate(-50%, -50%) scale(1.06);
-      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.12);
+      transform: translate(-50%, -50%) scale(1.08);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.16);
     }
     .zone-label.active {
       color: white;
@@ -282,33 +336,43 @@
 
     <!-- Map Viewport -->
     <div class="map-container" id="mapContainer">
-      <img src="./images/shenzhen_map_base_sophisticated.jpg" alt="선전시 행정구역 기본도" class="map-image">
+      
+      <!-- Zoom Wrapper focusing on the bottom-left cluster area -->
+      <div class="zoom-wrapper">
+        <img src="./images/shenzhen_map_base_sophisticated.jpg" alt="선전시 행정구역 기본도" class="map-image">
 
-      <!-- Interactive Neon Zones -->
-      <div class="zone-overlay zone-ftz" id="zone-ftz" onclick="showZone('ftz', event)"></div>
-      <div class="zone-overlay zone-qianhai" id="zone-qianhai" onclick="showZone('qianhai', event)"></div>
-      <div class="zone-overlay zone-shekou" id="zone-shekou" onclick="showCompany('shekou', event)" style="display:none;"></div> <!-- dummy to keep naming consistent -->
-      <div class="zone-overlay zone-shekou" id="zone-shekou-real" onclick="showZone('shekou', event)"></div>
-      <div class="zone-overlay zone-hetao" id="zone-hetao" onclick="showZone('hetao', event)"></div>
+        <!-- Interactive Neon Zones -->
+        <div class="zone-overlay zone-ftz" id="zone-ftz" onclick="showZone('ftz', event)"></div>
+        <div class="zone-overlay zone-qianhai" id="zone-qianhai" onclick="showZone('qianhai', event)"></div>
+        <div class="zone-overlay zone-shekou" id="zone-shekou-real" onclick="showZone('shekou', event)"></div>
+        <div class="zone-overlay zone-hetao" id="zone-hetao" onclick="showZone('hetao', event)"></div>
 
-      <!-- Labels positioned on top of the zones -->
-      <div class="zone-label label-qianhai" id="label-qianhai" style="left: 13.5%; top: 57.0%;" onclick="showZone('qianhai', event)">
-        첸하이 선강 합작구
+        <!-- Labels positioned on top of the zones -->
+        <div class="zone-label label-qianhai" id="label-qianhai" style="left: 13.5%; top: 57.0%;" onclick="showZone('qianhai', event)">
+          첸하이 선강 합작구
+        </div>
+
+        <div class="zone-label label-shekou" id="label-shekou" style="left: 20.0%; top: 83.0%;" onclick="showZone('shekou', event)">
+          셔코우 공업구
+        </div>
+
+        <div class="zone-label label-ftz" id="label-ftz" style="left: 9.0%; top: 73.0%;" onclick="showZone('ftz', event)">
+          자유무역시험구
+        </div>
+
+        <div class="zone-label label-hetao" id="label-hetao" style="left: 40.0%; top: 67.0%;" onclick="showZone('hetao', event)">
+          허타오 과기합작구
+        </div>
       </div>
 
-      <div class="zone-label label-shekou" id="label-shekou" style="left: 20.0%; top: 83.0%;" onclick="showZone('shekou', event)">
-        셔코우 공업구
+      <!-- Minimap Overview Locator (outside zoom-wrapper) -->
+      <div class="minimap-card">
+        <img src="./images/shenzhen_map_base_sophisticated.jpg" class="minimap-img" alt="미니맵">
+        <div class="minimap-focus-box"></div>
+        <div class="minimap-label">선전시 전도</div>
       </div>
 
-      <div class="zone-label label-ftz" id="label-ftz" style="left: 10.0%; top: 73.0%;" onclick="showZone('ftz', event)">
-        자유무역시험구
-      </div>
-
-      <div class="zone-label label-hetao" id="label-hetao" style="left: 40.0%; top: 67.0%;" onclick="showZone('hetao', event)">
-        허타오 과기합작구
-      </div>
-
-      <!-- Floating Popover Balloon -->
+      <!-- Floating Popover Balloon (outside zoom-wrapper) -->
       <div class="district-popover" id="districtPopover" style="display: none;">
         <div class="popover-close" onclick="closePopover()">×</div>
         <div class="district-title" id="popoverTitle">개발구명 <span class="district-hanja" id="popoverHanja">한자</span></div>
@@ -345,7 +409,7 @@
         code: '지정일: 2015년 4월',
         streets: '위치: 남산구 첸하이 및 셔코우 일대 (28.2㎢)',
         border: '#06b6d4',
-        desc: '2015년 지정된 국가급 자유무역시험구다. 무역·투자 규제를 국제 수준으로 대폭 완화하는 특구로, 한국의 \'경제자유구역\'과 일치하는 개념의 고도화된 글로벌 비즈니스 거점이다.'
+        desc: '2015년 지정된 국가급 자유무역시험구다. 무역·투자 규제를 국제 수준으로 대폭 완화하는 특구로, 한국의 '경제자유구역'과 일치하는 개념의 고도화된 글로벌 비즈니스 거점이다.'
       },
       'hetao': {
         name: '허타오 선강 과기혁신 합작구',
@@ -383,7 +447,6 @@
       document.getElementById('popoverCode').textContent = d.code;
       document.getElementById('popoverStreets').textContent = d.streets;
       
-      // Set indicator border color to match the zone
       const descBox = document.getElementById('popoverDesc');
       descBox.textContent = d.desc;
       descBox.style.borderLeftColor = d.border;
@@ -391,28 +454,26 @@
       const popover = document.getElementById('districtPopover');
       popover.style.display = 'block';
 
-      // Position Popover dynamically next to the clicked spot
+      // Position Popover dynamically next to the clicked spot using getBoundingClientRect()
       const container = document.getElementById('mapContainer');
-      const rect = container.getBoundingClientRect();
-      
-      const label = document.getElementById('label-' + id);
-      const leftPct = parseFloat(label.style.left);
-      const topPct = parseFloat(label.style.top);
+      const containerRect = container.getBoundingClientRect();
+      const labelRect = activeLabel.getBoundingClientRect();
 
-      const targetX = (leftPct / 100) * rect.width;
-      const targetY = (topPct / 100) * rect.height;
+      // Compute pixel coordinate relative to container
+      const targetX = labelRect.left - containerRect.left + labelRect.width / 2;
+      const targetY = labelRect.top - containerRect.top + labelRect.height / 2;
 
-      let popoverX = targetX + 10;
+      let popoverX = targetX + 15;
       let popoverY = targetY - 60;
 
-      if (popoverX + 290 > rect.width) {
-        popoverX = targetX - 300;
+      if (popoverX + 290 > containerRect.width) {
+        popoverX = targetX - 305;
       }
       if (popoverX < 0) {
         popoverX = 10;
       }
-      if (popoverY + 160 > rect.height) {
-        popoverY = rect.height - 170;
+      if (popoverY + 160 > containerRect.height) {
+        popoverY = containerRect.height - 170;
       }
       if (popoverY < 0) {
         popoverY = 10;
@@ -441,4 +502,4 @@
     });
   </script>
 </body>
-</html>`;
+</html>
