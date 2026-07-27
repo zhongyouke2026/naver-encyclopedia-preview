@@ -262,6 +262,96 @@
       color: #64748b;
       pointer-events: none;
     }
+
+    /* HTML labels on top of 3D pillars */
+    .pillar-label {
+      position: absolute;
+      transform: translate(-50%, -50%);
+      font-size: 10px;
+      font-weight: 700;
+      color: #64748b;
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid rgba(0, 0, 0, 0.08);
+      padding: 2px 6px;
+      border-radius: 4px;
+      pointer-events: none;
+      z-index: 2;
+      transition: all 0.2s;
+    }
+    .pillar-label.active {
+      background: #2563eb;
+      color: white;
+      border-color: transparent;
+      font-size: 11px;
+      box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
+    }
+
+    /* Floating popover above active pillar */
+    .pillar-popover {
+      position: absolute;
+      transform: translate(-50%, -100%);
+      margin-top: -12px;
+      background: rgba(255, 255, 255, 0.95);
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      padding: 6px 10px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+      font-size: 11px;
+      font-weight: 600;
+      z-index: 4;
+      pointer-events: none;
+      white-space: nowrap;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      transition: opacity 0.2s;
+    }
+    .popover-temp { color: #dc2626; display: flex; align-items: center; gap: 4px; }
+    .popover-rain { color: #2563eb; display: flex; align-items: center; gap: 4px; }
+
+    /* Visual Key Legend */
+    .chart-legend {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      z-index: 5;
+      background: rgba(255, 255, 255, 0.88);
+      border: 1px solid rgba(0, 0, 0, 0.08);
+      border-radius: 10px;
+      padding: 8px 12px;
+      font-size: 10px;
+      color: #475569;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      pointer-events: none;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
+    }
+    .legend-title {
+      font-weight: 700;
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      color: #94a3b8;
+      margin-bottom: 2px;
+    }
+    .legend-key {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .key-color-temp {
+      width: 10px;
+      height: 12px;
+      background: linear-gradient(180deg, #e63946 0%, #4ea8de 100%);
+      border-radius: 2px;
+    }
+    .key-color-rain {
+      width: 10px;
+      height: 8px;
+      background: #2563eb;
+      border-radius: 2px;
+    }
   </style>
 </head>
 <body>
@@ -271,6 +361,23 @@
     <div class="viewport-area" id="stage">
       <div class="help-tooltip">💡 기둥을 클릭하거나 드래그하여 3D 기후 링 회전</div>
       <canvas id="climateCanvas"></canvas>
+      
+      <!-- 3D labels container -->
+      <div id="pillarLabels" style="position:absolute; inset:0; pointer-events:none; z-index:2;"></div>
+      <!-- Detail Popover -->
+      <div id="pillarPopover" class="pillar-popover" style="display:none;"></div>
+      <!-- 3D Chart Legend -->
+      <div class="chart-legend">
+        <div class="legend-title">3D 차트 기호 안내</div>
+        <div class="legend-key">
+          <div class="key-color-temp"></div>
+          <div>🌡️ 기둥 높이/색: 월평균 기온</div>
+        </div>
+        <div class="legend-key">
+          <div class="key-color-rain"></div>
+          <div>💧 상단 파란 캡: 월평균 강수량</div>
+        </div>
+      </div>
       
       <!-- Timeline Controller Overlay -->
       <div class="timeline-bar">
@@ -546,6 +653,9 @@
     function buildClimatePillars() {
       const radius = 22;
       const count = 12;
+      
+      const labelContainer = document.getElementById('pillarLabels');
+      labelContainer.innerHTML = '';
 
       for (let i = 0; i < count; i++) {
         const d = CLIMATE_DATA[i];
@@ -611,6 +721,13 @@
 
         scene.add(group);
         pillars.push(group);
+
+        // HTML Month Label
+        const lbl = document.createElement('div');
+        lbl.className = 'pillar-label';
+        lbl.textContent = d.name;
+        labelContainer.appendChild(lbl);
+        d._label = lbl;
       }
 
       // Add a selection highlight ring
@@ -815,11 +932,70 @@
       renderer.setSize(stage.clientWidth, stage.clientHeight);
     }
 
+    const tempV = new THREE.Vector3();
+    const popoverEl = document.getElementById('pillarPopover');
+
+    // Project 3D positions to 2D HTML labels on stage
+    function positionPillarLabels() {
+      if (!renderer || !camera) return;
+      const rect = canvas.getBoundingClientRect();
+
+      CLIMATE_DATA.forEach((d, idx) => {
+        const group = pillars[idx];
+        if (!group || !d._label) return;
+
+        // 1. Month Label at the base of the pillar
+        tempV.set(group.position.x, -0.4, group.position.z);
+        tempV.project(camera);
+
+        const x = (tempV.x * 0.5 + 0.5) * rect.width;
+        const y = (-tempV.y * 0.5 + 0.5) * rect.height;
+        const visible = tempV.z < 1 && tempV.z > -1;
+
+        d._label.style.left = x + 'px';
+        d._label.style.top = (y + 12) + 'px';
+        
+        if (visible) {
+          d._label.style.opacity = '1';
+          d._label.classList.toggle('active', idx === activeMonthIndex);
+        } else {
+          d._label.style.opacity = '0';
+        }
+
+        // 2. Active Month Detailed Popover hovering on top of the active pillar
+        if (idx === activeMonthIndex) {
+          const minTemp = 10;
+          const height = (d.temp - minTemp) * 0.7;
+          const rainH = d.rain * 0.015;
+          const topY = height + rainH + 1.2; // place above the blue rain cap
+
+          tempV.set(group.position.x, topY, group.position.z);
+          tempV.project(camera);
+
+          const px = (tempV.x * 0.5 + 0.5) * rect.width;
+          const py = (-tempV.y * 0.5 + 0.5) * rect.height;
+          const pVisible = tempV.z < 1 && tempV.z > -1;
+
+          if (pVisible) {
+            popoverEl.style.display = 'flex';
+            popoverEl.style.left = px + 'px';
+            popoverEl.style.top = py + 'px';
+            popoverEl.innerHTML = 
+              '<div class="popover-temp">🌡️ ' + d.temp.toFixed(1) + '℃</div>' +
+              '<div class="popover-rain">💧 ' + d.rain + 'mm</div>';
+          } else {
+            popoverEl.style.display = 'none';
+          }
+        }
+      });
+    }
+
     // Animation Loop
     function animate() {
       requestAnimationFrame(animate);
 
       controls.update();
+      positionPillarLabels();
 
       // Lerp Orbit Target smoothly to active month
       controls.target.lerp(targetLookAt, 0.05);
