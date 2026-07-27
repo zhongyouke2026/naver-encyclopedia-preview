@@ -240,91 +240,6 @@
       background: #ef4444;
       border-radius: 50%;
     }
-
-    /* Map Mode Tabs */
-    .map-tabs {
-      display: flex;
-      background: #f1f5f9;
-      padding: 2px;
-      border-radius: 10px;
-      border: 1px solid rgba(0, 0, 0, 0.05);
-      flex-shrink: 0;
-    }
-    .map-tab {
-      border: none;
-      background: transparent;
-      padding: 5px 12px;
-      font-size: 11px;
-      font-weight: 700;
-      color: #64748b;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-    .map-tab:hover {
-      color: #334155;
-    }
-    .map-tab.active {
-      background: #ffffff;
-      color: #0f172a;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
-    }
-
-    /* Company Pins */
-    .company-pin {
-      position: absolute;
-      transform: translate(-50%, -50%);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      cursor: pointer;
-      z-index: 3;
-      transition: all 0.22s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    }
-    .company-pin:hover, .company-pin.active {
-      transform: translate(-50%, -50%) scale(1.08);
-      z-index: 5;
-    }
-    .company-logo-container {
-      width: 38px;
-      height: 38px;
-      background: #ffffff;
-      border: 1.5px solid rgba(0, 0, 0, 0.08);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
-      padding: 5px;
-      transition: all 0.2s;
-    }
-    .company-pin:hover .company-logo-container, .company-pin.active .company-logo-container {
-      border-color: #3b82f6;
-      box-shadow: 0 6px 15px rgba(59, 130, 246, 0.25);
-    }
-    .company-logo-img {
-      max-width: 100%;
-      max-height: 100%;
-      object-fit: contain;
-    }
-    .company-label {
-      margin-top: 4px;
-      font-size: 9.5px;
-      font-weight: 800;
-      color: #1e293b;
-      background: rgba(255, 255, 255, 0.94);
-      border: 1px solid rgba(0, 0, 0, 0.06);
-      padding: 2px 6px;
-      border-radius: 4px;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-      white-space: nowrap;
-    }
-    .company-pin:hover .company-label, .company-pin.active .company-label {
-      background: #3b82f6;
-      color: white;
-      border-color: transparent;
-    }
-  
   </style>
 </head>
 <body>
@@ -338,11 +253,7 @@
         </svg>
         선전시 행정구역 안내 지도
       </div>
-      
-      <div class="map-tabs">
-        <button class="map-tab active" id="tab-districts" onclick="switchMapMode('districts')">행정구역 지도</button>
-        <button class="map-tab" id="tab-companies" onclick="switchMapMode('companies')">대표 기업 지도</button>
-      </div>
+      <div class="widget-subtitle">각 구(区)를 클릭하시면 상세 정보가 표시됩니다</div>
     </div>
 
     <!-- Map Viewport -->
@@ -350,61 +261,51 @@
       <img src="./images/shenzhen_map_base.jpg" alt="선전시 행정구역 기본도" class="map-image">
 
       <!-- District Pulse Dots & Hotspots -->
-      <!-- 1. 바오안구 -->
       <div class="pulse-dot" style="left: 15%; top: 40%;"></div>
       <div class="hotspot" id="pin-baoan" style="left: 15%; top: 40%;" onclick="showDistrict('baoan', event)">
         바오안구
       </div>
 
-      <!-- 2. 광밍구 -->
       <div class="pulse-dot" style="left: 23%; top: 23%;"></div>
       <div class="hotspot" id="pin-guangming" style="left: 23%; top: 23%;" onclick="showDistrict('guangming', event)">
         광밍구
       </div>
 
-      <!-- 3. 남산구 -->
       <div class="pulse-dot" style="left: 21%; top: 68%;"></div>
       <div class="hotspot" id="pin-nanshan" style="left: 21%; top: 68%;" onclick="showDistrict('nanshan', event)">
         남산구
       </div>
 
-      <!-- 4. 룽화구 -->
       <div class="pulse-dot" style="left: 36%; top: 41%;"></div>
       <div class="hotspot" id="pin-longhua" style="left: 36%; top: 41%;" onclick="showDistrict('longhua', event)">
         룽화구
       </div>
 
-      <!-- 5. 복전구 -->
       <div class="pulse-dot" style="left: 38%; top: 68%;"></div>
       <div class="hotspot" id="pin-futian" style="left: 38%; top: 68%;" onclick="showDistrict('futian', event)">
         푸톈구
       </div>
 
-      <!-- 6. 뤄후구 -->
       <div class="pulse-dot" style="left: 48%; top: 63%;"></div>
       <div class="hotspot" id="pin-luohu" style="left: 48%; top: 63%;" onclick="showDistrict('luohu', event)">
         뤄후구
       </div>
 
-      <!-- 7. 룽강구 -->
       <div class="pulse-dot" style="left: 56%; top: 38%;"></div>
       <div class="hotspot" id="pin-longgang" style="left: 56%; top: 38%;" onclick="showDistrict('longgang', event)">
         룽강구
       </div>
 
-      <!-- 8. 옌톈구 -->
       <div class="pulse-dot" style="left: 62%; top: 58%;"></div>
       <div class="hotspot" id="pin-yantian" style="left: 62%; top: 58%;" onclick="showDistrict('yantian', event)">
         옌톈구
       </div>
 
-      <!-- 9. 핑산구 -->
       <div class="pulse-dot" style="left: 72%; top: 39%;"></div>
       <div class="hotspot" id="pin-pingshan" style="left: 72%; top: 39%;" onclick="showDistrict('pingshan', event)">
         핑산구
       </div>
 
-      <!-- 10. 대붕신구 -->
       <div class="pulse-dot" style="left: 86%; top: 63%;"></div>
       <div class="hotspot" id="pin-dapeng" style="left: 86%; top: 63%;" onclick="showDistrict('dapeng', event)">
         다펑신구
@@ -414,42 +315,6 @@
       <div class="inset-box" onclick="showDistrict('shenshan', event)">
         <div class="inset-dot"></div>
         선산특별합작구 ➔
-      </div>
-
-      <!-- Company Pins (Hidden by default) -->
-      <div class="company-pin" id="pin-huawei" style="left: 48.0%; top: 45.0%; display: none;" onclick="showCompany('huawei', event)">
-        <div class="company-logo-container">
-          <img src="./images/logo_huawei.png" class="company-logo-img" alt="화웨이">
-        </div>
-        <div class="company-label">화웨이</div>
-      </div>
-
-      <div class="company-pin" id="pin-tencent" style="left: 20.0%; top: 62.0%; display: none;" onclick="showCompany('tencent', event)">
-        <div class="company-logo-container">
-          <img src="./images/logo_tencent.png" class="company-logo-img" alt="텐센트">
-        </div>
-        <div class="company-label">텐센트</div>
-      </div>
-
-      <div class="company-pin" id="pin-byd" style="left: 74.0%; top: 42.0%; display: none;" onclick="showCompany('byd', event)">
-        <div class="company-logo-container">
-          <img src="./images/logo_byd.png" class="company-logo-img" alt="비야디">
-        </div>
-        <div class="company-label">비야디</div>
-      </div>
-
-      <div class="company-pin" id="pin-pingan" style="left: 36.0%; top: 73.0%; display: none;" onclick="showCompany('pingan', event)">
-        <div class="company-logo-container">
-          <img src="./images/logo_pingan.png" class="company-logo-img" alt="중국핑안">
-        </div>
-        <div class="company-label">중국핑안</div>
-      </div>
-
-      <div class="company-pin" id="pin-cmb" style="left: 43.0%; top: 70.0%; display: none;" onclick="showCompany('cmb', event)">
-        <div class="company-logo-container">
-          <img src="./images/logo_cmb.png" class="company-logo-img" alt="자오상은행">
-        </div>
-        <div class="company-label">자오상은행</div>
       </div>
 
       <!-- Floating Popover Balloon -->
@@ -466,133 +331,6 @@
   </div>
 
   <script>
-
-    let currentMapMode = 'districts';
-
-    const COMPANIES_DATA = {
-      'huawei': {
-        name: '화웨이',
-        hanja: 'Huawei, 华为',
-        code: '분야: 통신장비 · 단말',
-        streets: '홈페이지: huawei.com',
-        desc: '1987년 선전에서 창업한 세계 최대의 통신 장비 제조 기업이다. 룽강구 반텐(坂田)에 거대한 연구 개발형 본사 캠퍼스가 위치하고 있다.'
-      },
-      'tencent': {
-        name: '텐센트',
-        hanja: 'Tencent, 腾讯',
-        code: '분야: 인터넷 · 게임',
-        streets: '홈페이지: tencent.com',
-        desc: '1998년 창업한 중국 최대의 메신저(위챗, QQ) 및 모바일 게임 개발 기업이다. 남산구 하이테크 파크의 텐센트 빌딩과 텐센트 씨프런트 타워가 본사다.'
-      },
-      'byd': {
-        name: '비야디',
-        hanja: 'BYD, 比亚迪',
-        code: '분야: 전기차 · 배터리',
-        streets: '홈페이지: byd.com',
-        desc: '1995년 배터리 제조사로 창업하여 세계 1위 수준의 전기자동차 제조사로 성장한 대기업이다. 핑산구에 거대한 본사 연구소 및 생산기지를 보유하고 있다.'
-      },
-      'pingan': {
-        name: '중국핑안',
-        hanja: 'Ping An, 中国平安',
-        code: '분야: 보험 · 금융',
-        streets: '홈페이지: pingan.cn',
-        desc: '1988년 선전 셰코우에서 창업하여 세계 최대 규모의 금융지주사로 성장한 보험·금융 그룹이다. 푸톈구 CBD의 초고층 랜드마크인 핑안 파이낸스 센터가 본사다.'
-      },
-      'cmb': {
-        name: '자오상은행',
-        hanja: '招商银行',
-        code: '분야: 은행',
-        streets: '홈페이지: cmbchina.com',
-        desc: '1987년 셰코우 산업개발과 연계하여 선전 셰코우에서 설립된 민영 상업은행이다. 푸톈구의 자오상은행 타워를 중심으로 선전 금융업의 한 축을 이룬다.'
-      }
-    };
-
-    function switchMapMode(mode) {
-      currentMapMode = mode;
-      closePopover();
-
-      // Update tabs UI
-      document.getElementById('tab-districts').classList.toggle('active', mode === 'districts');
-      document.getElementById('tab-companies').classList.toggle('active', mode === 'companies');
-
-      // Toggle elements
-      const isDistricts = mode === 'districts';
-      document.querySelectorAll('.pulse-dot').forEach(el => el.style.display = isDistricts ? 'block' : 'none');
-      document.querySelectorAll('.hotspot').forEach(el => el.style.display = isDistricts ? 'block' : 'none');
-      document.querySelector('.inset-box').style.display = isDistricts ? 'flex' : 'none';
-
-      document.querySelectorAll('.company-pin').forEach(el => el.style.display = isDistricts ? 'none' : 'flex');
-
-      if (isDistricts) {
-        showDistrict('futian');
-      } else {
-        showCompany('huawei');
-      }
-    }
-
-    function showCompany(id, event) {
-      if (event) event.stopPropagation();
-
-      // Deactivate other company pins
-      document.querySelectorAll('.company-pin').forEach(p => p.classList.remove('active'));
-      
-      const d = COMPANIES_DATA[id];
-      if (!d) return;
-
-      // Activate target company pin
-      const activePin = document.getElementById('pin-' + id);
-      if (activePin) activePin.classList.add('active');
-
-      // Reset badge classes for district
-      document.getElementById('popoverCode').className = 'meta-badge badge-code';
-      document.getElementById('popoverStreets').className = 'meta-badge badge-streets';
-
-      // Populate popover content
-      document.getElementById('popoverTitle').innerHTML = d.name + ' <span class="district-hanja">' + d.hanja + '</span>';
-      document.getElementById('popoverCode').textContent = d.code;
-      document.getElementById('popoverStreets').textContent = d.streets;
-      
-      // Update badge style for company
-      document.getElementById('popoverCode').className = 'meta-badge badge-streets'; // blue badge for sector
-      document.getElementById('popoverStreets').className = 'meta-badge badge-code';  // gray badge for website
-      
-      document.getElementById('popoverDesc').textContent = d.desc;
-
-      const popover = document.getElementById('districtPopover');
-      popover.style.display = 'block';
-
-      // Position Popover dynamically next to the clicked spot
-      const container = document.getElementById('mapContainer');
-      const rect = container.getBoundingClientRect();
-      
-      const pin = document.getElementById('pin-' + id);
-      const leftPct = parseFloat(pin.style.left);
-      const topPct = parseFloat(pin.style.top);
-
-      const targetX = (leftPct / 100) * rect.width;
-      const targetY = (topPct / 100) * rect.height;
-
-      let popoverX = targetX + 22;
-      let popoverY = targetY - 70;
-
-      if (popoverX + 290 > rect.width) {
-        popoverX = targetX - 312;
-      }
-      if (popoverX < 0) {
-        popoverX = 10;
-      }
-      if (popoverY + 160 > rect.height) {
-        popoverY = rect.height - 170;
-      }
-      if (popoverY < 0) {
-        popoverY = 10;
-      }
-
-      popover.style.left = popoverX + 'px';
-      popover.style.top = popoverY + 'px';
-    }
-  
-    // Districts detailed dataset
     const DISTRICTS_DATA = {
       'baoan': {
         name: '바오안구',
@@ -674,20 +412,16 @@
     };
 
     function showDistrict(id, event) {
-      // Prevent event bubbling
       if (event) event.stopPropagation();
-
-      // Deactivate other hotspots
       document.querySelectorAll('.hotspot').forEach(p => p.classList.remove('active'));
-      
       const d = DISTRICTS_DATA[id];
       if (!d) return;
 
-      // Activate target hotspot
       const activePin = document.getElementById('pin-' + id);
       if (activePin) activePin.classList.add('active');
 
-      // Populate popover content
+      document.getElementById('popoverCode').className = 'meta-badge badge-code';
+      document.getElementById('popoverStreets').className = 'meta-badge badge-streets';
       document.getElementById('popoverTitle').innerHTML = d.name + ' <span class="district-hanja">' + d.hanja + '</span>';
       document.getElementById('popoverCode').textContent = d.code;
       document.getElementById('popoverStreets').textContent = d.streets;
@@ -696,13 +430,11 @@
       const popover = document.getElementById('districtPopover');
       popover.style.display = 'block';
 
-      // Position Popover dynamically next to the clicked spot
       const container = document.getElementById('mapContainer');
       const rect = container.getBoundingClientRect();
       
       let leftPct, topPct;
       if (id === 'shenshan') {
-        // Position at bottom right corner above the inset box
         leftPct = 52;
         topPct = 42;
       } else {
@@ -711,27 +443,21 @@
         topPct = parseFloat(pin.style.top);
       }
 
-      // Compute pixel coordinates
       const targetX = (leftPct / 100) * rect.width;
       const targetY = (topPct / 100) * rect.height;
 
-      // Decide popover position (left or right, top or bottom to keep within viewport bounds)
       let popoverX = targetX + 15;
       let popoverY = targetY - 70;
 
-      // Adjust if popover goes outside right boundary
       if (popoverX + 290 > rect.width) {
         popoverX = targetX - 305;
       }
-      // Adjust if popover goes outside left boundary
       if (popoverX < 0) {
         popoverX = 10;
       }
-      // Adjust if popover goes outside bottom boundary
       if (popoverY + 160 > rect.height) {
         popoverY = rect.height - 170;
       }
-      // Adjust if popover goes outside top boundary
       if (popoverY < 0) {
         popoverY = 10;
       }
@@ -743,17 +469,14 @@
     function closePopover() {
       document.getElementById('districtPopover').style.display = 'none';
       document.querySelectorAll('.hotspot').forEach(p => p.classList.remove('active'));
-      document.querySelectorAll('.company-pin').forEach(p => p.classList.remove('active'));
     }
 
-    // Close popover when clicking anywhere else on the map
     document.getElementById('mapContainer').addEventListener('click', (e) => {
       if (e.target.className === 'map-image' || e.target.id === 'mapContainer') {
         closePopover();
       }
     });
 
-    // Auto-focus on Futian (the capital center) on start
     window.addEventListener('load', () => {
       setTimeout(() => {
         showDistrict('futian');
