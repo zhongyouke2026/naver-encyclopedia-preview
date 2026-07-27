@@ -440,7 +440,7 @@
         desc: '도심 매립지 한가운데에 인공적으로 생태를 복원하여 성공적으로 국가습지로 인정받은 모범 사례입니다. 다양한 연안 생물과 조류의 안전한 도심 속 서식처 역할을 제공하고 있습니다.',
         species: [
           { name: '흰죽지수리 (Ⅰ급 보호종)', label: '흰죽지수리(1급 보호종)', type: '조류', icon: '🦅', img: 'eastern_imperial_eagle.jpg', png: 'eagle.png', badge: 'Ⅰ' },
-          { name: '호랑무늬개구리 (Ⅱ급 보호종)', label: '호랑무늬개구리(2급 보호종)', type: '양서류', icon: '🐸', img: 'tiger_frog.jpg', badge: 'Ⅱ' },
+          { name: '호랑무늬개구리 (Ⅱ급 보호종)', label: '호랑무늬개구리(2급 보호종)', type: '양서류', icon: '🐸', img: 'tiger_frog.jpg', png: 'frog.png', badge: 'Ⅱ' },
           { name: '해안 맹그로브 복원림', label: '해안 맹그로브 복원림', type: '식물', icon: '🌾', img: 'mangrove_trees.jpg', png: 'mangrove.png', badge: 'Ⅱ' }
         ]
       },
@@ -555,7 +555,7 @@
           // Name tag below the image bubble
           const nameTag = document.createElement('div');
           nameTag.className = 'species-bubble-name';
-          nameTag.textContent = sp.name.split(' ')[0]; // E.g., "검은황새"
+          nameTag.textContent = sp.label ? sp.label.split('(')[0] : sp.name.split(' ')[0];
           bubble.appendChild(nameTag);
           
           bubblesLayer.appendChild(bubble);
