@@ -99,7 +99,6 @@
     .gi-west { left: 12px; top: 12px; border-left: 3px solid #2563eb; }
     .gi-east { right: 12px; top: 12px; border-left: 3px solid #10b981; }
     
-    /* Port Hotspots */
     .hotspot {
       position: absolute;
       transform: translate(-50%, -50%);
@@ -117,6 +116,7 @@
       gap: 5px;
       z-index: 3;
       transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      white-space: nowrap;
     }
     
     .hotspot:hover, .hotspot.active {
@@ -256,24 +256,24 @@
         <div class="group-indicator gi-east">⚓ 동부 항구군 (대붕만)</div>
         
         <!-- West Hotspots -->
-        <div class="hotspot hotspot-west" id="pin-baoan" style="left: 17%; top: 38%;" onclick="showPort('baoan')">
+        <div class="hotspot hotspot-west" id="pin-baoan" style="left: 21%; top: 49%;" onclick="showPort('baoan')">
           <span class="hotspot-icon">✈️</span>바오안 항구
         </div>
-        <div class="hotspot hotspot-west" id="pin-dachanwan" style="left: 31%; top: 58%;" onclick="showPort('dachanwan')">
+        <div class="hotspot hotspot-west" id="pin-dachanwan" style="left: 25%; top: 56%;" onclick="showPort('dachanwan')">
           <span class="hotspot-icon">🏗️</span>다찬완 항구
         </div>
-        <div class="hotspot hotspot-west" id="pin-daxiaochandao" style="left: 23%; top: 62%;" onclick="showPort('daxiaochandao')">
+        <div class="hotspot hotspot-west" id="pin-daxiaochandao" style="left: 36%; top: 58%;" onclick="showPort('daxiaochandao')">
           <span class="hotspot-icon">🧪</span>다샤오찬다오 항구
         </div>
-        <div class="hotspot hotspot-west" id="pin-nanshan" style="left: 35%; top: 78%;" onclick="showPort('nanshan')">
+        <div class="hotspot hotspot-west" id="pin-nanshan" style="left: 35%; top: 68%;" onclick="showPort('nanshan')">
           <span class="hotspot-icon">🛳️</span>난산 항구
         </div>
         
         <!-- East Hotspots -->
-        <div class="hotspot hotspot-east" id="pin-yantian" style="left: 72%; top: 64%;" onclick="showPort('yantian')">
+        <div class="hotspot hotspot-east" id="pin-yantian" style="left: 65%; top: 52%;" onclick="showPort('yantian')">
           <span class="hotspot-icon">⚓</span>옌톈 항구
         </div>
-        <div class="hotspot hotspot-east" id="pin-dapeng" style="left: 88%; top: 74%;" onclick="showPort('dapeng')">
+        <div class="hotspot hotspot-east" id="pin-dapeng" style="left: 82%; top: 54%;" onclick="showPort('dapeng')">
           <span class="hotspot-icon">⚡</span>다펑 항구
         </div>
       </div>
