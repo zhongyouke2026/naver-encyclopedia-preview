@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>선전항 6대 항구 구역 시각화 지도</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;800&display=swap" rel="stylesheet">
+  
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: transparent;
+      user-select: none;
+      color: #334155;
+      padding: 8px;
+    }
+    
+    .ports-dashboard {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.45);
+      border: 1px solid rgba(0, 0, 0, 0.05);
+      border-radius: 24px;
+      padding: 16px;
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.02);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    
+    .dashboard-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+      padding-bottom: 10px;
+    }
+    
+    .dashboard-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 15px;
+      font-weight: 800;
+      color: #0f172a;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    
+    .ports-layout {
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      gap: 16px;
+    }
+    
+    @media (max-width: 850px) {
+      .ports-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    /* Map Container */
+    .map-container {
+      position: relative;
+      width: 100%;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.04);
+      border: 1px solid rgba(0, 0, 0, 0.06);
+      background: #fafafa;
+    }
+    
+    .map-image {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    
+    /* Inset Labels representing East/West Port Groups */
+    .group-indicator {
+      position: absolute;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(0, 0, 0, 0.06);
+      border-radius: 8px;
+      padding: 4px 8px;
+      font-size: 9.5px;
+      font-weight: 700;
+      color: #475569;
+      pointer-events: none;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+    }
+    .gi-west { left: 12px; top: 12px; border-left: 3px solid #2563eb; }
+    .gi-east { right: 12px; top: 12px; border-left: 3px solid #10b981; }
+    
+    /* Port Hotspots */
+    .hotspot {
+      position: absolute;
+      transform: translate(-50%, -50%);
+      padding: 5px 12px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.92);
+      border: 1.5px solid rgba(0, 0, 0, 0.08);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      font-size: 10.5px;
+      font-weight: 700;
+      color: #1e293b;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      z-index: 3;
+      transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    
+    .hotspot:hover, .hotspot.active {
+      color: white;
+      border-color: transparent;
+      transform: translate(-50%, -50%) scale(1.08);
+      z-index: 5;
+    }
+    .hotspot-west:hover, .hotspot-west.active {
+      background: #2563eb;
+      box-shadow: 0 6px 15px rgba(37,99,235,0.3);
+    }
+    .hotspot-east:hover, .hotspot-east.active {
+      background: #10b981;
+      box-shadow: 0 6px 15px rgba(16,185,129,0.3);
+    }
+    
+    .hotspot-icon {
+      font-size: 11px;
+    }
+    
+    /* Right Details Panel */
+    .details-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    
+    .stats-card {
+      background: #ffffff;
+      border: 1px solid rgba(0, 0, 0, 0.05);
+      border-radius: 16px;
+      padding: 12px 14px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.01);
+    }
+    .stats-title {
+      font-size: 11px;
+      font-weight: 700;
+      color: #64748b;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+    .stat-box {
+      background: #f8fafc;
+      border: 1px solid #f1f5f9;
+      border-radius: 10px;
+      padding: 8px;
+    }
+    .stat-label {
+      font-size: 9px;
+      color: #94a3b8;
+      margin-bottom: 2px;
+    }
+    .stat-value {
+      font-family: 'Outfit', sans-serif;
+      font-size: 13px;
+      font-weight: 800;
+      color: #0f172a;
+    }
+    
+    .port-info-card {
+      background: #ffffff;
+      border: 1.5px solid rgba(0, 0, 0, 0.05);
+      border-radius: 18px;
+      padding: 16px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.02);
+      transition: border-color 0.3s;
+    }
+    
+    .port-group-badge {
+      font-size: 9.5px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 999px;
+      width: fit-content;
+    }
+    .pgb-west { background: #eff6ff; color: #1d4ed8; }
+    .pgb-east { background: #ecfdf5; color: #047857; }
+    
+    .port-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #0f172a;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    
+    .port-func {
+      font-size: 12px;
+      font-weight: 600;
+      color: #2563eb;
+      background: #eff6ff;
+      padding: 4px 10px;
+      border-radius: 8px;
+      width: fit-content;
+    }
+    .port-info-card.active-east .port-func {
+      color: #10b981;
+      background: #ecfdf5;
+    }
+    
+    .port-desc {
+      font-size: 11.5px;
+      line-height: 1.6;
+      color: #475569;
+      border-top: 1px dashed #e2e8f0;
+      padding-top: 8px;
+      margin-top: 4px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="ports-dashboard">
+    <div class="dashboard-header">
+      <div class="dashboard-title">⚓ 선전항 6대 항구 구역 지리적 성격 지도</div>
+    </div>
+    
+    <div class="ports-layout">
+      <!-- Left: Interactive Map -->
+      <div class="map-container">
+        <img src="./images/shenzhen_ports_base.jpg" alt="선전항 항구 구역 기본도" class="map-image">
+        
+        <!-- Coastline Group Tags -->
+        <div class="group-indicator gi-west">🚢 서부 항구군 (주강 하구)</div>
+        <div class="group-indicator gi-east">⚓ 동부 항구군 (대붕만)</div>
+        
+        <!-- West Hotspots -->
+        <div class="hotspot hotspot-west" id="pin-baoan" style="left: 17%; top: 38%;" onclick="showPort('baoan')">
+          <span class="hotspot-icon">✈️</span>바오안 항구
+        </div>
+        <div class="hotspot hotspot-west" id="pin-dachanwan" style="left: 31%; top: 58%;" onclick="showPort('dachanwan')">
+          <span class="hotspot-icon">🏗️</span>다찬완 항구
+        </div>
+        <div class="hotspot hotspot-west" id="pin-daxiaochandao" style="left: 23%; top: 62%;" onclick="showPort('daxiaochandao')">
+          <span class="hotspot-icon">🧪</span>다샤오찬다오 항구
+        </div>
+        <div class="hotspot hotspot-west" id="pin-nanshan" style="left: 35%; top: 78%;" onclick="showPort('nanshan')">
+          <span class="hotspot-icon">🛳️</span>난산 항구
+        </div>
+        
+        <!-- East Hotspots -->
+        <div class="hotspot hotspot-east" id="pin-yantian" style="left: 72%; top: 64%;" onclick="showPort('yantian')">
+          <span class="hotspot-icon">⚓</span>옌톈 항구
+        </div>
+        <div class="hotspot hotspot-east" id="pin-dapeng" style="left: 88%; top: 74%;" onclick="showPort('dapeng')">
+          <span class="hotspot-icon">⚡</span>다펑 항구
+        </div>
+      </div>
+      
+      <!-- Right: Info Panel -->
+      <div class="details-panel">
+        <!-- 2025 Port Statistics Card -->
+        <div class="stats-card">
+          <div class="stats-title">📊 2025 선전항 물류 통계</div>
+          <div class="stats-grid">
+            <div class="stat-box">
+              <div class="stat-label">연간 화물 처리량</div>
+              <div class="stat-value">3억 3,402만 톤</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-label">컨테이너 처리량</div>
+              <div class="stat-value">3,540만 TEU</div>
+            </div>
+            <div class="stat-box" style="grid-column: span 2;">
+              <div class="stat-label">생산성 선석 수</div>
+              <div class="stat-value" style="font-size:12.5px;">총 144개 (1만 톤급 이상 75개)</div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Port Detail Card -->
+        <div class="port-info-card" id="portDetailCard">
+          <div class="port-group-badge" id="portGroupBadge">항구 그룹</div>
+          <div class="port-title" id="portTitle">항구를 선택해보세요</div>
+          <div class="port-func" id="portFunc">주요 기능</div>
+          <div class="port-desc" id="portDesc">지도에서 원하시는 항구 핀을 클릭하시면 상세한 지리적 성격과 물류 기능 정보를 확인하실 수 있습니다.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Ports detailed dataset
+    const PORTS_DATA = {
+      'baoan': {
+        name: '바오안 (宝安) 항구',
+        group: '서부 항구군',
+        groupClass: 'pgb-west',
+        icon: '✈️',
+        func: '벌크 · 잡화 및 연안 여객 운송',
+        desc: '선전 서북부 바오안 국제공항과 인접한 연안 항구. 주로 석탄, 모래 등의 벌크 잡화와 공항 여객 터미널을 통한 홍콩/마카오 왕복 수상 여객 수송을 전담하고 있습니다.'
+      },
+      'dachanwan': {
+        name: '다찬완 (大铲湾) 항구',
+        group: '서부 항구군',
+        groupClass: 'pgb-west',
+        icon: '🏗️',
+        func: '컨테이너 전문 현대 물류 터미널',
+        desc: '주강 하구 핵심 길목에 위치해 주강 삼각주 서부 제조업 벨트와 연동되는 신흥 현대식 컨테이너 항구입니다. 최첨단 크레인 설비와 효율적인 연동 물류망을 구축하고 있습니다.'
+      },
+      'daxiaochandao': {
+        name: '다샤오찬다오 (大小铲岛) 항구',
+        group: '서부 항구군',
+        groupClass: 'pgb-west',
+        icon: '🧪',
+        func: '석유화학제품 및 액체 화공품 전용',
+        desc: '난산구 서쪽 해상의 다샤오찬다오 섬 지역에 위치한 위험물 특화 항구 구역. 일반 화물선이 접근하기 어려운 석유 정제품 및 대규모 액체 화학 산업 원료의 안전한 하역과 저장을 전담합니다.'
+      },
+      'nanshan': {
+        name: '난산 (南山) 항구',
+        group: '서부 항구군',
+        groupClass: 'pgb-west',
+        icon: '🛳️',
+        func: '컨테이너 간선 및 글로벌 복합 기능 항구',
+        desc: '서부 물류의 상징인 셰코우(蛇口)·츠완(赤湾)·마완(妈湾) 항구가 모인 대규모 복합 단지. 글로벌 선사들의 주요 기착지이자, 크루즈 여객과 화물 수송이 융합된 선전 서부 최대의 항구 구역입니다.'
+      },
+      'yantian': {
+        name: '옌톈 (盐田) 항구',
+        group: '동부 항구군',
+        groupClass: 'pgb-east',
+        icon: '⚓',
+        func: '글로벌 초거대 컨테이너 간선항의 핵심',
+        desc: '세계 최대 규모의 단일 컨테이너 터미널 중 하나. 동부 대붕만 수심이 깊은 천연 항만에 입지하여 미주/유럽 노선을 오가는 20만 톤급 이상 초대형 컨테이너선들의 중추 기착지 역할을 수행합니다.'
+      },
+      'dapeng': {
+        name: '다펑 (大鹏) 항구',
+        group: '동부 항구군',
+        groupClass: 'pgb-east',
+        icon: '⚡',
+        func: '청정에너지(LNG) 수입 및 수상 관광 레저',
+        desc: '선전 동남부 다펑 반도에 위치한 에너지 중심 포트. 중국 최대의 천연가스(LNG) 수입 터미널이 있으며, 수심이 깊고 맑은 환경을 활용한 마리나 요트 클럽 및 해양 관광 여객항이 공존합니다.'
+      }
+    };
+
+    function showPort(id) {
+      // Deactivate other hotspots
+      document.querySelectorAll('.hotspot').forEach(p => p.classList.remove('active'));
+      
+      // Activate target hotspot
+      const pin = document.getElementById('pin-' + id);
+      if (pin) pin.classList.add('active');
+      
+      // Update details card
+      const data = PORTS_DATA[id];
+      const card = document.getElementById('portDetailCard');
+      const badge = document.getElementById('portGroupBadge');
+      
+      badge.textContent = data.group;
+      badge.className = 'port-group-badge ' + data.groupClass;
+      
+      document.getElementById('portTitle').innerHTML = data.icon + ' ' + data.name;
+      document.getElementById('portFunc').textContent = data.func;
+      document.getElementById('portDesc').textContent = data.desc;
+      
+      // Toggle card border highlighting
+      card.className = 'port-info-card';
+      if (data.group === '동부 항구군') {
+        card.classList.add('active-east');
+        card.style.borderColor = '#10b981';
+      } else {
+        card.style.borderColor = '#2563eb';
+      }
+    }
+
+    // Load Yantian by default on first load for a beautiful presentation
+    window.addEventListener('DOMContentLoaded', () => {
+      showPort('yantian');
+    });
+  </script>
+</body>
+</html>
