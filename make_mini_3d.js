@@ -20,7 +20,7 @@ body { padding: 0 !important; margin: 0 !important; }
 content = content.replace('</head>', hide_css);
 
 // Adjust camera position for smaller height - zooming out a bit from previous attempt
-content = content.replace('camera.position.set(135, 48, 75);', 'camera.position.set(135, 48, 75);');
+content = content.replace('camera.position.set(-105, 42, 90);', 'camera.position.set(-105, 42, 90);');
 
 // Hide GridHelper
 content = content.replace('scene.add(grid);', '// scene.add(grid);');
