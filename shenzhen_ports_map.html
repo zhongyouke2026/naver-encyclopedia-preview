@@ -32,7 +32,7 @@
       box-shadow: 0 4px 30px rgba(0, 0, 0, 0.02);
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 12px;
     }
     
     .dashboard-header {
@@ -40,29 +40,17 @@
       justify-content: space-between;
       align-items: center;
       border-bottom: 1px solid rgba(0,0,0,0.05);
-      padding-bottom: 10px;
+      padding-bottom: 8px;
     }
     
     .dashboard-title {
       font-family: 'Outfit', sans-serif;
-      font-size: 15px;
+      font-size: 14px;
       font-weight: 800;
       color: #0f172a;
       display: flex;
       align-items: center;
       gap: 6px;
-    }
-    
-    .ports-layout {
-      display: grid;
-      grid-template-columns: 1fr 320px;
-      gap: 16px;
-    }
-    
-    @media (max-width: 850px) {
-      .ports-layout {
-        grid-template-columns: 1fr;
-      }
     }
     
     /* Map Container */
@@ -90,7 +78,7 @@
       border: 1px solid rgba(0, 0, 0, 0.06);
       border-radius: 8px;
       padding: 4px 8px;
-      font-size: 9.5px;
+      font-size: 9px;
       font-weight: 700;
       color: #475569;
       pointer-events: none;
@@ -99,6 +87,7 @@
     .gi-west { left: 12px; top: 12px; border-left: 3px solid #2563eb; }
     .gi-east { right: 12px; top: 12px; border-left: 3px solid #10b981; }
     
+    /* Port Hotspots */
     .hotspot {
       position: absolute;
       transform: translate(-50%, -50%);
@@ -107,7 +96,7 @@
       background: rgba(255, 255, 255, 0.92);
       border: 1.5px solid rgba(0, 0, 0, 0.08);
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-      font-size: 10.5px;
+      font-size: 10px;
       font-weight: 700;
       color: #1e293b;
       cursor: pointer;
@@ -122,7 +111,7 @@
     .hotspot:hover, .hotspot.active {
       color: white;
       border-color: transparent;
-      transform: translate(-50%, -50%) scale(1.08);
+      transform: translate(-50%, -50%) scale(1.06);
       z-index: 5;
     }
     .hotspot-west:hover, .hotspot-west.active {
@@ -138,66 +127,66 @@
       font-size: 11px;
     }
     
-    /* Right Details Panel */
-    .details-panel {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-    
-    .stats-card {
-      background: #ffffff;
-      border: 1px solid rgba(0, 0, 0, 0.05);
+    /* Floating Popover */
+    .port-popover {
+      position: absolute;
+      width: 290px;
+      background: rgba(255, 255, 255, 0.98);
+      backdrop-filter: blur(12px);
+      border: 1.5px solid rgba(0, 0, 0, 0.15);
       border-radius: 16px;
-      padding: 12px 14px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.01);
-    }
-    .stats-title {
-      font-size: 11px;
-      font-weight: 700;
-      color: #64748b;
-      margin-bottom: 8px;
-      text-transform: uppercase;
-      letter-spacing: .05em;
-    }
-    .stats-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-    }
-    .stat-box {
-      background: #f8fafc;
-      border: 1px solid #f1f5f9;
-      border-radius: 10px;
-      padding: 8px;
-    }
-    .stat-label {
-      font-size: 9px;
-      color: #94a3b8;
-      margin-bottom: 2px;
-    }
-    .stat-value {
-      font-family: 'Outfit', sans-serif;
-      font-size: 13px;
-      font-weight: 800;
-      color: #0f172a;
-    }
-    
-    .port-info-card {
-      background: #ffffff;
-      border: 1.5px solid rgba(0, 0, 0, 0.05);
-      border-radius: 18px;
-      padding: 16px;
-      flex: 1;
+      padding: 14px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.16);
+      z-index: 10;
       display: flex;
       flex-direction: column;
-      gap: 8px;
-      box-shadow: 0 6px 20px rgba(0,0,0,0.02);
-      transition: border-color 0.3s;
+      gap: 6px;
+      pointer-events: auto;
+      transition: opacity 0.2s, transform 0.2s;
+    }
+    
+    /* Close button inside popover */
+    .popover-close {
+      position: absolute;
+      top: 10px;
+      right: 12px;
+      font-size: 16px;
+      font-weight: 700;
+      color: #94a3b8;
+      cursor: pointer;
+      line-height: 1;
+    }
+    .popover-close:hover {
+      color: #64748b;
+    }
+    
+    /* Popover arrow */
+    .port-popover::after {
+      content: '';
+      position: absolute;
+      bottom: -6px;
+      width: 10px;
+      height: 10px;
+      background: #ffffff;
+      border-right: 1.5px solid rgba(0, 0, 0, 0.15);
+      border-bottom: 1.5px solid rgba(0, 0, 0, 0.15);
+      transform: rotate(45deg);
+    }
+    
+    /* Arrow alignment variations based on translate values */
+    .arrow-center::after {
+      left: 50%;
+      margin-left: -5px;
+    }
+    .arrow-right::after {
+      right: 35px;
+    }
+    .arrow-left::after {
+      left: 35px;
     }
     
     .port-group-badge {
-      font-size: 9.5px;
+      font-size: 9px;
       font-weight: 700;
       padding: 2px 8px;
       border-radius: 999px;
@@ -207,35 +196,48 @@
     .pgb-east { background: #ecfdf5; color: #047857; }
     
     .port-title {
-      font-size: 15px;
+      font-size: 13.5px;
       font-weight: 700;
       color: #0f172a;
       display: flex;
       align-items: center;
       gap: 6px;
+      margin-top: 2px;
     }
     
     .port-func {
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 600;
       color: #2563eb;
       background: #eff6ff;
-      padding: 4px 10px;
-      border-radius: 8px;
+      padding: 4px 8px;
+      border-radius: 6px;
       width: fit-content;
     }
-    .port-info-card.active-east .port-func {
+    .port-popover.active-east .port-func {
       color: #10b981;
       background: #ecfdf5;
     }
     
     .port-desc {
-      font-size: 11.5px;
-      line-height: 1.6;
+      font-size: 11px;
+      line-height: 1.5;
       color: #475569;
       border-top: 1px dashed #e2e8f0;
-      padding-top: 8px;
-      margin-top: 4px;
+      padding-top: 6px;
+      margin-top: 2px;
+    }
+    
+    /* Media queries for responsiveness */
+    @media (max-width: 600px) {
+      .hotspot {
+        font-size: 8.5px;
+        padding: 4px 8px;
+      }
+      .port-popover {
+        width: 250px;
+        padding: 10px;
+      }
     }
   </style>
 </head>
@@ -243,50 +245,46 @@
 
   <div class="ports-dashboard">
     <div class="dashboard-header">
-      <div class="dashboard-title">⚓ 선전항 6대 항구 구역 지리적 성격 지도</div>
+      <div class="dashboard-title">⚓ 선전항 6대 항구 구역 위치 및 상세 정보</div>
     </div>
     
-    <div class="ports-layout">
-      <!-- Left: Interactive Map -->
-      <div class="map-container">
-        <img src="./images/shenzhen_ports_base.jpg" alt="선전항 항구 구역 기본도" class="map-image">
-        
-        <!-- Coastline Group Tags -->
-        <div class="group-indicator gi-west">🚢 서부 항구군 (주강 하구)</div>
-        <div class="group-indicator gi-east">⚓ 동부 항구군 (대붕만)</div>
-        
-        <!-- West Hotspots -->
-        <div class="hotspot hotspot-west" id="pin-baoan" style="left: 21%; top: 49%;" onclick="showPort('baoan')">
-          <span class="hotspot-icon">✈️</span>바오안 항구
-        </div>
-        <div class="hotspot hotspot-west" id="pin-dachanwan" style="left: 25%; top: 56%;" onclick="showPort('dachanwan')">
-          <span class="hotspot-icon">🏗️</span>다찬완 항구
-        </div>
-        <div class="hotspot hotspot-west" id="pin-daxiaochandao" style="left: 36%; top: 58%;" onclick="showPort('daxiaochandao')">
-          <span class="hotspot-icon">🧪</span>다샤오찬다오 항구
-        </div>
-        <div class="hotspot hotspot-west" id="pin-nanshan" style="left: 35%; top: 68%;" onclick="showPort('nanshan')">
-          <span class="hotspot-icon">🛳️</span>난산 항구
-        </div>
-        
-        <!-- East Hotspots -->
-        <div class="hotspot hotspot-east" id="pin-yantian" style="left: 65%; top: 52%;" onclick="showPort('yantian')">
-          <span class="hotspot-icon">⚓</span>옌톈 항구
-        </div>
-        <div class="hotspot hotspot-east" id="pin-dapeng" style="left: 82%; top: 54%;" onclick="showPort('dapeng')">
-          <span class="hotspot-icon">⚡</span>다펑 항구
-        </div>
+    <!-- Map Viewport Container -->
+    <div class="map-container">
+      <img src="./images/shenzhen_ports_base.jpg" alt="선전항 항구 구역 기본도" class="map-image">
+      
+      <!-- Coastline Group Tags -->
+      <div class="group-indicator gi-west">🚢 서부 항구군 (주강 하구)</div>
+      <div class="group-indicator gi-east">⚓ 동부 항구군 (대붕만)</div>
+      
+      <!-- West Hotspots -->
+      <div class="hotspot hotspot-west" id="pin-baoan" style="left: 21%; top: 49%;" onclick="showPort('baoan')">
+        <span class="hotspot-icon">✈️</span>바오안 항구
+      </div>
+      <div class="hotspot hotspot-west" id="pin-dachanwan" style="left: 25%; top: 56%;" onclick="showPort('dachanwan')">
+        <span class="hotspot-icon">🏗️</span>다찬완 항구
+      </div>
+      <div class="hotspot hotspot-west" id="pin-daxiaochandao" style="left: 36%; top: 58%;" onclick="showPort('daxiaochandao')">
+        <span class="hotspot-icon">🧪</span>다샤오찬다오 항구
+      </div>
+      <div class="hotspot hotspot-west" id="pin-nanshan" style="left: 35%; top: 68%;" onclick="showPort('nanshan')">
+        <span class="hotspot-icon">🛳️</span>난산 항구
       </div>
       
-      <!-- Right: Info Panel -->
-      <div class="details-panel">
-        <!-- Port Detail Card -->
-        <div class="port-info-card" id="portDetailCard">
-          <div class="port-group-badge" id="portGroupBadge">항구 그룹</div>
-          <div class="port-title" id="portTitle">항구를 선택해보세요</div>
-          <div class="port-func" id="portFunc">주요 기능</div>
-          <div class="port-desc" id="portDesc">지도에서 원하시는 항구 핀을 클릭하시면 상세한 지리적 성격과 물류 기능 정보를 확인하실 수 있습니다.</div>
-        </div>
+      <!-- East Hotspots -->
+      <div class="hotspot hotspot-east" id="pin-yantian" style="left: 65%; top: 52%;" onclick="showPort('yantian')">
+        <span class="hotspot-icon">⚓</span>옌톈 항구
+      </div>
+      <div class="hotspot hotspot-east" id="pin-dapeng" style="left: 82%; top: 54%;" onclick="showPort('dapeng')">
+        <span class="hotspot-icon">⚡</span>다펑 항구
+      </div>
+      
+      <!-- Floating Popover Balloon -->
+      <div class="port-popover" id="portPopover" style="display: none;">
+        <div class="popover-close" onclick="closePopover()">×</div>
+        <div class="port-group-badge" id="popoverGroupBadge">그룹</div>
+        <div class="port-title" id="popoverTitle">항구 이름</div>
+        <div class="port-func" id="popoverFunc">주요 기능</div>
+        <div class="port-desc" id="popoverDesc">상세 정보</div>
       </div>
     </div>
   </div>
@@ -332,7 +330,7 @@
         groupClass: 'pgb-east',
         icon: '⚓',
         func: '글로벌 초거대 컨테이너 간선항의 핵심',
-        desc: '세계 최대 규모의 단일 컨테이너 터미널 중 하나. 동부 대붕만 수심이 깊은 천연 항만에 입지하여 미주/유럽 노선을 오가는 20만 톤급 이상 초대형 컨테이너선들의 중추 기착지 역할을 수행합니다.'
+        desc: '세계 최대 규모 of 단일 컨테이너 터미널 중 하나. 동부 대붕만 수심이 깊은 천연 항만에 입지하여 미주/유럽 노선을 오가는 20만 톤급 이상 초대형 컨테이너선들의 중추 기착지 역할을 수행합니다.'
       },
       'dapeng': {
         name: '다펑 (大鹏) 항구',
@@ -340,7 +338,7 @@
         groupClass: 'pgb-east',
         icon: '⚡',
         func: '청정에너지(LNG) 수입 및 수상 관광 레저',
-        desc: '선전 동남부 다펑 반도에 위치한 에너지 중심 포트. 중국 최대의 천연가스(LNG) 수입 터미널이 있으며, 수심이 깊고 맑은 환경을 활용한 마리나 요트 클럽 및 해양 관광 여객항이 공존합니다.<div style="margin-top: 12px; padding: 10px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px;"><div style="font-size: 10.5px; font-weight: 700; color: #1e293b; margin-bottom: 6px; display: flex; align-items: center; gap: 4px;">📊 2025 선전항 물류 통계 (전체)</div><div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px; font-size: 9.5px;"><div style="background: #ffffff; padding: 6px; border-radius: 8px; border: 1px solid #f1f5f9;"><span style="color: #94a3b8; display: block; font-size: 8px; margin-bottom: 1px;">연간 화물 처리량</span><span style="font-weight: 700; color: #0f172a;">3억 3,402만 톤</span></div><div style="background: #ffffff; padding: 6px; border-radius: 8px; border: 1px solid #f1f5f9;"><span style="color: #94a3b8; display: block; font-size: 8px; margin-bottom: 1px;">컨테이너 처리량</span><span style="font-weight: 700; color: #0f172a;">3,540.8만 TEU</span></div><div style="background: #ffffff; padding: 6px; border-radius: 8px; border: 1px solid #f1f5f9; grid-column: span 2;"><span style="color: #94a3b8; display: block; font-size: 8px; margin-bottom: 1px;">생산성 선석 수</span><span style="font-weight: 700; color: #0f172a;">총 144개 (1만 톤급 이상 75개)</span></div></div></div>'
+        desc: '선전 동남부 다펑 반도에 위치한 에너지 중심 포트. 중국 최대의 천연가스(LNG) 수입 터미널이 있으며, 수심이 깊고 맑은 환경을 활용한 마리나 요트 클럽 및 해양 관광 여객항이 공존합니다.<div style="margin-top: 10px; padding: 10px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px;"><div style="font-size: 10px; font-weight: 700; color: #1e293b; margin-bottom: 6px; display: flex; align-items: center; gap: 4px;">📊 2025 선전항 물류 통계 (전체)</div><div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px; font-size: 9px;"><div style="background: #ffffff; padding: 5px; border-radius: 6px; border: 1px solid #f1f5f9;"><span style="color: #94a3b8; display: block; font-size: 7.5px; margin-bottom: 1px;">연간 화물 처리량</span><span style="font-weight: 700; color: #0f172a;">3억 3,402만 톤</span></div><div style="background: #ffffff; padding: 5px; border-radius: 6px; border: 1px solid #f1f5f9;"><span style="color: #94a3b8; display: block; font-size: 7.5px; margin-bottom: 1px;">컨테이너 처리량</span><span style="font-weight: 700; color: #0f172a;">3,540.8만 TEU</span></div><div style="background: #ffffff; padding: 5px; border-radius: 6px; border: 1px solid #f1f5f9; grid-column: span 2;"><span style="color: #94a3b8; display: block; font-size: 7.5px; margin-bottom: 1px;">생산성 선석 수</span><span style="font-weight: 700; color: #0f172a;">총 144개 (1만 톤급 이상 75개)</span></div></div></div>'
       }
     };
 
@@ -352,26 +350,54 @@
       const pin = document.getElementById('pin-' + id);
       if (pin) pin.classList.add('active');
       
-      // Update details card
       const data = PORTS_DATA[id];
-      const card = document.getElementById('portDetailCard');
-      const badge = document.getElementById('portGroupBadge');
+      const popover = document.getElementById('portPopover');
+      const badge = document.getElementById('popoverGroupBadge');
       
+      // Fill popover content
       badge.textContent = data.group;
       badge.className = 'port-group-badge ' + data.groupClass;
       
-      document.getElementById('portTitle').innerHTML = data.icon + ' ' + data.name;
-      document.getElementById('portFunc').textContent = data.func;
-      document.getElementById('portDesc').innerHTML = data.desc;
+      document.getElementById('popoverTitle').innerHTML = data.icon + ' ' + data.name;
+      document.getElementById('popoverFunc').textContent = data.func;
+      document.getElementById('popoverDesc').innerHTML = data.desc;
       
-      // Toggle card border highlighting
-      card.className = 'port-info-card';
+      // Position popover relative to pin
+      const pctLeft = parseFloat(pin.style.left);
+      const pctTop = parseFloat(pin.style.top);
+      
+      popover.style.left = pctLeft + '%';
+      popover.style.top = (pctTop - 4) + '%'; // Position slightly above the pin
+      
+      // Apply translation and arrow style based on position to avoid overflow
+      popover.className = 'port-popover';
       if (data.group === '동부 항구군') {
-        card.classList.add('active-east');
-        card.style.borderColor = '#10b981';
+        popover.classList.add('active-east');
+        popover.style.borderColor = '#10b981';
       } else {
-        card.style.borderColor = '#2563eb';
+        popover.style.borderColor = '#2563eb';
       }
+      
+      if (pctLeft > 70) {
+        // Shift popover to the left, arrow to the right
+        popover.style.transform = 'translate(-85%, -100%)';
+        popover.classList.add('arrow-right');
+      } else if (pctLeft < 30) {
+        // Shift popover to the right, arrow to the left
+        popover.style.transform = 'translate(-15%, -100%)';
+        popover.classList.add('arrow-left');
+      } else {
+        // Center popover
+        popover.style.transform = 'translate(-50%, -100%)';
+        popover.classList.add('arrow-center');
+      }
+      
+      popover.style.display = 'flex';
+    }
+
+    function closePopover() {
+      document.getElementById('portPopover').style.display = 'none';
+      document.querySelectorAll('.hotspot').forEach(p => p.classList.remove('active'));
     }
 
     // Load Yantian by default on first load for a beautiful presentation
