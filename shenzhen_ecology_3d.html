@@ -538,11 +538,6 @@
           const pngImg = sp.img.replace('.jpg', '.png');
           bubble.style.backgroundImage = 'url("./images/' + pngImg + '")';
           
-          // Rank badge
-          const badge = document.createElement('div');
-          badge.className = 'species-bubble-badge';
-          badge.textContent = sp.badge;
-          bubble.appendChild(badge);
 
           // Name tag below the image bubble
           const nameTag = document.createElement('div');
