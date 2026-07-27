@@ -96,14 +96,14 @@
       transition: all 0.22s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
     .company-pin:hover, .company-pin.active {
-      transform: translate(-50%, -50%) scale(1.1);
+      transform: translate(-50%, -50%) scale(1.12);
       z-index: 5;
     }
     
     /* Clean transparent cutout container */
     .company-logo-container {
-      width: 46px;
-      height: 34px;
+      width: 44px;
+      height: 32px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -113,17 +113,17 @@
       max-width: 100%;
       max-height: 100%;
       object-fit: contain;
-      filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.12));
+      filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.16));
     }
     
     .company-label {
-      margin-top: 4px;
-      font-size: 9.5px;
+      margin-top: 3px;
+      font-size: 9px;
       font-weight: 800;
       color: #1e293b;
       background: rgba(255, 255, 255, 0.94);
       border: 1px solid rgba(0, 0, 0, 0.06);
-      padding: 2px 6px;
+      padding: 1.5px 5px;
       border-radius: 4px;
       box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
       white-space: nowrap;
@@ -164,7 +164,7 @@
     }
 
     .district-title {
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 800;
       color: #0f172a;
       margin-bottom: 2px;
@@ -227,7 +227,8 @@
     <div class="map-container" id="mapContainer">
       <img src="./images/shenzhen_map_base.jpg" alt="선전시 행정구역 기본도" class="map-image">
 
-      <!-- Company Pins -->
+      <!-- Company Pins (All 12) -->
+      <!-- 1. 화웨이 -->
       <div class="company-pin" id="pin-huawei" style="left: 48.0%; top: 45.0%;" onclick="showCompany('huawei', event)">
         <div class="company-logo-container">
           <img src="./images/logo_huawei.png" class="company-logo-img" alt="화웨이">
@@ -235,13 +236,15 @@
         <div class="company-label">화웨이</div>
       </div>
 
-      <div class="company-pin" id="pin-tencent" style="left: 20.0%; top: 62.0%;" onclick="showCompany('tencent', event)">
+      <!-- 2. 텐센트 -->
+      <div class="company-pin" id="pin-tencent" style="left: 20.0%; top: 55.0%;" onclick="showCompany('tencent', event)">
         <div class="company-logo-container">
           <img src="./images/logo_tencent.png" class="company-logo-img" alt="텐센트">
         </div>
         <div class="company-label">텐센트</div>
       </div>
 
+      <!-- 3. 비야디 -->
       <div class="company-pin" id="pin-byd" style="left: 74.0%; top: 42.0%;" onclick="showCompany('byd', event)">
         <div class="company-logo-container">
           <img src="./images/logo_byd.png" class="company-logo-img" alt="비야디">
@@ -249,6 +252,7 @@
         <div class="company-label">비야디</div>
       </div>
 
+      <!-- 4. 중국핑안 -->
       <div class="company-pin" id="pin-pingan" style="left: 36.0%; top: 73.0%;" onclick="showCompany('pingan', event)">
         <div class="company-logo-container">
           <img src="./images/logo_pingan.png" class="company-logo-img" alt="중국핑안">
@@ -256,11 +260,68 @@
         <div class="company-label">중국핑안</div>
       </div>
 
-      <div class="company-pin" id="pin-cmb" style="left: 43.0%; top: 70.0%;" onclick="showCompany('cmb', event)">
+      <!-- 5. 자오상은행 -->
+      <div class="company-pin" id="pin-cmb" style="left: 43.0%; top: 71.0%;" onclick="showCompany('cmb', event)">
         <div class="company-logo-container">
           <img src="./images/logo_cmb.png" class="company-logo-img" alt="자오상은행">
         </div>
         <div class="company-label">자오상은행</div>
+      </div>
+
+      <!-- 6. 완커 -->
+      <div class="company-pin" id="pin-vanke" style="left: 62.0%; top: 58.0%;" onclick="showCompany('vanke', event)">
+        <div class="company-logo-container">
+          <img src="./images/logo_vanke.png" class="company-logo-img" alt="완커">
+        </div>
+        <div class="company-label">완커</div>
+      </div>
+
+      <!-- 7. 순펑 -->
+      <div class="company-pin" id="pin-sf" style="left: 13.0%; top: 72.0%;" onclick="showCompany('sf', event)">
+        <div class="company-logo-container">
+          <img src="./images/logo_sf.png" class="company-logo-img" alt="순펑">
+        </div>
+        <div class="company-label">순펑</div>
+      </div>
+
+      <!-- 8. DJI -->
+      <div class="company-pin" id="pin-dji" style="left: 26.0%; top: 54.0%;" onclick="showCompany('dji', event)">
+        <div class="company-logo-container">
+          <img src="./images/logo_dji.png" class="company-logo-img" alt="DJI">
+        </div>
+        <div class="company-label">DJI</div>
+      </div>
+
+      <!-- 9. ZTE -->
+      <div class="company-pin" id="pin-zte" style="left: 27.0%; top: 62.0%;" onclick="showCompany('zte', event)">
+        <div class="company-logo-container">
+          <img src="./images/logo_zte.png" class="company-logo-img" alt="ZTE">
+        </div>
+        <div class="company-label">ZTE</div>
+      </div>
+
+      <!-- 10. 마이루이 -->
+      <div class="company-pin" id="pin-mindray" style="left: 20.0%; top: 68.0%;" onclick="showCompany('mindray', event)">
+        <div class="company-logo-container">
+          <img src="./images/logo_mindray.png" class="company-logo-img" alt="마이루이">
+        </div>
+        <div class="company-label">마이루이</div>
+      </div>
+
+      <!-- 11. 정웨이그룹 -->
+      <div class="company-pin" id="pin-amer" style="left: 33.0%; top: 65.0%;" onclick="showCompany('amer', event)">
+        <div class="company-logo-container">
+          <img src="./images/logo_amer.png" class="company-logo-img" alt="정웨이그룹">
+        </div>
+        <div class="company-label">정웨이그룹</div>
+      </div>
+
+      <!-- 12. 중국전자 -->
+      <div class="company-pin" id="pin-cec" style="left: 14.0%; top: 61.0%;" onclick="showCompany('cec', event)">
+        <div class="company-logo-container">
+          <img src="./images/logo_cec.png" class="company-logo-img" alt="중국전자">
+        </div>
+        <div class="company-label">중국전자</div>
       </div>
 
       <!-- Floating Popover Balloon -->
@@ -283,35 +344,84 @@
         hanja: 'Huawei, 华为',
         code: '분야: 통신장비 · 단말',
         streets: '홈페이지: huawei.com',
-        desc: '1987년 선전에서 창업한 세계 최대의 통신 장비 제조 기업이다. 룽강구 반텐(坂田)에 거대한 연구 개발형 본사 캠퍼스가 위치하고 있다.'
+        desc: '1987년 선전에서 창업한 세계 최대의 통신 장비 제조 기업이다. 룽강구 반텐(坂田)에 거대한 본사 R&D 캠퍼스가 위치하고 있다.'
       },
       'tencent': {
         name: '텐센트',
         hanja: 'Tencent, 腾讯',
         code: '분야: 인터넷 · 게임',
         streets: '홈페이지: tencent.com',
-        desc: '1998년 창업한 중국 최대의 메신저(위챗, QQ) 및 모바일 게임 개발 기업이다. 남산구 하이테크 파크의 텐센트 빌딩과 텐센트 씨프런트 타워가 본사다.'
+        desc: '1998년 창업한 중국 최대의 인터넷 메신저(위챗) 및 모바일 게임 개발사다. 남산구 하이테크 파크에 위치한 텐센트 씨프런트 타워가 본사다.'
       },
       'byd': {
         name: '비야디',
         hanja: 'BYD, 比亚迪',
         code: '분야: 전기차 · 배터리',
         streets: '홈페이지: byd.com',
-        desc: '1995년 배터리 제조사로 창업하여 세계 1위 수준의 전기자동차 제조사로 성장한 대기업이다. 핑산구에 거대한 본사 연구소 및 생산기지를 보유하고 있다.'
+        desc: '1995년 창업한 세계 1위권 친환경 전기자동차 및 리튬 배터리 제조사다. 핑산구에 거대한 규모의 연구 개발 단지 및 생산본부를 운영하고 있다.'
       },
       'pingan': {
         name: '중국핑안',
         hanja: 'Ping An, 中国平安',
         code: '분야: 보험 · 금융',
         streets: '홈페이지: pingan.cn',
-        desc: '1988년 선전 셰코우에서 창업하여 세계 최대 규모의 금융지주사로 성장한 보험·금융 그룹이다. 푸톈구 CBD의 초고층 랜드마크인 핑안 파이낸스 센터가 본사다.'
+        desc: '1988년 선전 셰코우에서 창업하여 글로벌 최대 수준으로 성장한 보험·금융 금융 그룹이다. 푸톈구 CBD의 초고층 빌딩 핑안 파이낸스 센터가 본사다.'
       },
       'cmb': {
         name: '자오상은행',
         hanja: '招商银行',
         code: '분야: 은행',
         streets: '홈페이지: cmbchina.com',
-        desc: '1987년 셰코우 산업개발과 연계하여 선전 셰코우에서 설립된 민영 상업은행이다. 푸톈구의 자오상은행 타워를 중심으로 선전 금융업의 한 축을 이룬다.'
+        desc: '1987년 셰코우 공업지구와 연계해 중국 최초로 지분을 모아 설립된 상업은행이다. 푸톈구 자오상은행 타워를 본사로 삼고 있다.'
+      },
+      'vanke': {
+        name: '완커',
+        hanja: 'Vanke, 万科',
+        code: '분야: 부동산',
+        streets: '홈페이지: vanke.com',
+        desc: '중국을 대표하는 초대형 주택 건설 및 부동산 종합 개발 그룹이다. 옌톈구 다메이사(大梅沙) 해해지구에 지어진 독특한 공중 수평 빌딩이 본사 사옥이다.'
+      },
+      'sf': {
+        name: '순펑',
+        hanja: 'SF Express, 顺丰',
+        code: '분야: 물류',
+        streets: '홈페이지: sf-express.com',
+        desc: '중국 최대의 특송 물류 기업이자 아시아 선두 물류 기업이다. 남산구 전해(첸하이) 신구에 랜드마크인 순펑 본사 타워를 보유하고 있다.'
+      },
+      'dji': {
+        name: 'DJI',
+        hanja: '다장촹신, 大疆创新',
+        code: '분야: 드론',
+        streets: '홈페이지: dji.com',
+        desc: '2006년 대학 연구실에서 창업하여 세계 소비자 드론 시장의 70% 이상을 석권한 선도 드론 기업이다. 남산구에 세워진 입체 구조물 DJI 스카이 시티가 본사다.'
+      },
+      'zte': {
+        name: 'ZTE',
+        hanja: '중싱통신, 中兴通讯',
+        code: '분야: 통신장비',
+        streets: '홈페이지: zte.com.cn',
+        desc: '1985년 국유 투자와 합작 설립된 대형 글로벌 정보통신 솔루션 장비 제조사다. 남산구 하이테크 밸리에 핵심 연구단지를 보유하고 있다.'
+      },
+      'mindray': {
+        name: '마이루이',
+        hanja: 'Mindray, 迈瑞医疗',
+        code: '분야: 의료기기',
+        streets: '홈페이지: mindray.com',
+        desc: '환자 감시 시스템, 생명 정보 및 영상진단 솔루션을 전 세계에 수출하는 중국 대표 의료장비 전문 기업이다. 남산구 하이테크 파크에 본사가 위치한다.'
+      },
+      'amer': {
+        name: '정웨이그룹',
+        hanja: '正威集团',
+        code: '분야: 비철금속',
+        streets: '홈페이지: —',
+        desc: '비철금속 원자재 개발과 첨단 전자 정보 재료 가공 분야의 글로벌 500대 비철금속 대형 소재 산업 그룹이다. 푸톈구에 본사 사옥이 위치하고 있다.'
+      },
+      'cec': {
+        name: '중국전자',
+        hanja: '中国전자, CEC',
+        code: '분야: 전자 · 반도체',
+        streets: '홈페이지: —',
+        desc: '중국 국가 보안 및 시스템 반도체, IT 인프라 제조를 담당하는 대형 IT 중앙 국유기업이다. 2021년 본사를 베이징에서 선전 남산구로 전격 이전하여 가동 중이다.'
       }
     };
 
