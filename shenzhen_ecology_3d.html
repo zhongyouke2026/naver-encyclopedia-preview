@@ -79,6 +79,8 @@
       max-width: 95%;
       overflow-x: auto;
       scrollbar-width: none;
+      cursor: grab;
+      user-select: none;
     }
     .floating-nav::-webkit-scrollbar {
       display: none;
@@ -470,11 +472,48 @@
       const bubblesLayer = document.getElementById('ecoBubbles');
       bubblesLayer.innerHTML = '';
 
+      // Grab to scroll (drag scroll) logic for navigation bar
+      const nav = document.querySelector('.floating-nav');
+      let isDown = false;
+      let startX;
+      let scrollLeft;
+      let wasDragged = false;
+
+      nav.addEventListener('mousedown', (e) => {
+        isDown = true;
+        wasDragged = false;
+        startX = e.pageX - nav.offsetLeft;
+        scrollLeft = nav.scrollLeft;
+        nav.style.cursor = 'grabbing';
+      });
+
+      nav.addEventListener('mouseleave', () => {
+        isDown = false;
+        nav.style.cursor = 'grab';
+      });
+
+      nav.addEventListener('mouseup', () => {
+        isDown = false;
+        nav.style.cursor = 'grab';
+      });
+
+      nav.addEventListener('mousemove', (e) => {
+        if (!isDown) return;
+        e.preventDefault();
+        const x = e.pageX - nav.offsetLeft;
+        const walk = (x - startX) * 1.5;
+        if (Math.abs(walk) > 4) {
+          wasDragged = true;
+        }
+        nav.scrollLeft = scrollLeft - walk;
+      });
+
       ECO_DATA.forEach((data, idx) => {
         const chip = document.createElement('button');
         chip.className = 'nav-chip' + (idx === activeEcoIndex ? ' active' : '');
         chip.textContent = data.name;
-        chip.addEventListener('click', () => {
+        chip.addEventListener('click', (e) => {
+          if (wasDragged) return; // Prevent click trigger when dragging the nav bar
           stopPlay();
           selectReserve(idx);
         });
