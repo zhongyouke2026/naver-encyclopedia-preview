@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>선전시 행정구역 2D 지도</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Outfit:wght@600;800&display=swap" rel="stylesheet">
+  
+  <style>
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: transparent;
+    }
+
+    /* Container holding the map card */
+    .widget-wrapper {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      background: #ffffff;
+      border: 1px solid rgba(0, 0, 0, 0.08);
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+      padding: 16px;
+      position: relative;
+    }
+
+    /* Header title */
+    .widget-header {
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-shrink: 0;
+    }
+    .widget-title {
+      font-size: 15px;
+      font-weight: 800;
+      color: #0f172a;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .widget-title svg {
+      width: 16px;
+      height: 16px;
+      color: #3b82f6;
+    }
+    .widget-subtitle {
+      font-size: 11px;
+      color: #64748b;
+      font-weight: 500;
+    }
+
+    /* Map viewport container */
+    .map-container {
+      width: 100%;
+      flex-grow: 1;
+      position: relative;
+      background: #f8fafc;
+      border-radius: 16px;
+      border: 1px solid rgba(0, 0, 0, 0.05);
+      overflow: hidden;
+    }
+
+    /* Background image stretching to cover container */
+    .map-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      user-select: none;
+      pointer-events: none;
+    }
+
+    /* District Hotspot labels */
+    .hotspot {
+      position: absolute;
+      transform: translate(-50%, -50%);
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.94);
+      border: 1.5px solid rgba(59, 130, 246, 0.2);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      font-size: 10.5px;
+      font-weight: 700;
+      color: #1e293b;
+      cursor: pointer;
+      z-index: 3;
+      transition: all 0.22s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      white-space: nowrap;
+    }
+    .hotspot:hover, .hotspot.active {
+      background: #3b82f6;
+      color: white;
+      border-color: transparent;
+      transform: translate(-50%, -50%) scale(1.08);
+      box-shadow: 0 6px 16px rgba(59, 130, 246, 0.35);
+      z-index: 5;
+    }
+
+    /* Pulse dot below hotspots to guide users */
+    .pulse-dot {
+      position: absolute;
+      transform: translate(-50%, -50%);
+      width: 12px;
+      height: 12px;
+      background: #3b82f6;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 2;
+    }
+    .pulse-dot::after {
+      content: '';
+      position: absolute;
+      inset: -4px;
+      border-radius: 50%;
+      border: 2px solid #3b82f6;
+      animation: pulse 1.6s infinite ease-out;
+      opacity: 0;
+    }
+    @keyframes pulse {
+      0% { transform: scale(0.6); opacity: 0.8; }
+      100% { transform: scale(2.4); opacity: 0; }
+    }
+
+    /* Floating Popover Balloon */
+    .district-popover {
+      position: absolute;
+      width: 290px;
+      background: rgba(255, 255, 255, 0.98);
+      backdrop-filter: blur(12px);
+      border: 1.5px solid rgba(0, 0, 0, 0.12);
+      border-radius: 16px;
+      padding: 14px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+      z-index: 10;
+      pointer-events: auto;
+      transition: opacity 0.25s, transform 0.25s;
+    }
+    .popover-close {
+      position: absolute;
+      top: 10px;
+      right: 12px;
+      font-size: 16px;
+      font-weight: 700;
+      color: #94a3b8;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+    .popover-close:hover {
+      color: #475569;
+    }
+
+    .district-title {
+      font-size: 16px;
+      font-weight: 800;
+      color: #0f172a;
+      margin-bottom: 2px;
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+    }
+    .district-hanja {
+      font-size: 11px;
+      font-weight: 600;
+      color: #64748b;
+    }
+    
+    .district-meta {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    .meta-badge {
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 999px;
+    }
+    .badge-code {
+      background: #f1f5f9;
+      color: #475569;
+    }
+    .badge-streets {
+      background: #eff6ff;
+      color: #2563eb;
+    }
+
+    .district-desc {
+      font-size: 11.5px;
+      line-height: 1.6;
+      color: #334155;
+      background: #f8fafc;
+      padding: 10px 12px;
+      border-radius: 8px;
+      border-left: 3px solid #3b82f6;
+    }
+
+    /* Inset box for Shenshan Special Zone which is 100km away */
+    .inset-box {
+      position: absolute;
+      bottom: 12px;
+      right: 12px;
+      background: rgba(255, 255, 255, 0.94);
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      border-radius: 12px;
+      padding: 8px 12px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+      cursor: pointer;
+      z-index: 4;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 10.5px;
+      font-weight: 700;
+      color: #475569;
+      transition: all 0.2s;
+    }
+    .inset-box:hover {
+      background: #eff6ff;
+      border-color: #3b82f6;
+      color: #2563eb;
+      transform: translateY(-1px);
+    }
+    .inset-dot {
+      width: 6px;
+      height: 6px;
+      background: #ef4444;
+      border-radius: 50%;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="widget-wrapper">
+    <!-- Header -->
+    <div class="widget-header">
+      <div class="widget-title">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/>
+        </svg>
+        선전시 행정구역 안내 지도
+      </div>
+      <div class="widget-subtitle">각 구(区)를 클릭하시면 상세 정보가 표시됩니다</div>
+    </div>
+
+    <!-- Map Viewport -->
+    <div class="map-container" id="mapContainer">
+      <img src="./images/shenzhen_map_base.jpg" alt="선전시 행정구역 기본도" class="map-image">
+
+      <!-- District Pulse Dots & Hotspots -->
+      <!-- 1. 바오안구 -->
+      <div class="pulse-dot" style="left: 15%; top: 40%;"></div>
+      <div class="hotspot" id="pin-baoan" style="left: 15%; top: 40%;" onclick="showDistrict('baoan', event)">
+        바오안구
+      </div>
+
+      <!-- 2. 광밍구 -->
+      <div class="pulse-dot" style="left: 23%; top: 23%;"></div>
+      <div class="hotspot" id="pin-guangming" style="left: 23%; top: 23%;" onclick="showDistrict('guangming', event)">
+        광밍구
+      </div>
+
+      <!-- 3. 남산구 -->
+      <div class="pulse-dot" style="left: 21%; top: 68%;"></div>
+      <div class="hotspot" id="pin-nanshan" style="left: 21%; top: 68%;" onclick="showDistrict('nanshan', event)">
+        남산구
+      </div>
+
+      <!-- 4. 룽화구 -->
+      <div class="pulse-dot" style="left: 36%; top: 41%;"></div>
+      <div class="hotspot" id="pin-longhua" style="left: 36%; top: 41%;" onclick="showDistrict('longhua', event)">
+        룽화구
+      </div>
+
+      <!-- 5. 복전구 -->
+      <div class="pulse-dot" style="left: 38%; top: 68%;"></div>
+      <div class="hotspot" id="pin-futian" style="left: 38%; top: 68%;" onclick="showDistrict('futian', event)">
+        푸톈구
+      </div>
+
+      <!-- 6. 뤄후구 -->
+      <div class="pulse-dot" style="left: 48%; top: 63%;"></div>
+      <div class="hotspot" id="pin-luohu" style="left: 48%; top: 63%;" onclick="showDistrict('luohu', event)">
+        뤄후구
+      </div>
+
+      <!-- 7. 룽강구 -->
+      <div class="pulse-dot" style="left: 56%; top: 38%;"></div>
+      <div class="hotspot" id="pin-longgang" style="left: 56%; top: 38%;" onclick="showDistrict('longgang', event)">
+        룽강구
+      </div>
+
+      <!-- 8. 옌톈구 -->
+      <div class="pulse-dot" style="left: 62%; top: 58%;"></div>
+      <div class="hotspot" id="pin-yantian" style="left: 62%; top: 58%;" onclick="showDistrict('yantian', event)">
+        옌톈구
+      </div>
+
+      <!-- 9. 핑산구 -->
+      <div class="pulse-dot" style="left: 72%; top: 39%;"></div>
+      <div class="hotspot" id="pin-pingshan" style="left: 72%; top: 39%;" onclick="showDistrict('pingshan', event)">
+        핑산구
+      </div>
+
+      <!-- 10. 대붕신구 -->
+      <div class="pulse-dot" style="left: 86%; top: 63%;"></div>
+      <div class="hotspot" id="pin-dapeng" style="left: 86%; top: 63%;" onclick="showDistrict('dapeng', event)">
+        다펑신구
+      </div>
+
+      <!-- Inset box for Shenshan Cooperation Zone -->
+      <div class="inset-box" onclick="showDistrict('shenshan', event)">
+        <div class="inset-dot"></div>
+        선산특별합작구 ➔
+      </div>
+
+      <!-- Floating Popover Balloon -->
+      <div class="district-popover" id="districtPopover" style="display: none;">
+        <div class="popover-close" onclick="closePopover()">×</div>
+        <div class="district-title" id="popoverTitle">행정구역명 <span class="district-hanja" id="popoverHanja">한자</span></div>
+        <div class="district-meta">
+          <span class="meta-badge badge-code" id="popoverCode">코드</span>
+          <span class="meta-badge badge-streets" id="popoverStreets">가도 수</span>
+        </div>
+        <div class="district-desc" id="popoverDesc">행정구역 특징 및 소개</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Districts detailed dataset
+    const DISTRICTS_DATA = {
+      'baoan': {
+        name: '바오안구',
+        hanja: '宝安区',
+        code: '행정코드: 440306',
+        streets: '가도 수: 11개',
+        desc: '선전 서부의 광활한 연안 평지 및 제조업 집적지. 국제 교통 요충지인 선전 바오안 국제공항과 대규모 해안 갯벌 복원지 등이 자리 잡고 있습니다.'
+      },
+      'guangming': {
+        name: '광밍구',
+        hanja: '光明区',
+        code: '행정코드: 440311',
+        streets: '가도 수: 6개',
+        desc: '2018년 신설된 행정구. 완경사 구릉지를 기반으로 한 친환경 국가 과학시설지구와 첨단 영농 시범 지대가 조화롭게 공존하는 녹색 개발 거점입니다.'
+      },
+      'nanshan': {
+        name: '남산구',
+        hanja: '南山区',
+        code: '행정코드: 440305',
+        streets: '가도 수: 9개',
+        desc: '선전의 고도 성장을 견인한 IT 혁신 핵심 기지. 텐센트 등 빅테크 기업과 대학, 연구소 및 전해(첸하이) 금융 합작구가 위치해 있으며 셰코우 항구가 자리해 있습니다.'
+      },
+      'longhua': {
+        name: '룽화구',
+        hanja: '龙华区',
+        code: '행정코드: 440309',
+        streets: '가도 수: 6개',
+        desc: '2016년 신설된 행정구. 선전 북역을 중심으로 고속철도 교통 요망이 발달한 선전 중부의 허브이자 대규모 배후 주거지 및 제조 복합 클러스터 역할을 담당합니다.'
+      },
+      'futian': {
+        name: '푸톈구',
+        hanja: '福田区',
+        code: '행정코드: 440304',
+        streets: '가도 수: 11개',
+        desc: '선전시 정부 청사 소재지이자 시 금융·비즈니스의 핵심 중심업무지구(CBD). 선전 증권거래소, 대규모 전자상가인 화창베이, 푸텐 맹그로브 자연보호구가 있습니다.'
+      },
+      'luohu': {
+        name: '뤄후구',
+        hanja: '罗湖区',
+        code: '행정코드: 440303',
+        streets: '가도 수: 10개',
+        desc: '선전 경제특구 개발 초기부터 중심지였던 역사적인 구도심. 홍콩과 맞닿아 관문을 이루는 뤄후 통상구와 최대 패션 상업지인 동먼 상가가 유명합니다.'
+      },
+      'longgang': {
+        name: '룽강구',
+        hanja: '龙岗区',
+        code: '행정코드: 440307',
+        streets: '가도 수: 14개',
+        desc: '선전시 동북부에 위치한 최대 면적의 행정구. 글로벌 기술 기업 화웨이 본사(반톈) 및 다수의 대형 제조업 생산 라인, 객가 문화유적 허후신쥐가 자리합니다.'
+      },
+      'yantian': {
+        name: '옌톈구',
+        hanja: '盐田区',
+        code: '행정코드: 440308',
+        streets: '가도 수: 5개',
+        desc: '선전시 동부 해안의 수려한 자연경관을 담은 산해 구역. 아시아 대표 컨테이너 항만인 옌톈항과 다메이사·샤오메이사 해변, 그리고 역사적인 국경거리 중잉제가 있습니다.'
+      },
+      'pingshan': {
+        name: '핑산구',
+        hanja: '坪山区',
+        code: '행정코드: 440310',
+        streets: '가도 수: 7개',
+        desc: '2016년 신설된 행정구. 선전의 신흥 혁신제조 거점으로, 글로벌 전기차/배터리 기업 BYD의 거대한 생산 본진 및 신에너지 및 바이오 제약 산업 클러스터가 활성화되어 있습니다.'
+      },
+      'dapeng': {
+        name: '다펑신구',
+        hanja: '大鹏新区',
+        code: '행정코드: — (신구)',
+        streets: '가도 수: — (3개 가도)',
+        desc: '선전 동남부 다펑 반도의 청정 생태 보존 구역. 600년 역사 유적인 다펑소성과 국가지질공원 및 깨끗한 남중국해를 감상할 수 있는 선전 유일의 힐링 해양 관광 벨트입니다.'
+      },
+      'shenshan': {
+        name: '선산특별합작구',
+        hanja: '深汕特别合作区',
+        code: '행정코드: — (합작구)',
+        streets: '가도 수: — (4개 가도)',
+        desc: '선전시에서 동쪽으로 약 100km 떨어진 산웨이시(汕尾市) 경내에 있으나 선전시가 독점 관리·개발하는 합작구. 선전의 부족한 산업 용지를 확대하기 위해 설립된 이례적 특구입니다.'
+      }
+    };
+
+    function showDistrict(id, event) {
+      // Prevent event bubbling
+      if (event) event.stopPropagation();
+
+      // Deactivate other hotspots
+      document.querySelectorAll('.hotspot').forEach(p => p.classList.remove('active'));
+      
+      const d = DISTRICTS_DATA[id];
+      if (!d) return;
+
+      // Activate target hotspot
+      const activePin = document.getElementById('pin-' + id);
+      if (activePin) activePin.classList.add('active');
+
+      // Populate popover content
+      document.getElementById('popoverTitle').innerHTML = d.name + ' <span class="district-hanja">' + d.hanja + '</span>';
+      document.getElementById('popoverCode').textContent = d.code;
+      document.getElementById('popoverStreets').textContent = d.streets;
+      document.getElementById('popoverDesc').textContent = d.desc;
+
+      const popover = document.getElementById('districtPopover');
+      popover.style.display = 'block';
+
+      // Position Popover dynamically next to the clicked spot
+      const container = document.getElementById('mapContainer');
+      const rect = container.getBoundingClientRect();
+      
+      let leftPct, topPct;
+      if (id === 'shenshan') {
+        // Position at bottom right corner above the inset box
+        leftPct = 52;
+        topPct = 42;
+      } else {
+        const pin = document.getElementById('pin-' + id);
+        leftPct = parseFloat(pin.style.left);
+        topPct = parseFloat(pin.style.top);
+      }
+
+      // Compute pixel coordinates
+      const targetX = (leftPct / 100) * rect.width;
+      const targetY = (topPct / 100) * rect.height;
+
+      // Decide popover position (left or right, top or bottom to keep within viewport bounds)
+      let popoverX = targetX + 15;
+      let popoverY = targetY - 70;
+
+      // Adjust if popover goes outside right boundary
+      if (popoverX + 290 > rect.width) {
+        popoverX = targetX - 305;
+      }
+      // Adjust if popover goes outside left boundary
+      if (popoverX < 0) {
+        popoverX = 10;
+      }
+      // Adjust if popover goes outside bottom boundary
+      if (popoverY + 160 > rect.height) {
+        popoverY = rect.height - 170;
+      }
+      // Adjust if popover goes outside top boundary
+      if (popoverY < 0) {
+        popoverY = 10;
+      }
+
+      popover.style.left = popoverX + 'px';
+      popover.style.top = popoverY + 'px';
+    }
+
+    function closePopover() {
+      document.getElementById('districtPopover').style.display = 'none';
+      document.querySelectorAll('.hotspot').forEach(p => p.classList.remove('active'));
+    }
+
+    // Close popover when clicking anywhere else on the map
+    document.getElementById('mapContainer').addEventListener('click', (e) => {
+      if (e.target.className === 'map-image' || e.target.id === 'mapContainer') {
+        closePopover();
+      }
+    });
+
+    // Auto-focus on Futian (the capital center) on start
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        showDistrict('futian');
+      }, 300);
+    });
+  </script>
+</body>
+</html>
