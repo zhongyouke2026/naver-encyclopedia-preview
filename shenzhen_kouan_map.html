@@ -382,6 +382,22 @@
   const COLOR = { '도로':'#8A6A4B', '철도':'#4A5A78', '수운':'#3F6E72', '항공':'#7A5C74' };
   const detail = document.getElementById('detail');
 
+  
+  function resizeIframe() {
+    try {
+      if (window.parent && window.parent.document) {
+        const iframes = window.parent.document.querySelectorAll('iframe');
+        iframes.forEach(f => {
+          if (f.contentWindow === window) {
+            f.style.height = document.documentElement.scrollHeight + 10 + 'px';
+          }
+        });
+      }
+    } catch(e) {}
+  }
+  window.addEventListener('load', resizeIframe);
+  window.addEventListener('resize', resizeIframe);
+
   function pick(id) {
     const p = PORTS[id];
     if (!p) return;
@@ -397,6 +413,7 @@
       '<span class="d-cn">' + p.hanja + '</span></div>' +
       '<div class="d-coord">' + p.coord + '</div>' +
       '<div class="d-desc">' + p.note + '</div>';
+    resizeIframe();
   }
 
   document.querySelectorAll('.kp, .row').forEach(function (el) {
