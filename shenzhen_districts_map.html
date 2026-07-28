@@ -165,10 +165,9 @@
 <div class="plate">
 
   <div class="head">
-    <div class="eyebrow">廣東省 深圳市</div>
-    <div class="titlerow">
+        <div class="titlerow">
       <h1>행정구역</h1>
-      <div class="hint">지도의 구(区)를 선택하면 하이라이트됩니다</div>
+      <div class="hint" id="mapHint">지도의 구(区)를 선택하면 하이라이트됩니다</div>
     </div>
   </div>
 
@@ -301,6 +300,20 @@
 };
   const map = document.getElementById('map');
 
+  const ONE_LINERS = {
+    'baoan': '바오안구: 서부 연안 평지이자 국제공항이 위치한 제조업 집적지',
+    'guangming': '광밍구: 첨단 국가 과학시설지구와 친환경 영농 시범 지대의 녹색 거점',
+    'nanshan': '남산구: 빅테크 기업들과 첸하이 금융 특구가 자리한 혁신 IT 기지',
+    'longhua': '룽화구: 고속철 선전북역 교통 요망과 중부 제조 클러스터의 허브',
+    'futian': '푸톈구: 시정부 청사와 증권거래소, 화창베이가 위치한 금융·비즈니스 중심',
+    'luohu': '뤄후구: 홍콩 관문 뤄후 통상구와 동면 상가가 위치한 역사적 구도심',
+    'longgang': '룽강구: 화웨이 본사 및 대형 제조업 라인이 자리한 최대 면적의 구',
+    'yantian': '옌톈구: 글로벌 컨테이너 항만 옌톈항과 수려한 해안 관광벨트의 산해 구역',
+    'pingshan': '핑산구: 전기차 BYD 본진 및 신에너지·바이오 클러스터의 혁신 거점',
+    'dapeng': '다펑신구: 다펑소성과 국가지질공원을 품은 청정 해양 생태 보존 구역',
+    'shenshan': '선산특별합작구: 선전에서 100km 동쪽 산웨이에 위치해 선전이 관리하는 특구'
+  };
+
   function pick(id) {
     const d = DISTRICTS[id];
     if (!d) return;
@@ -309,6 +322,13 @@
     map.querySelectorAll('.dist, .dlab').forEach(function (el) {
       el.classList.toggle('on', el.dataset.id === id);
     });
+
+    const hintEl = document.getElementById('mapHint');
+    if (hintEl) {
+      hintEl.textContent = ONE_LINERS[id];
+      hintEl.style.color = '#2E5A4C';
+      hintEl.style.fontWeight = '600';
+    }
   }
 
   map.querySelectorAll('.dist').forEach(function (p) {
@@ -331,6 +351,13 @@
     map.querySelectorAll('.dist, .dlab').forEach(function (el) {
       el.classList.remove('on');
     });
+    
+    const hintEl = document.getElementById('mapHint');
+    if (hintEl) {
+      hintEl.textContent = '지도의 구(区)를 선택하면 하이라이트됩니다';
+      hintEl.style.color = 'var(--muted)';
+      hintEl.style.fontWeight = '400';
+    }
   });
 </script>
 
