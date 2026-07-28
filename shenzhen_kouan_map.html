@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>선전시 일류 통상구</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css">
+<style>
+  :root{
+    --paper:#FCFBF9;--ink:#16191D;--muted:#8A8781;--rule:#E6E3DD;
+    --sea:#E9EEF0;--land:#EFEDE8;--landline:#DFDCD5;
+    --sans:"Pretendard Variable",Pretendard,system-ui,sans-serif;
+    --serif:"Nanum Myeongjo","Apple SD Gothic Neo","Songti SC","SimSun",serif;
+  }
+  *{box-sizing:border-box}
+  :focus{outline:none} svg *:focus{outline:none}
+  *{-webkit-tap-highlight-color:transparent}
+  body{margin:0;background:transparent;font-family:var(--sans);color:var(--ink);-webkit-font-smoothing:antialiased}
+  .plate{background:var(--paper);border:1px solid var(--rule);border-radius:3px}
+
+  .head{padding:22px 26px 18px}
+  .eyebrow{font-family:var(--serif);font-size:11px;letter-spacing:.34em;color:var(--muted);margin-bottom:9px}
+  .titlerow{display:flex;align-items:baseline;justify-content:space-between;gap:16px;flex-wrap:wrap}
+  h1{margin:0;font-size:23px;font-weight:700;letter-spacing:-.035em}
+  .hint{font-size:11.5px;color:var(--muted)}
+
+  .field{margin:4px 18px 0;background:var(--sea);border:1px solid var(--rule);border-radius:2px}
+  svg.map{display:block;width:100%;height:auto}
+  .dist{fill:var(--land);stroke:var(--landline);stroke-width:.6;stroke-linejoin:round}
+  .dlab{font-size:4.1px;font-weight:500;letter-spacing:-.03em;fill:#B3AFA8;text-anchor:middle;pointer-events:none}
+
+  /* 통상구 기호 — 교통수단별 흰 글리프 */
+  .kp{cursor:pointer}
+  .kp-halo{fill:var(--paper);opacity:.95}
+  .kp-dot{fill:var(--kc);transition:r .2s ease}
+  .gl{fill:none;stroke:#fff;stroke-width:.5;stroke-linecap:round;pointer-events:none}
+  .gf{fill:#fff;pointer-events:none}
+  .kp:hover .kp-halo,.kp.on .kp-halo{stroke:var(--kc);stroke-width:1}
+  .kp.on .kp-dot{r:3.9}
+
+  .foot{padding:11px 26px 0;font-size:11px;line-height:1.65;color:var(--muted)}
+
+  .key{margin:16px 26px 0;display:grid;grid-template-columns:repeat(4,1fr);gap:0 18px}
+  .grp{border-top:1.5px solid var(--kc);padding-top:9px}
+  .grp-head{display:flex;align-items:center;gap:6px;font-size:11.5px;color:#5A6068;margin-bottom:7px;letter-spacing:-.02em}
+  .grp-head b{font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums}
+  .gsym{display:inline-flex;--kc:inherit}
+  .grp-list{margin:0;padding:0;list-style:none}
+  .row{font-size:12.5px;font-weight:500;letter-spacing:-.03em;padding:4px 0;cursor:pointer;color:#3A4048;
+       display:flex;align-items:baseline;gap:5px;transition:color .18s ease}
+  .row:hover{color:var(--kc)}
+  .row.on{color:var(--kc);font-weight:700}
+  .offmap{font-size:9.5px;color:var(--muted);border:1px solid var(--rule);border-radius:2px;padding:0 3px;font-weight:500}
+
+  .detail{margin:18px 26px 22px;padding-top:16px;border-top:1px solid var(--rule)}
+  .d-guide{font-size:12.5px;color:var(--muted)}
+  .d-mode{font-size:10.5px;font-weight:600;color:var(--kc);margin-bottom:5px;letter-spacing:.02em}
+  .d-name{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+  .d-ko{font-size:18px;font-weight:700;letter-spacing:-.035em}
+  .d-cn{font-family:var(--serif);font-size:12.5px;color:var(--muted)}
+  .d-coord{font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums;
+           padding-bottom:11px;margin-bottom:11px;border-bottom:1px solid var(--rule)}
+  .d-desc{font-size:13.5px;line-height:1.85;letter-spacing:-.015em;color:#3A4048}
+
+  @media (max-width:720px){ .key{grid-template-columns:repeat(2,1fr);gap:18px} }
+  @media (max-width:460px){
+    .head{padding:18px 18px 14px} h1{font-size:20px}
+    .field{margin:4px 12px 0}
+    .foot,.key,.detail{margin-left:18px;margin-right:18px}
+    .key{grid-template-columns:1fr}
+  }
+  @media (prefers-reduced-motion:reduce){ .kp-dot,.row{transition:none} }
+</style>
+</head>
+<body>
+<div class="plate">
+
+  <div class="head">
+    <div class="eyebrow">深圳 一類口岸</div>
+    <div class="titlerow">
+      <h1>통상구 16곳</h1>
+      <div class="hint">기호를 누르면 아래에 설명이 나옵니다</div>
+    </div>
+  </div>
+
+  <div class="field">
+    <svg class="map" id="map" viewBox="-107.4 -63.5 214.7 127.0" xmlns="http://www.w3.org/2000/svg"
+         role="group" aria-label="선전시 일류 통상구 위치도">
+      <g id="shapes">
+        <path class="dist" d="M-65.18 -50.52L-65.65 -51.19L-66.74 -51.24L-67.18 -53.09L-66.33 -52.53L-63.85 -52.58L-63.15 -51.67L-62.37 -51.72L-63.57 -53.06L-62.50 -53.62L-59.62 -53.22L-61.60 -53.92L-63.25 -53.68L-63.87 -52.88L-66.60 -53.07L-66.46 -53.69L-66.99 -53.65L-66.55 -54.31L-67.06 -53.99L-67.60 -54.57L-68.18 -53.72L-68.02 -54.39L-69.42 -54.90L-69.03 -55.53L-69.72 -56.45L-68.90 -55.65L-67.80 -57.33L-68.95 -56.64L-70.14 -57.32L-69.83 -58.50L-70.96 -57.72L-70.36 -56.99L-71.39 -55.91L-72.17 -55.90L-72.25 -56.52L-72.72 -56.15L-72.43 -56.78L-72.79 -56.86L-73.74 -54.18L-74.51 -54.45L-74.12 -52.41L-76.06 -52.27L-76.66 -51.36L-77.77 -51.18L-77.97 -51.95L-79.12 -52.40L-81.40 -51.52L-82.99 -48.55L-82.07 -47.95L-81.74 -45.70L-82.40 -43.22L-83.89 -42.36L-84.68 -42.59L-84.49 -41.95L-85.28 -41.20L-87.65 -40.90L-88.07 -40.23L-87.68 -39.45L-88.64 -38.52L-91.02 -38.89L-90.77 -37.03L-92.87 -35.56L-92.46 -33.48L-93.24 -31.26L-99.89 -27.11L-102.44 -21.71L-100.95 -12.50L-99.16 -9.23L-97.34 -3.57L-95.24 0.84L-90.31 9.02L-82.53 16.05L-82.14 17.53L-82.90 19.56L-83.00 22.49L-81.98 22.90L-78.31 21.80L-76.87 25.80L-67.42 21.03L-64.06 18.17L-63.96 15.87L-61.55 13.88L-60.84 12.13L-61.91 11.18L-62.02 9.83L-61.07 9.62L-62.24 7.27L-60.74 5.33L-61.32 3.38L-60.44 1.51L-60.88 -1.01L-59.19 -2.42L-58.97 -4.03L-57.45 -5.42L-56.20 -5.82L-54.96 -5.10L-53.72 -5.89L-52.07 -5.46L-51.29 -6.21L-50.59 -8.85L-52.08 -11.05L-51.44 -12.49L-50.32 -12.92L-50.33 -16.14L-49.39 -16.59L-50.07 -16.86L-49.03 -16.95L-49.10 -17.57L-50.21 -17.72L-49.80 -17.95L-50.03 -18.55L-50.53 -18.33L-49.55 -20.90L-51.33 -20.38L-53.08 -21.72L-53.75 -21.44L-54.52 -22.58L-54.71 -22.10L-55.48 -22.41L-56.85 -20.67L-58.72 -20.03L-58.18 -19.44L-58.80 -18.55L-60.42 -19.86L-61.29 -19.28L-61.86 -20.22L-63.94 -20.40L-65.03 -19.18L-66.28 -19.13L-66.28 -17.99L-67.39 -16.57L-66.83 -16.59L-66.52 -15.55L-68.45 -16.36L-68.16 -15.90L-69.15 -14.96L-71.55 -15.31L-72.44 -14.37L-73.74 -15.75L-72.52 -16.76L-73.02 -18.15L-72.25 -18.44L-73.38 -18.96L-73.77 -19.81L-73.15 -20.65L-73.57 -21.20L-71.97 -21.74L-71.87 -22.31L-73.10 -24.94L-71.81 -26.43L-71.47 -27.95L-73.11 -30.70L-72.87 -31.84L-74.04 -33.10L-73.78 -33.45L-74.80 -33.98L-76.22 -36.11L-76.97 -36.18L-76.49 -37.61L-77.60 -39.96L-72.01 -42.39L-70.19 -48.41L-70.03 -47.97L-69.44 -48.51L-69.82 -48.16L-68.94 -47.77L-68.14 -49.98L-65.18 -50.52Z"/>
+        <path class="dist" d="M-65.18 -50.52L-68.14 -49.98L-68.94 -47.77L-69.82 -48.16L-69.44 -48.51L-70.03 -47.97L-70.19 -48.41L-72.01 -42.39L-77.60 -39.96L-76.49 -37.61L-76.97 -36.18L-76.22 -36.11L-74.80 -33.98L-73.78 -33.45L-74.04 -33.10L-72.87 -31.84L-73.11 -30.70L-71.47 -27.95L-71.81 -26.43L-73.10 -24.94L-71.97 -21.74L-73.57 -21.20L-73.15 -20.65L-73.77 -19.81L-73.13 -18.61L-72.25 -18.44L-73.02 -18.15L-72.52 -16.76L-73.74 -15.75L-72.44 -14.37L-71.55 -15.31L-69.15 -14.96L-68.16 -15.90L-68.45 -16.36L-66.52 -15.55L-66.83 -16.59L-67.39 -16.57L-66.28 -17.99L-66.28 -19.13L-65.03 -19.18L-63.94 -20.40L-61.86 -20.22L-61.29 -19.28L-60.42 -19.86L-58.80 -18.55L-58.18 -19.44L-58.72 -20.03L-56.85 -20.67L-55.48 -22.41L-54.71 -22.10L-54.52 -22.58L-53.75 -21.44L-53.08 -21.72L-51.33 -20.38L-50.28 -20.73L-48.09 -22.17L-47.17 -23.69L-43.57 -27.02L-42.33 -26.84L-42.31 -28.90L-43.50 -30.08L-42.94 -30.61L-46.17 -31.41L-45.87 -32.69L-45.18 -32.56L-43.75 -33.83L-45.47 -35.76L-44.74 -37.08L-45.74 -38.56L-46.51 -43.03L-48.83 -42.91L-48.09 -43.17L-47.98 -43.87L-49.63 -42.71L-49.57 -43.18L-50.24 -43.32L-50.22 -42.58L-50.86 -43.54L-50.41 -44.34L-49.42 -44.61L-50.05 -45.60L-52.30 -46.10L-52.61 -46.96L-53.40 -46.34L-54.89 -46.76L-54.97 -48.26L-56.78 -49.89L-58.45 -50.34L-58.90 -51.20L-65.18 -50.52Z"/>
+        <path class="dist" d="M-17.89 -23.12L-19.34 -23.62L-19.80 -25.62L-21.16 -26.80L-20.77 -27.34L-21.37 -29.70L-22.85 -29.41L-22.69 -29.91L-24.66 -30.55L-26.90 -28.12L-27.84 -30.19L-29.56 -30.30L-29.29 -31.89L-30.61 -31.38L-31.18 -32.09L-33.03 -32.18L-32.18 -33.75L-32.89 -34.44L-33.02 -35.89L-35.07 -34.00L-36.15 -34.62L-37.13 -33.99L-38.07 -34.56L-38.34 -33.82L-40.20 -32.98L-42.33 -33.26L-43.20 -33.97L-45.18 -32.56L-45.87 -32.69L-46.17 -31.41L-42.94 -30.61L-43.50 -30.08L-42.31 -28.90L-42.33 -26.84L-43.57 -27.02L-49.69 -21.04L-49.47 -20.46L-50.53 -18.33L-50.03 -18.55L-49.80 -17.95L-50.21 -17.72L-49.10 -17.57L-49.03 -16.95L-50.07 -16.86L-49.39 -16.59L-50.33 -16.14L-50.32 -12.92L-51.44 -12.49L-52.08 -11.05L-50.59 -8.85L-50.77 -7.14L-51.97 -5.98L-51.68 -3.83L-52.17 -2.96L-50.28 -1.78L-47.66 -1.86L-46.15 -0.55L-45.83 0.81L-43.97 0.84L-41.37 5.74L-38.96 7.32L-38.96 8.52L-38.21 9.74L-38.88 11.92L-37.29 12.19L-33.79 11.28L-32.10 11.89L-30.50 10.44L-28.89 10.90L-27.65 9.13L-29.55 7.48L-29.77 8.39L-30.15 7.78L-30.79 6.57L-30.43 5.49L-30.76 2.96L-32.46 0.60L-31.99 -0.11L-32.16 -1.65L-31.25 -1.88L-31.72 -2.81L-31.49 -4.34L-32.64 -4.56L-32.43 -5.32L-31.54 -5.03L-31.64 -7.66L-31.18 -8.45L-31.70 -9.32L-30.42 -8.93L-28.19 -11.54L-27.42 -11.08L-26.63 -11.61L-25.99 -11.39L-24.31 -7.86L-23.54 -7.50L-20.88 -9.96L-20.99 -11.64L-22.15 -14.01L-21.80 -14.69L-20.57 -15.03L-22.44 -16.38L-22.55 -17.88L-21.65 -18.86L-20.07 -19.23L-18.82 -22.21L-17.89 -23.12Z"/>
+        <path class="dist" d="M38.74 -34.38L38.61 -37.19L36.52 -37.42L35.66 -38.88L37.82 -41.03L37.39 -42.76L38.13 -44.64L37.34 -44.62L36.89 -45.29L32.84 -45.31L32.56 -44.57L31.33 -44.19L30.04 -44.63L29.09 -43.01L28.31 -43.87L26.96 -43.41L24.65 -43.68L23.75 -45.14L22.16 -45.05L21.70 -43.58L19.75 -41.47L18.34 -40.99L18.54 -40.19L16.70 -38.39L15.07 -38.68L14.55 -38.26L12.98 -40.63L10.24 -41.46L9.77 -44.76L9.17 -46.12L8.38 -46.42L7.15 -45.05L6.00 -44.92L4.04 -40.41L1.56 -39.38L0.01 -39.39L-1.56 -37.87L-2.48 -37.74L-2.41 -36.18L-1.84 -35.94L-1.93 -37.02L-0.46 -35.53L-1.81 -34.90L-1.85 -34.25L-0.43 -33.82L2.44 -34.34L2.29 -33.06L3.88 -32.23L3.07 -31.70L3.31 -30.67L3.63 -31.06L4.62 -30.70L4.39 -29.02L5.98 -27.75L6.01 -26.78L4.35 -25.24L4.23 -21.52L3.12 -21.76L1.58 -20.41L2.09 -19.44L1.70 -17.04L2.10 -16.35L1.67 -14.86L0.25 -14.81L0.62 -13.75L1.68 -13.40L-0.80 -10.85L-0.57 -9.38L-1.58 -8.90L-3.22 -6.33L-4.67 -6.70L-4.63 -7.59L-5.35 -8.43L-5.95 -8.19L-6.01 -7.07L-6.80 -7.13L-6.37 -8.04L-6.81 -9.04L-8.50 -7.95L-8.06 -10.03L-6.88 -10.01L-6.09 -9.13L-5.27 -10.98L-5.26 -12.98L-8.92 -15.36L-9.36 -17.70L-10.49 -18.13L-10.27 -19.34L-10.94 -20.27L-10.58 -21.40L-12.30 -21.94L-12.76 -20.88L-14.01 -21.98L-15.51 -21.66L-16.90 -23.66L-17.41 -23.61L-18.82 -22.21L-20.07 -19.23L-21.65 -18.86L-22.55 -17.88L-22.44 -16.38L-20.57 -15.03L-21.80 -14.69L-22.15 -14.01L-20.99 -11.64L-20.88 -9.96L-23.54 -7.50L-24.31 -7.86L-25.99 -11.39L-26.63 -11.61L-27.42 -11.08L-28.19 -11.54L-30.42 -8.93L-31.70 -9.32L-31.18 -8.45L-31.64 -7.66L-31.54 -5.03L-32.43 -5.32L-32.64 -4.56L-31.49 -4.34L-31.72 -2.81L-31.25 -1.88L-32.16 -1.65L-31.99 -0.11L-32.46 0.60L-30.76 2.96L-30.43 5.49L-30.79 6.57L-29.77 8.39L-29.55 7.48L-27.65 9.13L-26.51 8.74L-26.78 7.78L-25.42 7.09L-23.43 7.68L-22.56 7.26L-19.61 10.24L-16.94 9.50L-13.81 10.65L-10.67 9.50L-9.27 7.47L-7.01 6.95L-6.62 5.98L-4.04 4.70L-2.99 3.38L0.57 3.23L2.32 5.02L2.08 6.54L3.97 6.89L4.57 7.61L5.58 7.48L5.54 8.29L6.79 10.09L6.90 11.91L9.11 9.63L9.52 7.68L10.64 6.36L10.46 4.95L11.89 3.37L13.80 2.22L16.34 2.56L17.60 1.63L17.81 0.19L16.06 -1.29L15.89 -2.96L16.69 -4.93L18.65 -6.23L18.00 -8.29L19.48 -11.17L21.77 -11.65L22.22 -12.33L23.31 -12.08L24.28 -13.21L25.47 -13.12L26.27 -14.28L29.47 -14.48L30.05 -15.62L31.05 -14.91L31.20 -17.94L30.70 -18.74L32.27 -18.95L32.42 -20.49L34.14 -20.66L35.43 -21.69L35.26 -26.36L34.73 -26.89L35.17 -28.88L34.44 -29.76L35.37 -31.64L36.15 -31.71L37.18 -34.91L38.74 -34.38Z"/>
+        <path class="dist" d="M38.74 -34.38L37.18 -34.91L36.15 -31.71L35.37 -31.64L34.44 -29.76L35.17 -28.88L34.73 -26.89L35.26 -26.36L35.43 -21.69L34.14 -20.66L32.42 -20.49L32.27 -18.95L30.70 -18.74L31.20 -17.94L31.05 -14.91L30.05 -15.62L29.47 -14.48L26.27 -14.28L25.47 -13.12L24.28 -13.21L23.31 -12.08L22.22 -12.33L21.77 -11.65L19.48 -11.17L18.00 -8.29L18.65 -6.23L21.30 -3.14L24.61 -2.68L25.08 -1.22L28.08 0.24L28.88 1.18L30.58 0.84L32.35 1.55L33.93 0.79L34.89 1.43L36.48 -0.67L37.59 -0.60L37.87 0.52L40.94 1.73L41.48 -0.93L43.31 -0.89L42.85 -1.58L43.20 -2.41L42.37 -2.84L43.39 -3.88L44.63 -2.27L46.43 -1.86L46.67 -3.28L51.14 -4.92L51.48 -5.20L50.84 -5.81L51.58 -5.40L52.31 -6.36L53.48 -6.04L55.34 -7.35L56.62 -9.18L55.65 -11.99L58.72 -13.36L59.66 -15.07L58.88 -17.23L55.23 -17.82L54.67 -18.65L54.94 -20.07L53.88 -21.36L53.06 -20.77L50.88 -20.66L51.23 -21.25L49.87 -23.86L50.70 -24.30L50.82 -25.65L52.32 -26.95L52.79 -28.98L52.39 -31.01L53.87 -31.38L53.86 -32.13L53.16 -32.24L54.40 -32.99L54.03 -33.50L53.54 -33.11L53.32 -34.53L51.57 -37.42L50.16 -38.28L48.21 -37.28L47.86 -32.87L46.69 -32.29L41.62 -34.40L39.42 -33.87L38.74 -34.38Z"/>
+        <path class="dist" d="M34.89 1.43L35.81 2.82L34.51 6.43L37.50 6.65L38.21 9.81L44.84 6.93L48.68 6.58L52.84 8.09L55.42 10.12L57.75 16.70L62.63 21.12L64.86 24.06L65.91 27.80L65.00 34.60L66.46 41.36L67.83 44.28L70.05 46.60L74.06 47.88L79.75 46.84L81.61 45.20L83.93 41.05L92.39 39.13L98.46 36.96L100.31 35.22L102.29 31.69L102.11 27.43L99.19 21.09L90.79 18.96L88.34 17.17L86.19 13.24L86.23 11.51L87.68 8.86L89.32 6.63L92.69 4.07L96.53 -2.44L96.88 -5.67L95.59 -7.31L91.18 -8.16L84.86 -6.83L75.70 -6.63L75.30 -7.42L75.82 -7.97L73.80 -9.91L68.24 -9.86L67.32 -8.23L65.22 -9.58L61.55 -10.29L60.69 -9.12L56.53 -8.02L56.25 -8.39L53.48 -6.04L52.31 -6.36L51.58 -5.40L50.84 -5.81L51.48 -5.20L51.14 -4.92L46.67 -3.28L46.43 -1.86L44.63 -2.27L43.39 -3.88L42.37 -2.84L43.20 -2.41L42.85 -1.58L43.31 -0.89L41.48 -0.93L40.94 1.73L37.87 0.52L37.59 -0.60L36.48 -0.67L34.89 1.43Z"/>
+        <path class="dist" d="M3.02 18.89L7.78 19.18L9.53 20.89L9.95 22.37L16.09 17.65L23.94 16.61L26.84 15.17L28.48 12.68L30.88 10.48L38.21 9.81L37.50 6.65L34.51 6.43L35.81 2.82L34.89 1.43L33.93 0.79L32.35 1.55L30.58 0.84L28.88 1.18L28.08 0.24L25.08 -1.22L24.61 -2.68L21.30 -3.14L18.65 -6.23L16.69 -4.93L15.89 -2.96L16.06 -1.29L17.81 0.19L17.60 1.63L16.34 2.56L13.80 2.22L10.46 4.95L10.64 6.36L9.52 7.68L9.11 9.63L8.07 11.21L6.73 11.85L7.01 12.79L6.42 13.55L3.22 14.86L3.97 17.48L3.02 18.89Z"/>
+        <path class="dist" d="M-19.81 24.49L-18.16 24.48L-17.80 23.93L-17.61 25.25L-16.90 25.66L-12.81 22.68L-10.96 22.19L-8.60 22.61L-7.82 21.46L-8.26 20.89L-7.73 19.46L-6.75 19.21L-5.69 17.64L-5.09 18.22L-4.12 17.74L-1.79 18.17L-1.69 19.17L-0.94 19.54L3.02 18.89L3.97 17.48L3.22 14.86L6.42 13.55L7.01 12.79L6.79 10.09L5.54 8.29L5.58 7.48L4.57 7.61L3.97 6.89L2.08 6.54L2.32 5.02L0.57 3.23L-2.99 3.38L-4.04 4.70L-6.62 5.98L-7.01 6.95L-9.27 7.47L-10.67 9.50L-13.81 10.65L-16.94 9.50L-19.61 10.24L-22.56 7.26L-23.43 7.68L-25.02 7.00L-26.78 7.78L-26.51 8.74L-27.65 9.13L-28.89 10.90L-26.16 14.99L-23.82 14.96L-22.61 16.27L-19.96 15.38L-19.81 24.49Z"/>
+        <path class="dist" d="M-28.89 10.90L-30.50 10.44L-32.10 11.89L-33.79 11.28L-37.29 12.19L-38.88 11.92L-39.97 12.56L-42.17 12.62L-43.15 13.55L-43.60 16.56L-43.09 18.28L-44.94 18.63L-44.41 19.94L-45.26 20.68L-44.88 24.30L-45.44 24.16L-45.94 25.48L-45.69 26.93L-46.59 27.29L-46.54 29.78L-38.76 29.98L-37.16 31.37L-31.04 32.54L-29.82 31.73L-29.29 29.79L-28.23 28.98L-26.39 28.55L-25.32 29.32L-23.90 28.44L-23.27 27.16L-24.75 25.51L-21.66 23.79L-19.81 24.49L-19.96 15.38L-22.61 16.27L-23.82 14.96L-25.90 15.22L-28.89 10.90Z"/>
+        <path class="dist" d="M-38.88 11.92L-38.21 9.74L-38.96 8.52L-38.96 7.32L-41.37 5.74L-43.97 0.84L-45.83 0.81L-46.15 -0.55L-47.66 -1.86L-50.28 -1.78L-52.17 -2.96L-51.68 -3.83L-52.37 -5.65L-53.72 -5.89L-54.96 -5.10L-56.20 -5.82L-57.45 -5.42L-58.97 -4.03L-59.19 -2.42L-60.88 -1.01L-60.44 1.51L-61.32 3.38L-60.74 5.33L-62.24 7.27L-61.07 9.62L-62.02 9.83L-61.91 11.18L-60.84 12.13L-61.55 13.88L-63.96 15.87L-64.06 18.17L-67.42 21.03L-76.87 25.80L-76.14 28.42L-77.23 33.54L-76.43 38.52L-74.75 42.61L-71.19 46.38L-68.79 46.67L-56.79 38.14L-55.31 35.55L-54.88 35.74L-55.24 35.38L-54.42 32.30L-53.22 30.53L-52.31 30.00L-46.54 29.78L-46.59 27.29L-45.69 26.93L-45.94 25.48L-45.44 24.16L-44.88 24.30L-45.26 20.68L-44.41 19.94L-44.94 18.63L-43.09 18.28L-43.60 16.56L-43.15 13.55L-42.17 12.62L-39.97 12.56L-38.88 11.92ZM-86.45 58.50L-85.41 58.10L-85.45 56.49L-87.76 52.70L-89.91 52.85L-90.57 51.67L-91.36 51.93L-92.06 53.37L-93.43 52.89L-94.17 53.26L-94.21 54.16L-90.78 55.73L-89.40 57.52L-86.45 58.50ZM-80.71 29.87L-79.30 31.23L-77.83 31.54L-77.82 30.03L-80.73 28.15L-81.17 29.26L-80.71 29.87ZM-81.84 32.81L-80.06 34.47L-78.98 33.62L-80.72 31.60L-81.88 32.27L-81.84 32.81Z"/>
+      </g>
+      <g id="dlabels" aria-hidden="true">
+        <text class="dlab" x="-77.81" y="-10.73">바오안구</text>
+        <text class="dlab" x="-60.54" y="-32.41">광밍구</text>
+        <text class="dlab" x="-36.37" y="-12.32">룽화구</text>
+        <text class="dlab" x="9.0" y="-14.88">룽강구</text>
+        <text class="dlab" x="40.45" y="-13.99">핑산구</text>
+        <text class="dlab" x="74.05" y="16.64">다펑신구</text>
+        <text class="dlab" x="20.03" y="9.95">옌톈구</text>
+        <text class="dlab" x="-9.94" y="14.97">뤄후구</text>
+        <text class="dlab" x="-33.35" y="23.01">푸톈구</text>
+        <text class="dlab" x="-57.5" y="22.67">난산구</text>
+      </g>
+      <g id="marks">
+        <g class="kp" data-id="luohu" tabindex="0" role="button" aria-label="뤄후 통상구" style="--kc:#8A6A4B">
+          <circle class="kp-halo" cx="-20.01" cy="23.42" r="4.4"/>
+          <circle class="kp-dot"  cx="-20.01" cy="23.42" r="3.2"/>
+          <path class="gl" d="M-20.01 21.87 L-20.01 22.970000000000002 M-20.01 23.87 L-20.01 24.970000000000002"/>
+        </g>
+        <g class="kp" data-id="wenjindu" tabindex="0" role="button" aria-label="원진두 통상구" style="--kc:#8A6A4B">
+          <circle class="kp-halo" cx="-12.0" cy="20.89" r="4.4"/>
+          <circle class="kp-dot"  cx="-12.0" cy="20.89" r="3.2"/>
+          <path class="gl" d="M-12.0 19.34 L-12.0 20.44 M-12.0 21.34 L-12.0 22.44"/>
+        </g>
+        <g class="kp" data-id="huanggang" tabindex="0" role="button" aria-label="황강 통상구" style="--kc:#8A6A4B">
+          <circle class="kp-halo" cx="-25.06" cy="27.21" r="4.4"/>
+          <circle class="kp-dot"  cx="-25.06" cy="27.21" r="3.2"/>
+          <path class="gl" d="M-25.06 25.66 L-25.06 26.76 M-25.06 27.66 L-25.06 28.76"/>
+        </g>
+        <g class="kp" data-id="shatoujiao" tabindex="0" role="button" aria-label="사터우자오 통상구" style="--kc:#8A6A4B">
+          <circle class="kp-halo" cx="6.04" cy="18.91" r="4.4"/>
+          <circle class="kp-dot"  cx="6.04" cy="18.91" r="3.2"/>
+          <path class="gl" d="M6.04 17.36 L6.04 18.46 M6.04 19.36 L6.04 20.46"/>
+        </g>
+        <g class="kp" data-id="shenzhenbay" tabindex="0" role="button" aria-label="선전만 통상구" style="--kc:#8A6A4B">
+          <circle class="kp-halo" cx="-58.68" cy="35.63" r="4.4"/>
+          <circle class="kp-dot"  cx="-58.68" cy="35.63" r="3.2"/>
+          <path class="gl" d="M-58.68 34.080000000000005 L-58.68 35.18 M-58.68 36.080000000000005 L-58.68 37.18"/>
+        </g>
+        <g class="kp" data-id="futian" tabindex="0" role="button" aria-label="푸톈 통상구" style="--kc:#8A6A4B">
+          <circle class="kp-halo" cx="-30.62" cy="29.46" r="4.4"/>
+          <circle class="kp-dot"  cx="-30.62" cy="29.46" r="3.2"/>
+          <path class="gl" d="M-30.62 27.91 L-30.62 29.01 M-30.62 29.91 L-30.62 31.01"/>
+        </g>
+        <g class="kp" data-id="liantang" tabindex="0" role="button" aria-label="롄탕 통상구" style="--kc:#8A6A4B">
+          <circle class="kp-halo" cx="-6.0" cy="16.27" r="4.4"/>
+          <circle class="kp-dot"  cx="-6.0" cy="16.27" r="3.2"/>
+          <path class="gl" d="M-6.0 14.719999999999999 L-6.0 15.82 M-6.0 16.72 L-6.0 17.82"/>
+        </g>
+        <g class="kp" data-id="szrail" tabindex="0" role="button" aria-label="선전 철도 통상구" style="--kc:#4A5A78">
+          <circle class="kp-halo" cx="-14.71" cy="26.24" r="4.4"/>
+          <circle class="kp-dot"  cx="-14.71" cy="26.24" r="3.2"/>
+          <path class="gl" d="M-14.71 24.639999999999997 L-14.71 27.84 M-15.860000000000001 25.52 L-13.56 25.52 M-15.860000000000001 26.959999999999997 L-13.56 26.959999999999997"/>
+        </g>
+        <g class="kp" data-id="yantian" tabindex="0" role="button" aria-label="옌톈항 통상구" style="--kc:#3F6E72">
+          <circle class="kp-halo" cx="18.77" cy="12.25" r="4.4"/>
+          <circle class="kp-dot"  cx="18.77" cy="12.25" r="3.2"/>
+          <path class="gl" d="M17.419999999999998 11.8 q0.675 -0.62 1.35 0 q0.675 0.62 1.35 0 M17.419999999999998 13.1 q0.675 -0.62 1.35 0 q0.675 0.62 1.35 0"/>
+        </g>
+        <g class="kp" data-id="dayawan" tabindex="0" role="button" aria-label="다야만 통상구" style="--kc:#3F6E72">
+          <circle class="kp-halo" cx="83.01" cy="7.22" r="4.4"/>
+          <circle class="kp-dot"  cx="83.01" cy="7.22" r="3.2"/>
+          <path class="gl" d="M81.66000000000001 6.77 q0.675 -0.62 1.35 0 q0.675 0.62 1.35 0 M81.66000000000001 8.07 q0.675 -0.62 1.35 0 q0.675 0.62 1.35 0"/>
+        </g>
+        <g class="kp" data-id="shekou" tabindex="0" role="button" aria-label="셔코우 통상구" style="--kc:#3F6E72">
+          <circle class="kp-halo" cx="-67.07" cy="37.26" r="4.4"/>
+          <circle class="kp-dot"  cx="-67.07" cy="37.26" r="3.2"/>
+          <path class="gl" d="M-68.41999999999999 36.809999999999995 q0.675 -0.62 1.35 0 q0.675 0.62 1.35 0 M-68.41999999999999 38.11 q0.675 -0.62 1.35 0 q0.675 0.62 1.35 0"/>
+        </g>
+        <g class="kp" data-id="chiwan" tabindex="0" role="button" aria-label="츠완 통상구" style="--kc:#3F6E72">
+          <circle class="kp-halo" cx="-71.9" cy="40.83" r="4.4"/>
+          <circle class="kp-dot"  cx="-71.9" cy="40.83" r="3.2"/>
+          <path class="gl" d="M-73.25 40.379999999999995 q0.675 -0.62 1.35 0 q0.675 0.62 1.35 0 M-73.25 41.68 q0.675 -0.62 1.35 0 q0.675 0.62 1.35 0"/>
+        </g>
+        <g class="kp" data-id="mawan" tabindex="0" role="button" aria-label="마완 통상구" style="--kc:#3F6E72">
+          <circle class="kp-halo" cx="-73.62" cy="35.08" r="4.4"/>
+          <circle class="kp-dot"  cx="-73.62" cy="35.08" r="3.2"/>
+          <path class="gl" d="M-74.97 34.629999999999995 q0.675 -0.62 1.35 0 q0.675 0.62 1.35 0 M-74.97 35.93 q0.675 -0.62 1.35 0 q0.675 0.62 1.35 0"/>
+        </g>
+        <g class="kp" data-id="dachanwan" tabindex="0" role="button" aria-label="다찬완 통상구" style="--kc:#3F6E72">
+          <circle class="kp-halo" cx="-78.18" cy="17.28" r="4.4"/>
+          <circle class="kp-dot"  cx="-78.18" cy="17.28" r="3.2"/>
+          <path class="gl" d="M-79.53 16.830000000000002 q0.675 -0.62 1.35 0 q0.675 0.62 1.35 0 M-79.53 18.130000000000003 q0.675 -0.62 1.35 0 q0.675 0.62 1.35 0"/>
+        </g>
+        <g class="kp" data-id="airport" tabindex="0" role="button" aria-label="선전 바오안 국제공항 통상구" style="--kc:#7A5C74">
+          <circle class="kp-halo" cx="-87.64" cy="-2.71" r="4.4"/>
+          <circle class="kp-dot"  cx="-87.64" cy="-2.71" r="3.2"/>
+          <path class="gf" d="M-87.64 -4.359999999999999 L-86.19 -1.66 L-87.64 -2.36 L-89.09 -1.66 Z"/>
+        </g>
+      </g>
+      <g id="furniture" aria-hidden="true">
+        <path fill="none" stroke="#9AA3A6" stroke-width=".55" d="M92 -52 L92 -41"/>
+        <path fill="none" stroke="#9AA3A6" stroke-width=".55" stroke-linejoin="round" d="M89.5 -49 L92 -53 L94.5 -49"/>
+        <text x="92" y="-36.5" font-size="3.6" fill="#8B9497" text-anchor="middle" font-weight="500">N</text>
+        <path fill="none" stroke="#9AA3A6" stroke-width=".55" d="M-96 55 L-96 58.5 M-96 58.5 L-73.3 58.5 M-73.3 58.5 L-73.3 55"/>
+        <text x="-84.6" y="53.2" font-size="3.6" fill="#8B9497" text-anchor="middle" font-weight="500">10 km</text>
+      </g>
+    </svg>
+  </div>
+
+  <div class="foot">
+    국무원 비준 일류(一类) 통상구입니다. 도로·철도 통상구는 대부분 홍콩과의 경계선을 따라 몰려 있어,
+    기호가 겹치는 곳은 최대 1.2km 범위에서 벌려 표시했습니다.
+  </div>
+
+  <div class="key" id="key">
+      <div class="grp" style="--kc:#8A6A4B">
+        <div class="grp-head"><span class="gsym"><svg viewBox="-4 -4 8 8" width="15" height="15"><circle class="kp-dot" cx="0" cy="0" r="3.2"/><path class="gl" d="M0 -1.55 L0 -0.45 M0 0.45 L0 1.55"/></svg></span>도로 <b>7</b>곳</div>
+        <ul class="grp-list">
+          <li class="row" data-id="luohu" tabindex="0" role="button">뤄후</li>
+          <li class="row" data-id="wenjindu" tabindex="0" role="button">원진두</li>
+          <li class="row" data-id="huanggang" tabindex="0" role="button">황강</li>
+          <li class="row" data-id="shatoujiao" tabindex="0" role="button">사터우자오</li>
+          <li class="row" data-id="shenzhenbay" tabindex="0" role="button">선전만</li>
+          <li class="row" data-id="futian" tabindex="0" role="button">푸톈</li>
+          <li class="row" data-id="liantang" tabindex="0" role="button">롄탕</li>
+        </ul>
+      </div>
+      <div class="grp" style="--kc:#4A5A78">
+        <div class="grp-head"><span class="gsym"><svg viewBox="-4 -4 8 8" width="15" height="15"><circle class="kp-dot" cx="0" cy="0" r="3.2"/><path class="gl" d="M0 -1.6 L0 1.6 M-1.15 -0.72 L1.15 -0.72 M-1.15 0.72 L1.15 0.72"/></svg></span>철도 <b>2</b>곳</div>
+        <ul class="grp-list">
+          <li class="row" data-id="szrail" tabindex="0" role="button">선전 철도</li>
+          <li class="row" data-id="wkln" tabindex="0" role="button">광선강 고속철 시주룽역<span class="offmap">지도 밖</span></li>
+        </ul>
+      </div>
+      <div class="grp" style="--kc:#3F6E72">
+        <div class="grp-head"><span class="gsym"><svg viewBox="-4 -4 8 8" width="15" height="15"><circle class="kp-dot" cx="0" cy="0" r="3.2"/><path class="gl" d="M-1.35 -0.45 q0.675 -0.62 1.35 0 q0.675 0.62 1.35 0 M-1.35 0.85 q0.675 -0.62 1.35 0 q0.675 0.62 1.35 0"/></svg></span>수운 <b>6</b>곳</div>
+        <ul class="grp-list">
+          <li class="row" data-id="yantian" tabindex="0" role="button">옌톈항</li>
+          <li class="row" data-id="dayawan" tabindex="0" role="button">다야만</li>
+          <li class="row" data-id="shekou" tabindex="0" role="button">셔코우</li>
+          <li class="row" data-id="chiwan" tabindex="0" role="button">츠완</li>
+          <li class="row" data-id="mawan" tabindex="0" role="button">마완</li>
+          <li class="row" data-id="dachanwan" tabindex="0" role="button">다찬완</li>
+        </ul>
+      </div>
+      <div class="grp" style="--kc:#7A5C74">
+        <div class="grp-head"><span class="gsym"><svg viewBox="-4 -4 8 8" width="15" height="15"><circle class="kp-dot" cx="0" cy="0" r="3.2"/><path class="gf" d="M0 -1.65 L1.45 1.05 L0 0.35 L-1.45 1.05 Z"/></svg></span>항공 <b>1</b>곳</div>
+        <ul class="grp-list">
+          <li class="row" data-id="airport" tabindex="0" role="button">선전 바오안 국제공항</li>
+        </ul>
+      </div>
+  </div>
+
+  <div class="detail" id="detail">
+    <div class="d-guide">통상구를 선택하세요.</div>
+  </div>
+
+</div>
+
+<script>
+  const PORTS = {
+  "luohu": {
+    "name": "뤄후",
+    "hanja": "罗湖",
+    "mode": "도로",
+    "note": "육로 여객 최대. 전국 상위권 통행량",
+    "coord": "114.1155°E 22.5320°N",
+    "onmap": true
+  },
+  "wenjindu": {
+    "name": "원진두",
+    "hanja": "文锦渡",
+    "mode": "도로",
+    "note": "중국에서 가장 이른 시기에 개방된 통상구 중 하나",
+    "coord": "114.1355°E 22.5425°N",
+    "onmap": true
+  },
+  "huanggang": {
+    "name": "황강",
+    "hanja": "皇岗",
+    "mode": "도로",
+    "note": "화물차 출입경 최다. 24시간 통관을 처음 시행",
+    "coord": "114.0745°E 22.5175°N",
+    "onmap": true
+  },
+  "shatoujiao": {
+    "name": "사터우자오",
+    "hanja": "沙头角",
+    "mode": "도로",
+    "note": "다펑만 서안의 소규모 육로 통상구",
+    "coord": "114.2155°E 22.5535°N",
+    "onmap": true
+  },
+  "shenzhenbay": {
+    "name": "선전만",
+    "hanja": "深圳湾",
+    "mode": "도로",
+    "note": "아시아 최대 여객·화물 종합 육로 통상구. 일지양검 첫 시행",
+    "coord": "113.9385°E 22.4870°N",
+    "onmap": true
+  },
+  "futian": {
+    "name": "푸톈",
+    "hanja": "福田",
+    "mode": "도로",
+    "note": "내지와 홍콩을 지하철로 직결한 첫 통상구",
+    "coord": "114.0665°E 22.5145°N",
+    "onmap": true
+  },
+  "liantang": {
+    "name": "롄탕",
+    "hanja": "莲塘",
+    "mode": "도로",
+    "note": "선전·홍콩 간 일곱 번째 도로 통상구",
+    "coord": "114.1640°E 22.5640°N",
+    "onmap": true
+  },
+  "szrail": {
+    "name": "선전 철도",
+    "hanja": "深圳铁路",
+    "mode": "철도",
+    "note": "선전역에 설치된 재래선 철도 통상구",
+    "coord": "114.1180°E 22.5310°N",
+    "onmap": true
+  },
+  "wkln": {
+    "name": "광선강 고속철 시주룽역",
+    "hanja": "广深港高铁西九龙站",
+    "mode": "철도",
+    "note": "홍콩 시주룽역 구내에 설치. 선전시 경계 밖",
+    "coord": "114.1665°E 22.3040°N",
+    "onmap": false
+  },
+  "yantian": {
+    "name": "옌톈항",
+    "hanja": "盐田港",
+    "mode": "수운",
+    "note": "중국 4대 국제 환적 심수항 중 하나",
+    "coord": "114.2700°E 22.5800°N",
+    "onmap": true
+  },
+  "dayawan": {
+    "name": "다야만",
+    "hanja": "大亚湾",
+    "mode": "수운",
+    "note": "다야만 원자력발전소 전용 부두. 다펑아오 북측",
+    "coord": "114.5450°E 22.6000°N",
+    "onmap": true
+  },
+  "shekou": {
+    "name": "셔코우",
+    "hanja": "蛇口",
+    "mode": "수운",
+    "note": "기업이 자체 자금으로 건설·운영한 첫 해항 통상구",
+    "coord": "113.8990°E 22.4790°N",
+    "onmap": true
+  },
+  "chiwan": {
+    "name": "츠완",
+    "hanja": "赤湾",
+    "mode": "수운",
+    "note": "중외 합자 항만기업이 건설·운영한 첫 해항 통상구",
+    "coord": "113.8830°E 22.4740°N",
+    "onmap": true
+  },
+  "mawan": {
+    "name": "마완",
+    "hanja": "妈湾",
+    "mode": "수운",
+    "note": "대만구 최초의 5G 스마트 항만",
+    "coord": "113.8770°E 22.4830°N",
+    "onmap": true
+  },
+  "dachanwan": {
+    "name": "다찬완",
+    "hanja": "大铲湾",
+    "mode": "수운",
+    "note": "주강 하구의 현대식 컨테이너 통상구",
+    "coord": "113.8550°E 22.5600°N",
+    "onmap": true
+  },
+  "airport": {
+    "name": "선전 바오안 국제공항",
+    "hanja": "深圳宝安国际机场",
+    "mode": "항공",
+    "note": "지방 투자 위주로 지어진 첫 공항. 중국 4대 항공항",
+    "coord": "113.8145°E 22.6395°N",
+    "onmap": true
+  }
+};
+  const COLOR = { '도로':'#8A6A4B', '철도':'#4A5A78', '수운':'#3F6E72', '항공':'#7A5C74' };
+  const detail = document.getElementById('detail');
+
+  function pick(id) {
+    const p = PORTS[id];
+    if (!p) return;
+
+    document.querySelectorAll('.kp, .row').forEach(function (el) {
+      el.classList.toggle('on', el.dataset.id === id);
+    });
+
+    detail.style.setProperty('--kc', COLOR[p.mode]);
+    detail.innerHTML =
+      '<div class="d-mode">' + p.mode + ' 통상구' + (p.onmap ? '' : ' · 지도 밖') + '</div>' +
+      '<div class="d-name"><span class="d-ko">' + p.name + '</span>' +
+      '<span class="d-cn">' + p.hanja + '</span></div>' +
+      '<div class="d-coord">' + p.coord + '</div>' +
+      '<div class="d-desc">' + p.note + '</div>';
+  }
+
+  document.querySelectorAll('.kp, .row').forEach(function (el) {
+    el.addEventListener('click', function () { pick(el.dataset.id); });
+    el.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pick(el.dataset.id); }
+    });
+  });
+</script>
+</body>
+</html>
