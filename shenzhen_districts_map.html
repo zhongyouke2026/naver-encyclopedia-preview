@@ -11,8 +11,8 @@
     --paper:  #FCFBF9;
     --ink:    #16191D;
     --muted:  #8A8781;
-    --rule:   #E6E3DD;
-    --sea:    #E9EEF0;
+    --rule:   rgba(0, 0, 0, 0.05);
+    --sea:    #f8fafc;
     --accent: #2E5A4C;
 
     --sans: "Pretendard Variable", Pretendard, system-ui, sans-serif;
@@ -21,11 +21,10 @@
 
   * { box-sizing: border-box; }
 
-  /* 클릭 시 브라우저 기본 포커스 테두리 제거 (키보드 이동 표시는 아래에서 따로 유지) */
+  /* 클릭 시 브라우저 기본 포커스 테두리 제거 */
   :focus { outline: none; }
   svg *:focus { outline: none; }
   * { -webkit-tap-highlight-color: transparent; }
-
 
   body {
     margin: 0;
@@ -33,23 +32,32 @@
     font-family: var(--sans);
     color: var(--ink);
     -webkit-font-smoothing: antialiased;
+    width: 100%;
+    height: 100%;
   }
 
   .plate {
-    background: var(--paper);
-    border: 1px solid var(--rule);
-    border-radius: 3px;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 24px;
+    padding: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+    position: relative;
   }
 
   /* ── 도판 머리글 ───────────────────────── */
-  .head { padding: 22px 26px 18px; }
+  .head { padding: 8px 12px 10px; }
 
   .eyebrow {
     font-family: var(--serif);
-    font-size: 11px;
+    font-size: 10px;
     letter-spacing: .34em;
     color: var(--muted);
-    margin-bottom: 9px;
+    margin-bottom: 6px;
   }
 
   .titlerow {
@@ -61,21 +69,32 @@
   }
   h1 {
     margin: 0;
-    font-size: 23px;
+    font-size: 18px;
     font-weight: 700;
     letter-spacing: -.035em;
   }
-  .hint { font-size: 11.5px; color: var(--muted); letter-spacing: -.01em; }
+  .hint { font-size: 11px; color: var(--muted); letter-spacing: -.01em; }
 
   /* ── 지도 ──────────────────────────────── */
   .field {
-    margin: 4px 18px 0;
+    margin: 4px 12px 0;
     background: var(--sea);
     border: 1px solid var(--rule);
-    border-radius: 2px;
+    border-radius: 16px;
     position: relative;
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
   }
-  svg.map { display: block; width: 100%; height: auto; }
+  svg.map {
+    display: block;
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+  }
 
   .dist {
     stroke: var(--paper);
@@ -119,36 +138,14 @@
   }
 
   .foot {
-    padding: 11px 26px 0;
-    font-size: 11px;
-    line-height: 1.65;
+    padding: 10px 12px 4px;
+    font-size: 10.5px;
+    line-height: 1.5;
     color: var(--muted);
   }
   .foot b { font-weight: 600; color: #6E6B66; }
 
-  /* ── 상세 ──────────────────────────────── */
-  .detail { margin: 16px 26px 22px; padding-top: 16px; border-top: 1px solid var(--rule); }
-
-  .d-guide { font-size: 12.5px; color: var(--muted); }
-
-  .d-name {
-    display: flex; align-items: baseline; gap: 8px;
-    margin-bottom: 10px;
-  }
-  .d-ko { font-size: 18px; font-weight: 700; letter-spacing: -.035em; }
-  .d-cn { font-family: var(--serif); font-size: 13px; color: var(--muted); }
-
-  .d-meta {
-    display: flex; gap: 18px; flex-wrap: wrap;
-    padding-bottom: 11px; margin-bottom: 11px;
-    border-bottom: 1px solid var(--rule);
-    font-size: 11.5px; color: var(--muted);
-    font-variant-numeric: tabular-nums;
-  }
-  .d-meta span { letter-spacing: -.01em; }
-  .d-meta b { font-weight: 600; color: #4A4F55; margin-left: 5px; }
-
-  .d-desc { font-size: 13.5px; line-height: 1.85; letter-spacing: -.015em; color: #3A4048; }
+  
 
   @media (max-width: 460px) {
     .head { padding: 18px 18px 14px; }
@@ -171,7 +168,7 @@
     <div class="eyebrow">廣東省 深圳市</div>
     <div class="titlerow">
       <h1>행정구역</h1>
-      <div class="hint">구를 선택하면 아래에 설명이 나옵니다</div>
+      <div class="hint">지도의 구(区)를 선택하면 하이라이트됩니다</div>
     </div>
   </div>
 
@@ -217,8 +214,7 @@
     <b>선산특별합작구(深汕特别合作区)</b>는 선전시가 개발·관리하지만 시 경계 밖이어서 지도에 없습니다.
   </div>
 
-  <div class="detail" id="detail">
-    <div class="d-guide">지도에서 구를 선택하세요.</div>
+  
   </div>
 
 </div>
@@ -304,7 +300,6 @@
   }
 };
   const map = document.getElementById('map');
-  const detail = document.getElementById('detail');
 
   function pick(id) {
     const d = DISTRICTS[id];
@@ -314,15 +309,6 @@
     map.querySelectorAll('.dist, .dlab').forEach(function (el) {
       el.classList.toggle('on', el.dataset.id === id);
     });
-
-    detail.innerHTML =
-      '<div class="d-name"><span class="d-ko">' + d.name + '</span>' +
-      '<span class="d-cn">' + d.hanja + '</span></div>' +
-      '<div class="d-meta">' +
-        '<span>' + d.code.replace(':', '<b>') + '</b></span>' +
-        '<span>' + d.streets.replace(':', '<b>') + '</b></span>' +
-      '</div>' +
-      '<div class="d-desc">' + d.desc + '</div>';
   }
 
   map.querySelectorAll('.dist').forEach(function (p) {
@@ -330,9 +316,20 @@
     p.setAttribute('tabindex', '0');
     p.setAttribute('role', 'button');
     p.setAttribute('aria-label', DISTRICTS[id].name);
-    p.addEventListener('click', function () { pick(id); });
+    p.addEventListener('click', function (e) {
+      e.stopPropagation();
+      pick(id);
+    });
     p.addEventListener('keydown', function (e) {
       if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pick(id); }
+    });
+  });
+
+  // Clear focus when clicking background map
+  map.addEventListener('click', function () {
+    map.classList.remove('picked');
+    map.querySelectorAll('.dist, .dlab').forEach(function (el) {
+      el.classList.remove('on');
     });
   });
 </script>
