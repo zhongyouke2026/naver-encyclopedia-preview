@@ -1,558 +1,271 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>선전시 16대 통상구(口岸) 안내 지도</title>
-  <link rel="preconnect" href="https://cdn.jsdelivr.net">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css">
-  <style>
-    :root {
-      --sans: "Pretendard Variable", Pretendard, system-ui, sans-serif;
-      --serif: "Nanum Myeongjo", "Apple SD Gothic Neo", serif;
-      --ink: #1e293b;
-      --muted: #64748b;
-      --rule: rgba(0, 0, 0, 0.06);
-    }
-    
-    * { box-sizing: border-box; }
-    :focus { outline: none; }
-    
-    body {
-      margin: 0;
-      padding: 4px;
-      background: transparent;
-      font-family: var(--sans);
-      color: var(--ink);
-      -webkit-font-smoothing: antialiased;
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-    }
-    
-    .plate {
-      width: 100%;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      background: #ffffff;
-      border: 1px solid rgba(0, 0, 0, 0.08);
-      border-radius: 24px;
-      padding: 16px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
-      position: relative;
-      overflow: hidden;
-    }
-    
-    .head {
-      padding: 4px 6px 10px;
-    }
-    
-    .titlerow {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-      flex-wrap: wrap;
-    }
-    
-    h1 {
-      margin: 0;
-      font-size: 17px;
-      font-weight: 800;
-      letter-spacing: -.03em;
-    }
-    
-    /* Segmented Tab Control */
-    .tabs {
-      display: flex;
-      background: #f1f5f9;
-      padding: 2px;
-      border-radius: 8px;
-      gap: 2px;
-    }
-    
-    .tab {
-      font-size: 11px;
-      font-weight: 600;
-      color: var(--muted);
-      padding: 4px 10px;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      white-space: nowrap;
-    }
-    
-    .tab:hover {
-      color: var(--ink);
-    }
-    
-    .tab.active {
-      background: #ffffff;
-      color: var(--ink);
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
-    }
-    
-    .field {
-      margin: 4px 6px 0;
-      background: #f8fafc;
-      border: 1px solid var(--rule);
-      border-radius: 16px;
-      position: relative;
-      flex-grow: 1;
-      overflow: hidden;
-      max-height: 290px;
-    }
-    
-    .map-wrapper {
-      position: relative;
-      width: 100%;
-      height: 100%;
-    }
-    
-    .map-image {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-    
-    /* Styling for the custom pins */
-    .pin {
-      position: absolute;
-      transform: translate(-50%, -50%);
-      cursor: pointer;
-      z-index: 5;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      transition: opacity 0.3s ease, transform 0.2s ease;
-    }
-    
-    .pin-circle {
-      width: 22px;
-      height: 22px;
-      border-radius: 50%;
-      border: 2px solid #ffffff;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 10px;
-      color: #ffffff;
-      transition: all 0.2s ease;
-    }
-    
-    .pin-label {
-      font-size: 8.5px;
-      font-weight: 700;
-      color: #334155;
-      background: rgba(255, 255, 255, 0.85);
-      padding: 1px 4px;
-      border-radius: 4px;
-      border: 0.5px solid rgba(0,0,0,0.1);
-      margin-top: 2px;
-      white-space: nowrap;
-      pointer-events: none;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-    }
-    
-    .pin:hover .pin-circle, .pin.active .pin-circle {
-      transform: scale(1.22);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
-    }
-    
-    /* Popover */
-    .popover {
-      position: absolute;
-      width: 270px;
-      background: rgba(255, 255, 255, 0.98);
-      backdrop-filter: blur(12px);
-      border-radius: 14px;
-      padding: 12px;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-      z-index: 10;
-      display: flex;
-      flex-direction: column;
-      gap: 5px;
-      pointer-events: auto;
-      transition: opacity 0.2s, transform 0.2s;
-    }
-    
-    .popover-close {
-      position: absolute;
-      top: 8px;
-      right: 10px;
-      font-size: 15px;
-      font-weight: 700;
-      color: #94a3b8;
-      cursor: pointer;
-      line-height: 1;
-    }
-    .popover-close:hover {
-      color: #64748b;
-    }
-    
-    .popover-badge {
-      font-size: 9px;
-      font-weight: 700;
-      padding: 2px 7px;
-      border-radius: 999px;
-      width: fit-content;
-      color: #ffffff;
-    }
-    
-    .popover-title {
-      font-size: 13px;
-      font-weight: 700;
-      color: #0f172a;
-      margin-top: 1px;
-    }
-    
-    .popover-desc {
-      font-size: 11px;
-      line-height: 1.45;
-      color: #475569;
-      border-top: 1px dashed #e2e8f0;
-      padding-top: 5px;
-      margin-top: 1px;
-    }
-    
-    /* Popover Arrow */
-    .popover::after {
-      content: '';
-      position: absolute;
-      bottom: -5px;
-      width: 8px;
-      height: 8px;
-      background: #ffffff;
-      transform: rotate(45deg);
-    }
-    
-    .arrow-center::after { left: 50%; margin-left: -4px; border-right: 1px solid rgba(0, 0, 0, 0.12); border-bottom: 1px solid rgba(0, 0, 0, 0.12); }
-    .arrow-right::after { right: 35px; border-right: 1px solid rgba(0, 0, 0, 0.12); border-bottom: 1px solid rgba(0, 0, 0, 0.12); }
-    .arrow-left::after { left: 35px; border-right: 1px solid rgba(0, 0, 0, 0.12); border-bottom: 1px solid rgba(0, 0, 0, 0.12); }
-    
-    .foot {
-      padding: 8px 6px 2px;
-      font-size: 10px;
-      line-height: 1.4;
-      color: var(--muted);
-    }
-    .foot b { font-weight: 600; color: #475569; }
-    
-    @media (max-width: 620px) {
-      .titlerow { flex-direction: column; align-items: flex-start; gap: 8px; }
-      .tabs { width: 100%; justify-content: space-between; }
-      .tab { padding: 4px 6px; font-size: 10px; }
-    }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>선전항 항구 구역</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css">
+<style>
+  :root{
+    --paper:#FCFBF9;--ink:#16191D;--muted:#8A8781;--rule:#E6E3DD;
+    --sea:#E9EEF0;--land:#EFEDE8;--landline:#DFDCD5;
+    --west:#5E7391;--east:#4E7A6B;
+    --sans:"Pretendard Variable",Pretendard,system-ui,sans-serif;
+    --serif:"Nanum Myeongjo","Apple SD Gothic Neo","Songti SC","SimSun",serif;
+  }
+  *{box-sizing:border-box}
+  :focus{outline:none} svg *:focus{outline:none}
+  *{-webkit-tap-highlight-color:transparent}
+  body{margin:0;padding:4px;background:transparent;font-family:var(--sans);color:var(--ink);-webkit-font-smoothing:antialiased;width:100%;height:100%;overflow:hidden}
+  .plate{width:100%;height:100%;display:flex;flex-direction:column;background:#ffffff;border:1px solid rgba(0,0,0,0.08);border-radius:24px;padding:16px;box-shadow:0 10px 30px rgba(0,0,0,0.04);position:relative;overflow:hidden}
+
+  .head{padding:8px 12px 10px}
+  .eyebrow{font-family:var(--serif);font-size:11px;letter-spacing:.34em;color:var(--muted);margin-bottom:9px}
+  .titlerow{display:flex;align-items:baseline;justify-content:space-between;gap:16px;flex-wrap:wrap}
+  h1{margin:0;font-size:18px;font-weight:700;letter-spacing:-.035em}
+  .legend{display:flex;gap:10px;font-size:11px;color:var(--muted)}
+  .legend i{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:5px;vertical-align:baseline}
+
+  .field{margin:4px 12px 0;background:#f8fafc;border:1px solid rgba(0,0,0,0.05);border-radius:16px;position:relative;flex-grow:1;display:flex;align-items:center;justify-content:center;overflow:hidden;max-height:280px}
+  svg.map{display:block;max-width:100%;max-height:100%;width:auto;height:auto}
+  .dist{fill:var(--land);stroke:var(--landline);stroke-width:.6;stroke-linejoin:round}
+  .dlab{font-size:4.1px;font-weight:500;letter-spacing:-.03em;fill:#B3AFA8;text-anchor:middle;pointer-events:none}
+
+  .pk{cursor:pointer}
+  .pk-lead{stroke:#A9A6A0;stroke-width:.45}
+  .pk-ring{fill:none;stroke:var(--pc);stroke-width:.85;opacity:.55;transition:opacity .25s ease,stroke-width .25s ease}
+  .pk-dot{fill:var(--pc);transition:r .25s ease}
+  .pk-lab{font-size:4.3px;font-weight:600;letter-spacing:-.04em;fill:#3B4148;
+          paint-order:stroke;stroke:rgba(252,251,249,.92);stroke-width:1.7px;stroke-linejoin:round;
+          pointer-events:none;transition:fill .25s ease}
+  .pk:hover .pk-ring,.pk.on .pk-ring{opacity:1;stroke-width:1.3}
+  .pk.on .pk-dot{r:2.9}
+  .pk.on .pk-lab{fill:var(--pc)}
+
+  .key{margin:10px 12px 0;padding:0;list-style:none;display:grid;grid-template-columns:repeat(2,1fr);gap:1px 16px}
+  .row{display:flex;align-items:baseline;gap:9px;padding:7px 0;cursor:pointer;
+       border-bottom:1px solid transparent;transition:border-color .2s ease}
+  .row:hover{border-bottom-color:var(--rule)}
+  .swatch{flex:none;width:8px;height:8px;border-radius:50%;background:var(--pc);opacity:.45;transition:opacity .2s ease}
+  .row.on .swatch{opacity:1}
+  .rname{font-size:13px;font-weight:600;letter-spacing:-.03em;white-space:nowrap}
+  .rfunc{font-size:10.5px;color:var(--muted);letter-spacing:-.02em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+  .detail{margin:12px 12px 0;padding-top:12px;border-top:1px solid rgba(0,0,0,0.08)}
+  .d-guide{font-size:12.5px;color:var(--muted)}
+  .d-grp{font-size:10.5px;font-weight:600;letter-spacing:.02em;color:var(--pc);margin-bottom:5px}
+  .d-name{font-size:17px;font-weight:700;letter-spacing:-.035em;margin-bottom:3px}
+  .d-func{font-size:12px;color:#5A6068;margin-bottom:11px;padding-bottom:11px;border-bottom:1px solid var(--rule)}
+  .d-desc{font-size:13.5px;line-height:1.85;letter-spacing:-.015em;color:#3A4048}
+
+  /* ── 물류 통계 ── */
+  .stats-wrap{margin:16px 12px 4px;padding-top:14px;border-top:1px solid rgba(0,0,0,0.08)}
+  .stats-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:14px}
+  .stats-title{font-size:12px;font-weight:700;letter-spacing:-.02em}
+  .stats-note{font-size:10.5px;color:var(--muted)}
+  .stats{display:grid;grid-template-columns:repeat(4,1fr)}
+  .stat{padding:0 16px;border-left:1px solid var(--rule)}
+  .stat:first-child{padding-left:0;border-left:none}
+  .s-lab{font-size:10.5px;color:var(--muted);letter-spacing:-.01em;margin-bottom:6px}
+  .s-num{font-size:19px;font-weight:700;letter-spacing:-.045em;font-variant-numeric:tabular-nums;line-height:1.15}
+  .s-unit{font-size:11px;font-weight:500;color:#6E6B66;margin-left:3px;letter-spacing:-.01em}
+  .s-chg{margin-top:5px;font-size:10.5px;font-weight:600;color:#4E7A6B;font-variant-numeric:tabular-nums}
+  .s-sub{margin-top:5px;font-size:10.5px;color:var(--muted)}
+
+  @media (max-width:700px){ .stats{grid-template-columns:repeat(2,1fr);gap:18px 0}
+    .stat:nth-child(3){padding-left:0;border-left:none} }
+  @media (max-width:560px){ .key{grid-template-columns:1fr} }
+  @media (max-width:460px){
+    .head{padding:18px 18px 14px} h1{font-size:20px}
+    .field{margin:4px 12px 0}
+    .key,.detail,.stats-wrap{margin-left:18px;margin-right:18px}
+    .stats{grid-template-columns:1fr;gap:16px 0}
+    .stat{padding-left:0;border-left:none}
+  }
+  @media (prefers-reduced-motion:reduce){ .pk-ring,.pk-dot,.pk-lab,.swatch,.row{transition:none} }
+</style>
 </head>
 <body>
+<div class="plate">
 
-  <div class="plate">
-    <div class="head">
-      <div class="titlerow">
-        <h1>선전시 주요 통상구(口岸) 지도</h1>
-        <div class="tabs" id="tabs">
-          <div class="tab active" data-filter="all">전체 (16)</div>
-          <div class="tab" data-filter="road">🛣️ 도로 (7)</div>
-          <div class="tab" data-filter="railway">🚇 철도 (2)</div>
-          <div class="tab" data-filter="waterway">🚢 수운 (6)</div>
-          <div class="tab" data-filter="aviation">✈️ 항공 (1)</div>
-        </div>
+  <div class="head">
+        <div class="titlerow">
+      <h1>6대 항구 구역</h1>
+      <div class="legend">
+        <span><i style="background:var(--west)"></i>서부 항구군</span>
+        <span><i style="background:var(--east)"></i>동부 항구군</span>
       </div>
-    </div>
-    
-    <div class="field" id="mapField">
-      <div class="map-wrapper" id="mapWrapper">
-        <img src="./images/shenzhen_ports_base.jpg" alt="선전시 주요 통상구 기본 지도" class="map-image">
-        
-        <!-- Popover -->
-        <div class="popover" id="popover" style="display: none;">
-          <div class="popover-close" onclick="closePopover()">×</div>
-          <div class="popover-badge" id="popoverBadge">도로</div>
-          <div class="popover-title" id="popoverTitle">통상구 이름</div>
-          <div class="popover-desc" id="popoverDesc">설명</div>
-        </div>
-      </div>
-    </div>
-    
-    <div class="foot">
-      선전의 일류(一类) 통상구 16곳의 위치입니다. 도로(오렌지), 철도(레드), 수운(블루), 항공(퍼플) 등 각 <b>교통 수단별 성격에 맞는 랜드마크 심볼</b>로 특징을 살려 표기했습니다. 핀을 클릭하면 통관 특성이 열립니다.
     </div>
   </div>
 
-  <script>
-    const PORTS_DATA = {
-      // 도로 7곳
-      'luohu': {
-        name: '뤄후(罗湖) 도로 통상구',
-        type: 'road',
-        typeName: '도로',
-        icon: '🚗',
-        color: '#d97706',
-        left: 55.5, top: 61.5,
-        desc: '선전에서 여객 통행량이 가장 많은 유서 깊은 육로 통상구입니다. 국경 보행 통로를 통해 홍콩 신제 지역과 직접 연결됩니다.'
-      },
-      'wenjindu': {
-        name: '원진두(文锦渡) 도로 통상구',
-        type: 'road',
-        typeName: '도로',
-        icon: '🚗',
-        color: '#d97706',
-        left: 57.0, top: 59.5,
-        desc: '중국 본토에서 홍콩으로 신선 농수산물을 전문 수송하는 핵심 물류 도로 관문입니다. 신선 식품 전담 통관 트럭들이 주로 이용합니다.'
-      },
-      'huanggang': {
-        name: '황강(皇岗) 도로 통상구',
-        type: 'road',
-        typeName: '도로',
-        icon: '🚗',
-        color: '#d97706',
-        left: 51.0, top: 62.0,
-        desc: '선전과 홍콩을 잇는 최초의 24시간 상시 통관 도로 통상구입니다. 물류 화물 차량 및 심야 여객 버스 수송의 핵심 통관 요충지입니다.'
-      },
-      'shatoujiao': {
-        name: '사터우자오(沙头角) 도로 통상구',
-        type: 'road',
-        typeName: '도로',
-        icon: '🚗',
-        color: '#d97706',
-        left: 63.8, top: 54.5,
-        desc: '선전 동부 Yantian 지역에 위치하며 국경 거리인 중잉제(中英街)와 바로 맞닿아 있는 유서 깊은 도로 관문입니다.'
-      },
-      'shenzhenbay': {
-        name: '선전만(深圳湾) 도로 통상구',
-        type: 'road',
-        typeName: '도로',
-        icon: '🚗',
-        color: '#d97706',
-        left: 42.0, top: 65.5,
-        desc: '선전만대교를 통해 홍콩과 연결되는 종합 도로 관문입니다. 하나의 청사 안에서 중국·홍콩 양측 통관 절차를 마치는 '일지양검(一地两检)' 방식으로 운영됩니다.'
-      },
-      'futian': {
-        name: '푸텐(福田) 도로 통상구',
-        type: 'road',
-        typeName: '도로',
-        icon: '🚗',
-        color: '#d97706',
-        left: 52.5, top: 63.0,
-        desc: '선전 지하철 4호선/10호선 종점과 홍콩 지하철 동철선 록마차우역이 거대 보행교로 직결된 대규모 여객 전용 관문입니다.'
-      },
-      'liantang': {
-        name: '롄탕(莲塘) 도로 통상구',
-        type: 'road',
-        typeName: '도로',
-        icon: '🚗',
-        color: '#d97706',
-        left: 60.5, top: 56.5,
-        desc: '2020년에 개통된 최신식 육로 통상구입니다. 선전 동부 고속도로망과 직결되어 홍콩 동부 및 광둥성 동부 간 물류 이동을 분담합니다.'
-      },
-      // 철도 2곳
-      'xijulong': {
-        name: '광선강 고속철 시주룽역 통상구',
-        type: 'railway',
-        typeName: '철도',
-        icon: '🚇',
-        color: '#dc2626',
-        left: 49.5, top: 60.5,
-        desc: '홍콩 국경 내의 고속철도 시주룽역 지하 승강장 구역에 설치된 중국측 출입국 검문소입니다. 중국 본토행 열차 승객들의 입국 수속을 홍콩 내에서 마칩니다.'
-      },
-      'railway': {
-        name: '선전 철도 통상구 (뤄후 철교)',
-        type: 'railway',
-        typeName: '철도',
-        icon: '🚇',
-        color: '#dc2626',
-        left: 54.0, top: 59.5,
-        desc: '뤄후 국경 철교를 통과하는 일반 간선철도 및 도시간 열차 승객들을 위한 철도 전용 출입국 관리 구역입니다.'
-      },
-      // 수운 6곳
-      'yantian': {
-        name: '옌톈항(盐田港) 수운 통상구',
-        type: 'waterway',
-        typeName: '수운',
-        icon: '🚢',
-        color: '#0284c7',
-        left: 68.3, top: 50.0,
-        desc: '초대형 컨테이너선들이 입항하는 글로벌 핵심 컨테이너 항만 관문입니다. 북미 및 유럽 등 전 세계 컨테이너 화물 노선망을 운용합니다.'
-      },
-      'dayabay': {
-        name: '다야만(大亚湾) 수운 통상구',
-        type: 'waterway',
-        typeName: '수운',
-        icon: '🚢',
-        color: '#0284c7',
-        left: 88.0, top: 52.5,
-        desc: '선전 동남부 다펑 반도에 위치한 청정에너지 포트로, 대규모 액화천연가스(LNG) 수입 선박 및 해양 요트 등의 특수 통관을 담당합니다.'
-      },
-      'shekou': {
-        name: '셔코우(蛇口) 수운 통상구',
-        type: 'waterway',
-        typeName: '수운',
-        icon: '🚢',
-        color: '#0284c7',
-        left: 36.0, top: 71.0,
-        desc: '셔코우 크루즈 여객 센터를 전용 관문으로 둔 해상 관문입니다. 홍콩 국제공항과 마카오, 주하이 등을 잇는 수상 여객선을 가동합니다.'
-      },
-      'chiwan': {
-        name: '츠완(赤湾) 수운 통상구',
-        type: 'waterway',
-        typeName: '수운',
-        icon: '🚢',
-        color: '#0284c7',
-        left: 32.5, top: 68.0,
-        desc: '남산 반도 서남단에 위치하며 곡물, 비료 및 대형 중화학 벌크 화물의 입하와 석유 제품 전용선 통관을 수행합니다.'
-      },
-      'mawan': {
-        name: '마완(妈湾) 수운 통상구',
-        type: 'waterway',
-        typeName: '수운',
-        icon: '🚢',
-        color: '#0284c7',
-        left: 30.0, top: 61.5,
-        desc: '컨테이너 처리 및 연안 화력발전용 석탄 수입 등의 전문 원자재 세관을 가동하는 선전 서부의 해상 물류 포트 관문입니다.'
-      },
-      'dachanwan': {
-        name: '다찬완(大铲湾) 수운 통상구',
-        type: 'waterway',
-        typeName: '수운',
-        icon: '🚢',
-        color: '#0284c7',
-        left: 22.0, top: 50.0,
-        desc: '선전 서부 보안구 해안에 지어진 신흥 스마트 항만 관문입니다. 글로벌 무역 정기 노선 및 컨테이너 하역의 현대식 허브 포트입니다.'
-      },
-      // 항공 1곳
-      'baoan': {
-        name: '선전 바오안 국제공항 항공 통상구',
-        type: 'aviation',
-        typeName: '항공',
-        icon: '✈️',
-        color: '#7c3aed',
-        left: 14.0, top: 44.0,
-        desc: '선전 유일의 24시간 공항 관문입니다. 국제 여객 및 대규모 항공 수출입 화물을 고속 통관하는 선전의 하늘길 세관 기지입니다.'
-      }
-    };
+  <div class="field">
+    <svg class="map" id="map" viewBox="-107.4 -63.5 214.7 127.0" xmlns="http://www.w3.org/2000/svg"
+         role="group" aria-label="선전항 6대 항구 구역 위치도">
+      <g id="shapes">
+        <path class="dist" d="M-65.18 -50.52L-65.65 -51.19L-66.74 -51.24L-67.18 -53.09L-66.33 -52.53L-63.85 -52.58L-63.15 -51.67L-62.37 -51.72L-63.57 -53.06L-62.50 -53.62L-59.62 -53.22L-61.60 -53.92L-63.25 -53.68L-63.87 -52.88L-66.60 -53.07L-66.46 -53.69L-66.99 -53.65L-66.55 -54.31L-67.06 -53.99L-67.60 -54.57L-68.18 -53.72L-68.02 -54.39L-69.42 -54.90L-69.03 -55.53L-69.72 -56.45L-68.90 -55.65L-67.80 -57.33L-68.95 -56.64L-70.14 -57.32L-69.83 -58.50L-70.96 -57.72L-70.36 -56.99L-71.39 -55.91L-72.17 -55.90L-72.25 -56.52L-72.72 -56.15L-72.43 -56.78L-72.79 -56.86L-73.74 -54.18L-74.51 -54.45L-74.12 -52.41L-76.06 -52.27L-76.66 -51.36L-77.77 -51.18L-77.97 -51.95L-79.12 -52.40L-81.40 -51.52L-82.99 -48.55L-82.07 -47.95L-81.74 -45.70L-82.40 -43.22L-83.89 -42.36L-84.68 -42.59L-84.49 -41.95L-85.28 -41.20L-87.65 -40.90L-88.07 -40.23L-87.68 -39.45L-88.64 -38.52L-91.02 -38.89L-90.77 -37.03L-92.87 -35.56L-92.46 -33.48L-93.24 -31.26L-99.89 -27.11L-102.44 -21.71L-100.95 -12.50L-99.16 -9.23L-97.34 -3.57L-95.24 0.84L-90.31 9.02L-82.53 16.05L-82.14 17.53L-82.90 19.56L-83.00 22.49L-81.98 22.90L-78.31 21.80L-76.87 25.80L-67.42 21.03L-64.06 18.17L-63.96 15.87L-61.55 13.88L-60.84 12.13L-61.91 11.18L-62.02 9.83L-61.07 9.62L-62.24 7.27L-60.74 5.33L-61.32 3.38L-60.44 1.51L-60.88 -1.01L-59.19 -2.42L-58.97 -4.03L-57.45 -5.42L-56.20 -5.82L-54.96 -5.10L-53.72 -5.89L-52.07 -5.46L-51.29 -6.21L-50.59 -8.85L-52.08 -11.05L-51.44 -12.49L-50.32 -12.92L-50.33 -16.14L-49.39 -16.59L-50.07 -16.86L-49.03 -16.95L-49.10 -17.57L-50.21 -17.72L-49.80 -17.95L-50.03 -18.55L-50.53 -18.33L-49.55 -20.90L-51.33 -20.38L-53.08 -21.72L-53.75 -21.44L-54.52 -22.58L-54.71 -22.10L-55.48 -22.41L-56.85 -20.67L-58.72 -20.03L-58.18 -19.44L-58.80 -18.55L-60.42 -19.86L-61.29 -19.28L-61.86 -20.22L-63.94 -20.40L-65.03 -19.18L-66.28 -19.13L-66.28 -17.99L-67.39 -16.57L-66.83 -16.59L-66.52 -15.55L-68.45 -16.36L-68.16 -15.90L-69.15 -14.96L-71.55 -15.31L-72.44 -14.37L-73.74 -15.75L-72.52 -16.76L-73.02 -18.15L-72.25 -18.44L-73.38 -18.96L-73.77 -19.81L-73.15 -20.65L-73.57 -21.20L-71.97 -21.74L-71.87 -22.31L-73.10 -24.94L-71.81 -26.43L-71.47 -27.95L-73.11 -30.70L-72.87 -31.84L-74.04 -33.10L-73.78 -33.45L-74.80 -33.98L-76.22 -36.11L-76.97 -36.18L-76.49 -37.61L-77.60 -39.96L-72.01 -42.39L-70.19 -48.41L-70.03 -47.97L-69.44 -48.51L-69.82 -48.16L-68.94 -47.77L-68.14 -49.98L-65.18 -50.52Z"/>
+        <path class="dist" d="M-65.18 -50.52L-68.14 -49.98L-68.94 -47.77L-69.82 -48.16L-69.44 -48.51L-70.03 -47.97L-70.19 -48.41L-72.01 -42.39L-77.60 -39.96L-76.49 -37.61L-76.97 -36.18L-76.22 -36.11L-74.80 -33.98L-73.78 -33.45L-74.04 -33.10L-72.87 -31.84L-73.11 -30.70L-71.47 -27.95L-71.81 -26.43L-73.10 -24.94L-71.97 -21.74L-73.57 -21.20L-73.15 -20.65L-73.77 -19.81L-73.13 -18.61L-72.25 -18.44L-73.02 -18.15L-72.52 -16.76L-73.74 -15.75L-72.44 -14.37L-71.55 -15.31L-69.15 -14.96L-68.16 -15.90L-68.45 -16.36L-66.52 -15.55L-66.83 -16.59L-67.39 -16.57L-66.28 -17.99L-66.28 -19.13L-65.03 -19.18L-63.94 -20.40L-61.86 -20.22L-61.29 -19.28L-60.42 -19.86L-58.80 -18.55L-58.18 -19.44L-58.72 -20.03L-56.85 -20.67L-55.48 -22.41L-54.71 -22.10L-54.52 -22.58L-53.75 -21.44L-53.08 -21.72L-51.33 -20.38L-50.28 -20.73L-48.09 -22.17L-47.17 -23.69L-43.57 -27.02L-42.33 -26.84L-42.31 -28.90L-43.50 -30.08L-42.94 -30.61L-46.17 -31.41L-45.87 -32.69L-45.18 -32.56L-43.75 -33.83L-45.47 -35.76L-44.74 -37.08L-45.74 -38.56L-46.51 -43.03L-48.83 -42.91L-48.09 -43.17L-47.98 -43.87L-49.63 -42.71L-49.57 -43.18L-50.24 -43.32L-50.22 -42.58L-50.86 -43.54L-50.41 -44.34L-49.42 -44.61L-50.05 -45.60L-52.30 -46.10L-52.61 -46.96L-53.40 -46.34L-54.89 -46.76L-54.97 -48.26L-56.78 -49.89L-58.45 -50.34L-58.90 -51.20L-65.18 -50.52Z"/>
+        <path class="dist" d="M-17.89 -23.12L-19.34 -23.62L-19.80 -25.62L-21.16 -26.80L-20.77 -27.34L-21.37 -29.70L-22.85 -29.41L-22.69 -29.91L-24.66 -30.55L-26.90 -28.12L-27.84 -30.19L-29.56 -30.30L-29.29 -31.89L-30.61 -31.38L-31.18 -32.09L-33.03 -32.18L-32.18 -33.75L-32.89 -34.44L-33.02 -35.89L-35.07 -34.00L-36.15 -34.62L-37.13 -33.99L-38.07 -34.56L-38.34 -33.82L-40.20 -32.98L-42.33 -33.26L-43.20 -33.97L-45.18 -32.56L-45.87 -32.69L-46.17 -31.41L-42.94 -30.61L-43.50 -30.08L-42.31 -28.90L-42.33 -26.84L-43.57 -27.02L-49.69 -21.04L-49.47 -20.46L-50.53 -18.33L-50.03 -18.55L-49.80 -17.95L-50.21 -17.72L-49.10 -17.57L-49.03 -16.95L-50.07 -16.86L-49.39 -16.59L-50.33 -16.14L-50.32 -12.92L-51.44 -12.49L-52.08 -11.05L-50.59 -8.85L-50.77 -7.14L-51.97 -5.98L-51.68 -3.83L-52.17 -2.96L-50.28 -1.78L-47.66 -1.86L-46.15 -0.55L-45.83 0.81L-43.97 0.84L-41.37 5.74L-38.96 7.32L-38.96 8.52L-38.21 9.74L-38.88 11.92L-37.29 12.19L-33.79 11.28L-32.10 11.89L-30.50 10.44L-28.89 10.90L-27.65 9.13L-29.55 7.48L-29.77 8.39L-30.15 7.78L-30.79 6.57L-30.43 5.49L-30.76 2.96L-32.46 0.60L-31.99 -0.11L-32.16 -1.65L-31.25 -1.88L-31.72 -2.81L-31.49 -4.34L-32.64 -4.56L-32.43 -5.32L-31.54 -5.03L-31.64 -7.66L-31.18 -8.45L-31.70 -9.32L-30.42 -8.93L-28.19 -11.54L-27.42 -11.08L-26.63 -11.61L-25.99 -11.39L-24.31 -7.86L-23.54 -7.50L-20.88 -9.96L-20.99 -11.64L-22.15 -14.01L-21.80 -14.69L-20.57 -15.03L-22.44 -16.38L-22.55 -17.88L-21.65 -18.86L-20.07 -19.23L-18.82 -22.21L-17.89 -23.12Z"/>
+        <path class="dist" d="M38.74 -34.38L38.61 -37.19L36.52 -37.42L35.66 -38.88L37.82 -41.03L37.39 -42.76L38.13 -44.64L37.34 -44.62L36.89 -45.29L32.84 -45.31L32.56 -44.57L31.33 -44.19L30.04 -44.63L29.09 -43.01L28.31 -43.87L26.96 -43.41L24.65 -43.68L23.75 -45.14L22.16 -45.05L21.70 -43.58L19.75 -41.47L18.34 -40.99L18.54 -40.19L16.70 -38.39L15.07 -38.68L14.55 -38.26L12.98 -40.63L10.24 -41.46L9.77 -44.76L9.17 -46.12L8.38 -46.42L7.15 -45.05L6.00 -44.92L4.04 -40.41L1.56 -39.38L0.01 -39.39L-1.56 -37.87L-2.48 -37.74L-2.41 -36.18L-1.84 -35.94L-1.93 -37.02L-0.46 -35.53L-1.81 -34.90L-1.85 -34.25L-0.43 -33.82L2.44 -34.34L2.29 -33.06L3.88 -32.23L3.07 -31.70L3.31 -30.67L3.63 -31.06L4.62 -30.70L4.39 -29.02L5.98 -27.75L6.01 -26.78L4.35 -25.24L4.23 -21.52L3.12 -21.76L1.58 -20.41L2.09 -19.44L1.70 -17.04L2.10 -16.35L1.67 -14.86L0.25 -14.81L0.62 -13.75L1.68 -13.40L-0.80 -10.85L-0.57 -9.38L-1.58 -8.90L-3.22 -6.33L-4.67 -6.70L-4.63 -7.59L-5.35 -8.43L-5.95 -8.19L-6.01 -7.07L-6.80 -7.13L-6.37 -8.04L-6.81 -9.04L-8.50 -7.95L-8.06 -10.03L-6.88 -10.01L-6.09 -9.13L-5.27 -10.98L-5.26 -12.98L-8.92 -15.36L-9.36 -17.70L-10.49 -18.13L-10.27 -19.34L-10.94 -20.27L-10.58 -21.40L-12.30 -21.94L-12.76 -20.88L-14.01 -21.98L-15.51 -21.66L-16.90 -23.66L-17.41 -23.61L-18.82 -22.21L-20.07 -19.23L-21.65 -18.86L-22.55 -17.88L-22.44 -16.38L-20.57 -15.03L-21.80 -14.69L-22.15 -14.01L-20.99 -11.64L-20.88 -9.96L-23.54 -7.50L-24.31 -7.86L-25.99 -11.39L-26.63 -11.61L-27.42 -11.08L-28.19 -11.54L-30.42 -8.93L-31.70 -9.32L-31.18 -8.45L-31.64 -7.66L-31.54 -5.03L-32.43 -5.32L-32.64 -4.56L-31.49 -4.34L-31.72 -2.81L-31.25 -1.88L-32.16 -1.65L-31.99 -0.11L-32.46 0.60L-30.76 2.96L-30.43 5.49L-30.79 6.57L-29.77 8.39L-29.55 7.48L-27.65 9.13L-26.51 8.74L-26.78 7.78L-25.42 7.09L-23.43 7.68L-22.56 7.26L-19.61 10.24L-16.94 9.50L-13.81 10.65L-10.67 9.50L-9.27 7.47L-7.01 6.95L-6.62 5.98L-4.04 4.70L-2.99 3.38L0.57 3.23L2.32 5.02L2.08 6.54L3.97 6.89L4.57 7.61L5.58 7.48L5.54 8.29L6.79 10.09L6.90 11.91L9.11 9.63L9.52 7.68L10.64 6.36L10.46 4.95L11.89 3.37L13.80 2.22L16.34 2.56L17.60 1.63L17.81 0.19L16.06 -1.29L15.89 -2.96L16.69 -4.93L18.65 -6.23L18.00 -8.29L19.48 -11.17L21.77 -11.65L22.22 -12.33L23.31 -12.08L24.28 -13.21L25.47 -13.12L26.27 -14.28L29.47 -14.48L30.05 -15.62L31.05 -14.91L31.20 -17.94L30.70 -18.74L32.27 -18.95L32.42 -20.49L34.14 -20.66L35.43 -21.69L35.26 -26.36L34.73 -26.89L35.17 -28.88L34.44 -29.76L35.37 -31.64L36.15 -31.71L37.18 -34.91L38.74 -34.38Z"/>
+        <path class="dist" d="M38.74 -34.38L37.18 -34.91L36.15 -31.71L35.37 -31.64L34.44 -29.76L35.17 -28.88L34.73 -26.89L35.26 -26.36L35.43 -21.69L34.14 -20.66L32.42 -20.49L32.27 -18.95L30.70 -18.74L31.20 -17.94L31.05 -14.91L30.05 -15.62L29.47 -14.48L26.27 -14.28L25.47 -13.12L24.28 -13.21L23.31 -12.08L22.22 -12.33L21.77 -11.65L19.48 -11.17L18.00 -8.29L18.65 -6.23L21.30 -3.14L24.61 -2.68L25.08 -1.22L28.08 0.24L28.88 1.18L30.58 0.84L32.35 1.55L33.93 0.79L34.89 1.43L36.48 -0.67L37.59 -0.60L37.87 0.52L40.94 1.73L41.48 -0.93L43.31 -0.89L42.85 -1.58L43.20 -2.41L42.37 -2.84L43.39 -3.88L44.63 -2.27L46.43 -1.86L46.67 -3.28L51.14 -4.92L51.48 -5.20L50.84 -5.81L51.58 -5.40L52.31 -6.36L53.48 -6.04L55.34 -7.35L56.62 -9.18L55.65 -11.99L58.72 -13.36L59.66 -15.07L58.88 -17.23L55.23 -17.82L54.67 -18.65L54.94 -20.07L53.88 -21.36L53.06 -20.77L50.88 -20.66L51.23 -21.25L49.87 -23.86L50.70 -24.30L50.82 -25.65L52.32 -26.95L52.79 -28.98L52.39 -31.01L53.87 -31.38L53.86 -32.13L53.16 -32.24L54.40 -32.99L54.03 -33.50L53.54 -33.11L53.32 -34.53L51.57 -37.42L50.16 -38.28L48.21 -37.28L47.86 -32.87L46.69 -32.29L41.62 -34.40L39.42 -33.87L38.74 -34.38Z"/>
+        <path class="dist" d="M34.89 1.43L35.81 2.82L34.51 6.43L37.50 6.65L38.21 9.81L44.84 6.93L48.68 6.58L52.84 8.09L55.42 10.12L57.75 16.70L62.63 21.12L64.86 24.06L65.91 27.80L65.00 34.60L66.46 41.36L67.83 44.28L70.05 46.60L74.06 47.88L79.75 46.84L81.61 45.20L83.93 41.05L92.39 39.13L98.46 36.96L100.31 35.22L102.29 31.69L102.11 27.43L99.19 21.09L90.79 18.96L88.34 17.17L86.19 13.24L86.23 11.51L87.68 8.86L89.32 6.63L92.69 4.07L96.53 -2.44L96.88 -5.67L95.59 -7.31L91.18 -8.16L84.86 -6.83L75.70 -6.63L75.30 -7.42L75.82 -7.97L73.80 -9.91L68.24 -9.86L67.32 -8.23L65.22 -9.58L61.55 -10.29L60.69 -9.12L56.53 -8.02L56.25 -8.39L53.48 -6.04L52.31 -6.36L51.58 -5.40L50.84 -5.81L51.48 -5.20L51.14 -4.92L46.67 -3.28L46.43 -1.86L44.63 -2.27L43.39 -3.88L42.37 -2.84L43.20 -2.41L42.85 -1.58L43.31 -0.89L41.48 -0.93L40.94 1.73L37.87 0.52L37.59 -0.60L36.48 -0.67L34.89 1.43Z"/>
+        <path class="dist" d="M3.02 18.89L7.78 19.18L9.53 20.89L9.95 22.37L16.09 17.65L23.94 16.61L26.84 15.17L28.48 12.68L30.88 10.48L38.21 9.81L37.50 6.65L34.51 6.43L35.81 2.82L34.89 1.43L33.93 0.79L32.35 1.55L30.58 0.84L28.88 1.18L28.08 0.24L25.08 -1.22L24.61 -2.68L21.30 -3.14L18.65 -6.23L16.69 -4.93L15.89 -2.96L16.06 -1.29L17.81 0.19L17.60 1.63L16.34 2.56L13.80 2.22L10.46 4.95L10.64 6.36L9.52 7.68L9.11 9.63L8.07 11.21L6.73 11.85L7.01 12.79L6.42 13.55L3.22 14.86L3.97 17.48L3.02 18.89Z"/>
+        <path class="dist" d="M-19.81 24.49L-18.16 24.48L-17.80 23.93L-17.61 25.25L-16.90 25.66L-12.81 22.68L-10.96 22.19L-8.60 22.61L-7.82 21.46L-8.26 20.89L-7.73 19.46L-6.75 19.21L-5.69 17.64L-5.09 18.22L-4.12 17.74L-1.79 18.17L-1.69 19.17L-0.94 19.54L3.02 18.89L3.97 17.48L3.22 14.86L6.42 13.55L7.01 12.79L6.79 10.09L5.54 8.29L5.58 7.48L4.57 7.61L3.97 6.89L2.08 6.54L2.32 5.02L0.57 3.23L-2.99 3.38L-4.04 4.70L-6.62 5.98L-7.01 6.95L-9.27 7.47L-10.67 9.50L-13.81 10.65L-16.94 9.50L-19.61 10.24L-22.56 7.26L-23.43 7.68L-25.02 7.00L-26.78 7.78L-26.51 8.74L-27.65 9.13L-28.89 10.90L-26.16 14.99L-23.82 14.96L-22.61 16.27L-19.96 15.38L-19.81 24.49Z"/>
+        <path class="dist" d="M-28.89 10.90L-30.50 10.44L-32.10 11.89L-33.79 11.28L-37.29 12.19L-38.88 11.92L-39.97 12.56L-42.17 12.62L-43.15 13.55L-43.60 16.56L-43.09 18.28L-44.94 18.63L-44.41 19.94L-45.26 20.68L-44.88 24.30L-45.44 24.16L-45.94 25.48L-45.69 26.93L-46.59 27.29L-46.54 29.78L-38.76 29.98L-37.16 31.37L-31.04 32.54L-29.82 31.73L-29.29 29.79L-28.23 28.98L-26.39 28.55L-25.32 29.32L-23.90 28.44L-23.27 27.16L-24.75 25.51L-21.66 23.79L-19.81 24.49L-19.96 15.38L-22.61 16.27L-23.82 14.96L-25.90 15.22L-28.89 10.90Z"/>
+        <path class="dist" d="M-38.88 11.92L-38.21 9.74L-38.96 8.52L-38.96 7.32L-41.37 5.74L-43.97 0.84L-45.83 0.81L-46.15 -0.55L-47.66 -1.86L-50.28 -1.78L-52.17 -2.96L-51.68 -3.83L-52.37 -5.65L-53.72 -5.89L-54.96 -5.10L-56.20 -5.82L-57.45 -5.42L-58.97 -4.03L-59.19 -2.42L-60.88 -1.01L-60.44 1.51L-61.32 3.38L-60.74 5.33L-62.24 7.27L-61.07 9.62L-62.02 9.83L-61.91 11.18L-60.84 12.13L-61.55 13.88L-63.96 15.87L-64.06 18.17L-67.42 21.03L-76.87 25.80L-76.14 28.42L-77.23 33.54L-76.43 38.52L-74.75 42.61L-71.19 46.38L-68.79 46.67L-56.79 38.14L-55.31 35.55L-54.88 35.74L-55.24 35.38L-54.42 32.30L-53.22 30.53L-52.31 30.00L-46.54 29.78L-46.59 27.29L-45.69 26.93L-45.94 25.48L-45.44 24.16L-44.88 24.30L-45.26 20.68L-44.41 19.94L-44.94 18.63L-43.09 18.28L-43.60 16.56L-43.15 13.55L-42.17 12.62L-39.97 12.56L-38.88 11.92ZM-86.45 58.50L-85.41 58.10L-85.45 56.49L-87.76 52.70L-89.91 52.85L-90.57 51.67L-91.36 51.93L-92.06 53.37L-93.43 52.89L-94.17 53.26L-94.21 54.16L-90.78 55.73L-89.40 57.52L-86.45 58.50ZM-80.71 29.87L-79.30 31.23L-77.83 31.54L-77.82 30.03L-80.73 28.15L-81.17 29.26L-80.71 29.87ZM-81.84 32.81L-80.06 34.47L-78.98 33.62L-80.72 31.60L-81.88 32.27L-81.84 32.81Z"/>
+      </g>
+      <g id="dlabels" aria-hidden="true">
+        <text class="dlab" x="-77.81" y="-10.73">바오안구</text>
+        <text class="dlab" x="-60.54" y="-32.41">광밍구</text>
+        <text class="dlab" x="-36.37" y="-12.32">룽화구</text>
+        <text class="dlab" x="9.0" y="-14.88">룽강구</text>
+        <text class="dlab" x="40.45" y="-13.99">핑산구</text>
+        <text class="dlab" x="74.05" y="16.64">다펑신구</text>
+        <text class="dlab" x="20.03" y="9.95">옌톈구</text>
+        <text class="dlab" x="-9.94" y="14.97">뤄후구</text>
+        <text class="dlab" x="-33.35" y="23.01">푸톈구</text>
+        <text class="dlab" x="-57.5" y="22.67">난산구</text>
+      </g>
+      <g id="marks">
+        <g class="pk" data-id="baoan" tabindex="0" role="button" aria-label="바오안 항구" style="--pc:#5E7391">
+          <line class="pk-lead" x1="-85.26" y1="-8.87" x2="-82.86" y2="-8.87"/>
+          <circle class="pk-ring" cx="-89.16" cy="-8.87" r="3.9"/>
+          <circle class="pk-dot"  cx="-89.16" cy="-8.87" r="2.1"/>
+          <text class="pk-lab" x="-81.96" y="-7.37" text-anchor="start">바오안 항구</text>
+        </g>
+        <g class="pk" data-id="dachanwan" tabindex="0" role="button" aria-label="다찬완 항구" style="--pc:#5E7391">
+          <line class="pk-lead" x1="-74.28" y1="17.28" x2="-71.88" y2="17.28"/>
+          <circle class="pk-ring" cx="-78.18" cy="17.28" r="3.9"/>
+          <circle class="pk-dot"  cx="-78.18" cy="17.28" r="2.1"/>
+          <text class="pk-lab" x="-70.98" y="18.78" text-anchor="start">다찬완 항구</text>
+        </g>
+        <g class="pk" data-id="daxiaochandao" tabindex="0" role="button" aria-label="다샤오찬다오 항구" style="--pc:#5E7391">
+          <line class="pk-lead" x1="-89.7" y1="29.84" x2="-87.3" y2="29.84"/>
+          <circle class="pk-ring" cx="-93.6" cy="29.84" r="3.9"/>
+          <circle class="pk-dot"  cx="-93.6" cy="29.84" r="2.1"/>
+          <text class="pk-lab" x="-86.4" y="31.34" text-anchor="start">다샤오찬다오 항구</text>
+        </g>
+        <g class="pk" data-id="nanshan" tabindex="0" role="button" aria-label="난산 항구" style="--pc:#5E7391">
+          <line class="pk-lead" x1="-66.11" y1="39.9" x2="-63.71" y2="39.9"/>
+          <circle class="pk-ring" cx="-70.01" cy="39.9" r="3.9"/>
+          <circle class="pk-dot"  cx="-70.01" cy="39.9" r="2.1"/>
+          <text class="pk-lab" x="-62.81" y="41.4" text-anchor="start">난산 항구</text>
+        </g>
+        <g class="pk" data-id="yantian" tabindex="0" role="button" aria-label="옌톈 항구" style="--pc:#4E7A6B">
+          <line class="pk-lead" x1="22.67" y1="12.25" x2="25.07" y2="12.25"/>
+          <circle class="pk-ring" cx="18.77" cy="12.25" r="3.9"/>
+          <circle class="pk-dot"  cx="18.77" cy="12.25" r="2.1"/>
+          <text class="pk-lab" x="25.97" y="13.75" text-anchor="start">옌톈 항구</text>
+        </g>
+        <g class="pk" data-id="dapeng" tabindex="0" role="button" aria-label="다펑 항구" style="--pc:#4E7A6B">
+          <line class="pk-lead" x1="61.68" y1="5.96" x2="64.08" y2="5.96"/>
+          <circle class="pk-ring" cx="57.78" cy="5.96" r="3.9"/>
+          <circle class="pk-dot"  cx="57.78" cy="5.96" r="2.1"/>
+          <text class="pk-lab" x="64.98" y="7.46" text-anchor="start">다펑 항구</text>
+        </g>
+      </g>
+      <g id="furniture" aria-hidden="true">
+        <path fill="none" stroke="#9AA3A6" stroke-width=".55" d="M92 -52 L92 -41"/>
+        <path fill="none" stroke="#9AA3A6" stroke-width=".55" stroke-linejoin="round" d="M89.5 -49 L92 -53 L94.5 -49"/>
+        <text x="92" y="-36.5" font-size="3.6" fill="#8B9497" text-anchor="middle" font-weight="500">N</text>
+        <path fill="none" stroke="#9AA3A6" stroke-width=".55" d="M-96 55 L-96 58.5 M-96 58.5 L-73.3 58.5 M-73.3 58.5 L-73.3 55"/>
+        <text x="-84.6" y="53.2" font-size="3.6" fill="#8B9497" text-anchor="middle" font-weight="500">10 km</text>
+      </g>
+    </svg>
+  </div>
 
-    const container = document.getElementById('mapWrapper');
-    const popover = document.getElementById('popover');
+  <ul class="key" id="key">
+      <li class="row" data-id="baoan" tabindex="0" role="button" style="--pc:#5E7391"><span class="swatch"></span><span class="rname">바오안 항구</span><span class="rfunc">벌크 · 잡화 및 연안 여객 운송</span></li>
+      <li class="row" data-id="dachanwan" tabindex="0" role="button" style="--pc:#5E7391"><span class="swatch"></span><span class="rname">다찬완 항구</span><span class="rfunc">컨테이너 전문 현대 물류 터미널</span></li>
+      <li class="row" data-id="daxiaochandao" tabindex="0" role="button" style="--pc:#5E7391"><span class="swatch"></span><span class="rname">다샤오찬다오 항구</span><span class="rfunc">석유화학제품 및 액체 화공품 전용</span></li>
+      <li class="row" data-id="nanshan" tabindex="0" role="button" style="--pc:#5E7391"><span class="swatch"></span><span class="rname">난산 항구</span><span class="rfunc">컨테이너 간선 및 글로벌 복합 기능 항구</span></li>
+      <li class="row" data-id="yantian" tabindex="0" role="button" style="--pc:#4E7A6B"><span class="swatch"></span><span class="rname">옌톈 항구</span><span class="rfunc">글로벌 초거대 컨테이너 간선항의 핵심</span></li>
+      <li class="row" data-id="dapeng" tabindex="0" role="button" style="--pc:#4E7A6B"><span class="swatch"></span><span class="rname">다펑 항구</span><span class="rfunc">청정에너지(LNG) 수입 및 수상 관광 레저</span></li>
+  </ul>
 
-    // 1. Render all pins onto the map
-    function renderPins() {
-      // Remove existing pins
-      document.querySelectorAll('.pin').forEach(p => p.remove());
+  <div class="detail" id="detail">
+    <div class="d-guide">항구를 선택하세요.</div>
+  </div>
 
-      Object.keys(PORTS_DATA).forEach(id => {
-        const data = PORTS_DATA[id];
-        
-        const pin = document.createElement('div');
-        pin.className = 'pin';
-        pin.dataset.id = id;
-        pin.dataset.type = data.type;
-        pin.style.left = data.left + '%';
-        pin.style.top = data.top + '%';
-        
-        const circle = document.createElement('div');
-        circle.className = 'pin-circle';
-        circle.style.backgroundColor = data.color;
-        circle.textContent = data.icon;
-        
-        const label = document.createElement('div');
-        label.className = 'pin-label';
-        label.textContent = data.name.split(' ')[0]; // Show short name
-        
-        pin.appendChild(circle);
-        pin.appendChild(label);
-        
-        pin.addEventListener('click', (e) => {
-          e.stopPropagation();
-          showPortDetail(id);
-        });
-        
-        container.appendChild(pin);
-      });
-    }
+  <div class="stats-wrap">
+    <div class="stats-head">
+      <div class="stats-title">선전항 물류 통계</div>
+      <div class="stats-note">2025년 · 괄호는 전년 대비</div>
+    </div>
+    <div class="stats">
+      <div class="stat"><div class="s-lab">연간 화물 처리량</div><div class="s-num">3억 3,402.23<span class="s-unit">만 톤</span></div><div class="s-chg">+5.1%</div></div>
+      <div class="stat"><div class="s-lab">컨테이너 처리량</div><div class="s-num">3,540.84<span class="s-unit">만 TEU</span></div><div class="s-chg">+6.0%</div></div>
+      <div class="stat"><div class="s-lab">수출 컨테이너</div><div class="s-num">1,792.49<span class="s-unit">만 TEU</span></div><div class="s-chg">+5.8%</div></div>
+      <div class="stat"><div class="s-lab">생산성 선석</div><div class="s-num">144<span class="s-unit">개</span></div><div class="s-sub">1만 톤급 이상 75개</div></div>
+    </div>
+  </div>
 
-    // 2. Display port popover detail
-    function showPortDetail(id) {
-      document.querySelectorAll('.pin').forEach(p => p.classList.remove('active'));
-      const activePin = document.querySelector(`.pin[data-id="${id}"]`);
-      if (activePin) activePin.classList.add('active');
+</div>
 
-      const data = PORTS_DATA[id];
-      const badge = document.getElementById('popoverBadge');
-      const title = document.getElementById('popoverTitle');
-      const desc = document.getElementById('popoverDesc');
+<script>
+  const PORTS = {
+  "baoan": {
+    "name": "바오안(宝安) 항구",
+    "group": "서부 항구군",
+    "func": "벌크 · 잡화 및 연안 여객 운송",
+    "desc": "선전 서북부 바오안 국제공항과 인접한 연안 항구이다. 주로 석탄, 모래 등의 벌크 잡화와 공항 여객 터미널을 통한 홍콩/마카오 왕복 수상 여객 수송을 전담한다."
+  },
+  "dachanwan": {
+    "name": "다찬완(大铲湾) 항구",
+    "group": "서부 항구군",
+    "func": "컨테이너 전문 현대 물류 터미널",
+    "desc": "주강 하구 핵심 길목에 위치해 주강 삼각주 서부 제조업 벨트와 연동되는 신흥 현대식 컨테이너 항구이다. 최첨단 크레인 설비와 효율적인 연동 물류망을 구축하고 있다."
+  },
+  "daxiaochandao": {
+    "name": "다샤오찬다오(大小铲岛) 항구",
+    "group": "서부 항구군",
+    "func": "석유화학제품 및 액체 화공품 전용",
+    "desc": "난산구 서쪽 해상의 다샤오찬다오 섬 지역에 위치한 위험물 특화 항구 구역이다. 일반 화물선이 접근하기 어려운 석유 정제품 및 대규모 액체 화학 산업 원료의 안전한 하역과 저장을 전담한다."
+  },
+  "nanshan": {
+    "name": "난산(南山) 항구",
+    "group": "서부 항구군",
+    "func": "컨테이너 간선 및 글로벌 복합 기능 항구",
+    "desc": "서부 물류의 상징인 셰코우(蛇口)·츠완(赤湾)·마완(妈湾) 항구가 모인 대규모 복합 단지이다. 글로벌 선사들의 주요 기착지이자, 크루즈 여객과 화물 수송이 융합된 선전 서부 최대의 항구 구역이다."
+  },
+  "yantian": {
+    "name": "옌톈(盐田) 항구",
+    "group": "동부 항구군",
+    "func": "글로벌 초거대 컨테이너 간선항의 핵심",
+    "desc": "세계 최대 규모의 단일 컨테이너 터미널 중 하나다. 동부 대붕만 수심이 깊은 천연 항만에 입지하여 미주/유럽 노선을 오가는 20만 톤급 이상 초대형 컨테이너선들의 중추 기착지 역할을 수행한다."
+  },
+  "dapeng": {
+    "name": "다펑(大鹏) 항구",
+    "group": "동부 항구군",
+    "func": "청정에너지(LNG) 수입 및 수상 관광 레저",
+    "desc": "선전 동남부 다펑 반도에 위치한 에너지 중심 포트다. 중국 최대의 천연가스(LNG) 수입 터미널이 있으며, 수심이 깊고 맑은 환경을 활용한 마리나 요트 클럽 및 해양 관광 여객항이 공존한다."
+  }
+};
+  const detail = document.getElementById('detail');
 
-      badge.textContent = data.typeName + ' 통상구';
-      badge.style.backgroundColor = data.color;
-      title.textContent = data.name;
-      desc.textContent = data.desc;
+  function pick(id) {
+    const p = PORTS[id];
+    if (!p) return;
 
-      // Position popover
-      const pctLeft = data.left;
-      const pctTop = data.top;
-
-      popover.style.left = pctLeft + '%';
-      popover.style.top = (pctTop - 4) + '%';
-      popover.className = 'popover';
-
-      if (pctLeft > 70) {
-        popover.style.transform = 'translate(-85%, -100%)';
-        popover.classList.add('arrow-right');
-      } else if (pctLeft < 30) {
-        popover.style.transform = 'translate(-15%, -100%)';
-        popover.classList.add('arrow-left');
-      } else {
-        popover.style.transform = 'translate(-50%, -100%)';
-        popover.classList.add('arrow-center');
-      }
-
-      popover.style.display = 'flex';
-      popover.style.borderColor = data.color;
-    }
-
-    // 3. Close popover
-    function closePopover() {
-      popover.style.display = 'none';
-      document.querySelectorAll('.pin').forEach(p => p.classList.remove('active'));
-    }
-
-    // 4. Tab filtering logic
-    document.getElementById('tabs').addEventListener('click', (e) => {
-      const tab = e.target.closest('.tab');
-      if (!tab) return;
-
-      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-      tab.classList.add('active');
-      closePopover();
-
-      const filter = tab.dataset.filter;
-      document.querySelectorAll('.pin').forEach(pin => {
-        if (filter === 'all' || pin.dataset.type === filter) {
-          pin.style.display = 'flex';
-        } else {
-          pin.style.display = 'none';
-        }
-      });
+    document.querySelectorAll('.pk, .row').forEach(function (el) {
+      el.classList.toggle('on', el.dataset.id === id);
     });
 
-    // Close popover when clicking background map
-    container.addEventListener('click', (e) => {
-      if (e.target.className === 'map-image' || e.target.id === 'mapWrapper') {
-        closePopover();
-      }
-    });
+    const color = document.querySelector('.row[data-id="' + id + '"]').style.getPropertyValue('--pc');
+    detail.style.setProperty('--pc', color);
+    detail.innerHTML =
+      '<div class="d-grp">' + p.group + '</div>' +
+      '<div class="d-name">' + p.name + '</div>' +
+      '<div class="d-func">' + p.func + '</div>' +
+      '<div class="d-desc">' + p.desc + '</div>';
+  }
 
-    // Initialize
-    window.addEventListener('DOMContentLoaded', () => {
-      renderPins();
-      // Load Luohu by default
-      setTimeout(() => {
-        showPortDetail('luohu');
-      }, 300);
+  document.querySelectorAll('.pk, .row').forEach(function (el) {
+    el.addEventListener('click', function () { pick(el.dataset.id); });
+    el.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pick(el.dataset.id); }
     });
-  </script>
+  });
+</script>
 </body>
 </html>
