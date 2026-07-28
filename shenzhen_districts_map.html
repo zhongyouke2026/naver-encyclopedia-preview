@@ -11,8 +11,8 @@
     --paper:  #FCFBF9;
     --ink:    #16191D;
     --muted:  #8A8781;
-    --rule:   rgba(0, 0, 0, 0.05);
-    --sea:    #f8fafc;
+    --rule:   #E6E3DD;
+    --sea:    #E9EEF0;
     --accent: #2E5A4C;
 
     --sans: "Pretendard Variable", Pretendard, system-ui, sans-serif;
@@ -21,10 +21,11 @@
 
   * { box-sizing: border-box; }
 
-  /* 클릭 시 브라우저 기본 포커스 테두리 제거 */
+  /* 클릭 시 브라우저 기본 포커스 테두리 제거 (키보드 이동 표시는 아래에서 따로 유지) */
   :focus { outline: none; }
   svg *:focus { outline: none; }
   * { -webkit-tap-highlight-color: transparent; }
+
 
   body {
     margin: 0;
@@ -32,32 +33,23 @@
     font-family: var(--sans);
     color: var(--ink);
     -webkit-font-smoothing: antialiased;
-    width: 100%;
-    height: 100%;
   }
 
   .plate {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    background: #ffffff;
-    border: 1px solid rgba(0, 0, 0, 0.08);
-    border-radius: 24px;
-    padding: 16px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
-    position: relative;
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-radius: 3px;
   }
 
   /* ── 도판 머리글 ───────────────────────── */
-  .head { padding: 8px 12px 10px; }
+  .head { padding: 22px 26px 18px; }
 
   .eyebrow {
     font-family: var(--serif);
-    font-size: 10px;
+    font-size: 11px;
     letter-spacing: .34em;
     color: var(--muted);
-    margin-bottom: 6px;
+    margin-bottom: 9px;
   }
 
   .titlerow {
@@ -69,32 +61,21 @@
   }
   h1 {
     margin: 0;
-    font-size: 18px;
+    font-size: 23px;
     font-weight: 700;
     letter-spacing: -.035em;
   }
-  .hint { font-size: 11px; color: var(--muted); letter-spacing: -.01em; }
+  .hint { font-size: 11.5px; color: var(--muted); letter-spacing: -.01em; }
 
   /* ── 지도 ──────────────────────────────── */
   .field {
-    margin: 4px 12px 0;
+    margin: 4px 18px 0;
     background: var(--sea);
     border: 1px solid var(--rule);
-    border-radius: 16px;
+    border-radius: 2px;
     position: relative;
-    flex-grow: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
   }
-  svg.map {
-    display: block;
-    max-width: 100%;
-    max-height: 100%;
-    width: auto;
-    height: auto;
-  }
+  svg.map { display: block; width: 100%; height: auto; }
 
   .dist {
     stroke: var(--paper);
@@ -138,14 +119,36 @@
   }
 
   .foot {
-    padding: 10px 12px 4px;
-    font-size: 10.5px;
-    line-height: 1.5;
+    padding: 11px 26px 0;
+    font-size: 11px;
+    line-height: 1.65;
     color: var(--muted);
   }
   .foot b { font-weight: 600; color: #6E6B66; }
 
-  
+  /* ── 상세 ──────────────────────────────── */
+  .detail { margin: 16px 26px 22px; padding-top: 16px; border-top: 1px solid var(--rule); }
+
+  .d-guide { font-size: 12.5px; color: var(--muted); }
+
+  .d-name {
+    display: flex; align-items: baseline; gap: 8px;
+    margin-bottom: 10px;
+  }
+  .d-ko { font-size: 18px; font-weight: 700; letter-spacing: -.035em; }
+  .d-cn { font-family: var(--serif); font-size: 13px; color: var(--muted); }
+
+  .d-meta {
+    display: flex; gap: 18px; flex-wrap: wrap;
+    padding-bottom: 11px; margin-bottom: 11px;
+    border-bottom: 1px solid var(--rule);
+    font-size: 11.5px; color: var(--muted);
+    font-variant-numeric: tabular-nums;
+  }
+  .d-meta span { letter-spacing: -.01em; }
+  .d-meta b { font-weight: 600; color: #4A4F55; margin-left: 5px; }
+
+  .d-desc { font-size: 13.5px; line-height: 1.85; letter-spacing: -.015em; color: #3A4048; }
 
   @media (max-width: 460px) {
     .head { padding: 18px 18px 14px; }
@@ -165,9 +168,10 @@
 <div class="plate">
 
   <div class="head">
-        <div class="titlerow">
+    <div class="eyebrow">廣東省 深圳市</div>
+    <div class="titlerow">
       <h1>행정구역</h1>
-      <div class="hint" id="mapHint">지도의 구(区)를 선택하면 하이라이트됩니다</div>
+      <div class="hint">구를 선택하면 아래에 설명이 나옵니다</div>
     </div>
   </div>
 
@@ -213,7 +217,8 @@
     <b>선산특별합작구(深汕特别合作区)</b>는 선전시가 개발·관리하지만 시 경계 밖이어서 지도에 없습니다.
   </div>
 
-  
+  <div class="detail" id="detail">
+    <div class="d-guide">지도에서 구를 선택하세요.</div>
   </div>
 
 </div>
@@ -299,20 +304,7 @@
   }
 };
   const map = document.getElementById('map');
-
-  const ONE_LINERS = {
-    'baoan': '바오안구: 서부 연안 평지이자 국제공항이 위치한 제조업 집적지',
-    'guangming': '광밍구: 첨단 국가 과학시설지구와 친환경 영농 시범 지대의 녹색 거점',
-    'nanshan': '남산구: 빅테크 기업들과 첸하이 금융 특구가 자리한 혁신 IT 기지',
-    'longhua': '룽화구: 고속철 선전북역 교통 요망과 중부 제조 클러스터의 허브',
-    'futian': '푸톈구: 시정부 청사와 증권거래소, 화창베이가 위치한 금융·비즈니스 중심',
-    'luohu': '뤄후구: 홍콩 관문 뤄후 통상구와 동면 상가가 위치한 역사적 구도심',
-    'longgang': '룽강구: 화웨이 본사 및 대형 제조업 라인이 자리한 최대 면적의 구',
-    'yantian': '옌톈구: 글로벌 컨테이너 항만 옌톈항과 수려한 해안 관광벨트의 산해 구역',
-    'pingshan': '핑산구: 전기차 BYD 본진 및 신에너지·바이오 클러스터의 혁신 거점',
-    'dapeng': '다펑신구: 다펑소성과 국가지질공원을 품은 청정 해양 생태 보존 구역',
-    'shenshan': '선산특별합작구: 선전에서 100km 동쪽 산웨이에 위치해 선전이 관리하는 특구'
-  };
+  const detail = document.getElementById('detail');
 
   function pick(id) {
     const d = DISTRICTS[id];
@@ -323,12 +315,14 @@
       el.classList.toggle('on', el.dataset.id === id);
     });
 
-    const hintEl = document.getElementById('mapHint');
-    if (hintEl) {
-      hintEl.textContent = ONE_LINERS[id];
-      hintEl.style.color = '#2E5A4C';
-      hintEl.style.fontWeight = '600';
-    }
+    detail.innerHTML =
+      '<div class="d-name"><span class="d-ko">' + d.name + '</span>' +
+      '<span class="d-cn">' + d.hanja + '</span></div>' +
+      '<div class="d-meta">' +
+        '<span>' + d.code.replace(':', '<b>') + '</b></span>' +
+        '<span>' + d.streets.replace(':', '<b>') + '</b></span>' +
+      '</div>' +
+      '<div class="d-desc">' + d.desc + '</div>';
   }
 
   map.querySelectorAll('.dist').forEach(function (p) {
@@ -336,28 +330,10 @@
     p.setAttribute('tabindex', '0');
     p.setAttribute('role', 'button');
     p.setAttribute('aria-label', DISTRICTS[id].name);
-    p.addEventListener('click', function (e) {
-      e.stopPropagation();
-      pick(id);
-    });
+    p.addEventListener('click', function () { pick(id); });
     p.addEventListener('keydown', function (e) {
       if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pick(id); }
     });
-  });
-
-  // Clear focus when clicking background map
-  map.addEventListener('click', function () {
-    map.classList.remove('picked');
-    map.querySelectorAll('.dist, .dlab').forEach(function (el) {
-      el.classList.remove('on');
-    });
-    
-    const hintEl = document.getElementById('mapHint');
-    if (hintEl) {
-      hintEl.textContent = '지도의 구(区)를 선택하면 하이라이트됩니다';
-      hintEl.style.color = 'var(--muted)';
-      hintEl.style.fontWeight = '400';
-    }
   });
 </script>
 
