@@ -63,11 +63,15 @@
            padding-bottom:11px;margin-bottom:11px;border-bottom:1px solid var(--rule)}
   .d-desc{font-size:13.5px;line-height:1.85;letter-spacing:-.015em;color:#3A4048}
 
-  @media (max-width:720px){ .key{grid-template-columns:repeat(2,1fr);gap:18px} }
+  @media (max-width:480px){
+    .key{grid-template-columns:repeat(2,1fr);gap:12px}
+  }
   @media (max-width:460px){
     .head{padding:18px 18px 14px} h1{font-size:20px}
     .field{margin:4px 12px 0}
     .foot,.key,.detail{margin-left:18px;margin-right:18px}
+  }
+  @media (max-width:350px){
     .key{grid-template-columns:1fr}
   }
   @media (prefers-reduced-motion:reduce){ .kp-dot,.row{transition:none} }
