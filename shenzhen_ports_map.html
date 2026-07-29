@@ -258,7 +258,24 @@
       '<div class="d-name">' + p.name + '</div>' +
       '<div class="d-func">' + p.func + '</div>' +
       '<div class="d-desc">' + p.desc + '</div>';
+    resizeIframe();
   }
+
+
+  function resizeIframe() {
+    try {
+      if (window.parent && window.parent.document) {
+        const iframes = window.parent.document.querySelectorAll('iframe');
+        iframes.forEach(f => {
+          if (f.contentWindow === window) {
+            f.style.height = document.documentElement.scrollHeight + 10 + 'px';
+          }
+        });
+      }
+    } catch(e) {}
+  }
+  window.addEventListener('load', resizeIframe);
+  window.addEventListener('resize', resizeIframe);
 
   document.querySelectorAll('.pk, .row').forEach(function (el) {
     el.addEventListener('click', function () { pick(el.dataset.id); });
@@ -266,6 +283,9 @@
       if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pick(el.dataset.id); }
     });
   });
+
+  // 옌톈(yantian) 항구를 기본 선택 상태로 로드
+  pick('yantian');
 </script>
 </body>
 </html>

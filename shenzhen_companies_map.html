@@ -351,6 +351,7 @@
         '<span>비고 <b>' + note + '</b></span>' +
       '</div>' +
       '<div class="d-desc">' + c.desc + '</div>';
+    resizeIframe();
   }
 
   document.querySelectorAll('.mk, .row').forEach(function (el) {
@@ -359,6 +360,22 @@
       if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pick(el.dataset.id); }
     });
   });
+
+
+  function resizeIframe() {
+    try {
+      if (window.parent && window.parent.document) {
+        const iframes = window.parent.document.querySelectorAll('iframe');
+        iframes.forEach(f => {
+          if (f.contentWindow === window) {
+            f.style.height = document.documentElement.scrollHeight + 10 + 'px';
+          }
+        });
+      }
+    } catch(e) {}
+  }
+  window.addEventListener('load', resizeIframe);
+  window.addEventListener('resize', resizeIframe);
 
   // 마이루이(mindray)를 기본 선택 상태로 로드
   pick('mindray');
