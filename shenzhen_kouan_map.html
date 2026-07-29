@@ -414,18 +414,21 @@
   // 뤄후(luohu) 통상구를 기본 선택 상태로 로드
   pick('luohu');
 
+  
   let lastWidth = window.innerWidth;
   function resizeIframe() {
     try {
       if (window.parent && window.parent.document) {
-        const iframes = window.parent.document.querySelectorAll('iframe');
+        const iframes = window.parent.document.querySelectorAll('iframe[src*="map.html"]');
         iframes.forEach(f => {
-          if (f.contentWindow === window) {
-            const newHeight = document.documentElement.scrollHeight + 4;
-            if (Math.abs(f.offsetHeight - newHeight) > 4) {
-              f.style.height = newHeight + 'px';
+          try {
+            if (f.contentWindow === window) {
+              const newHeight = document.documentElement.scrollHeight + 4;
+              if (Math.abs(f.offsetHeight - newHeight) > 4) {
+                f.style.height = newHeight + 'px';
+              }
             }
-          }
+          } catch(e) {}
         });
       }
     } catch(e) {}
