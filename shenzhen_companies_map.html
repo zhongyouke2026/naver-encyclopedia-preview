@@ -362,23 +362,36 @@
   });
 
 
+  
+  
+  
+
+  // 마이루이(mindray)를 기본 선택 상태로 로드
+  pick('mindray');
+
+  let lastWidth = window.innerWidth;
   function resizeIframe() {
     try {
       if (window.parent && window.parent.document) {
         const iframes = window.parent.document.querySelectorAll('iframe');
         iframes.forEach(f => {
           if (f.contentWindow === window) {
-            f.style.height = document.documentElement.scrollHeight + 10 + 'px';
+            const newHeight = document.documentElement.scrollHeight + 4;
+            if (Math.abs(f.offsetHeight - newHeight) > 4) {
+              f.style.height = newHeight + 'px';
+            }
           }
         });
       }
     } catch(e) {}
   }
   window.addEventListener('load', resizeIframe);
-  window.addEventListener('resize', resizeIframe);
-
-  // 마이루이(mindray)를 기본 선택 상태로 로드
-  pick('mindray');
+  window.addEventListener('resize', function() {
+    if (window.innerWidth !== lastWidth) {
+      lastWidth = window.innerWidth;
+      resizeIframe();
+    }
+  });
 </script>
 </body>
 </html>

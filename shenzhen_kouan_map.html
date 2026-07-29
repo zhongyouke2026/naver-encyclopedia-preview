@@ -77,7 +77,6 @@
 <div class="plate">
 
   <div class="head">
-    <div class="eyebrow">深圳 一類口岸</div>
     <div class="titlerow">
       <h1>통상구 16곳</h1>
       <div class="hint">기호를 누르면 아래에 설명이 나옵니다</div>
@@ -383,20 +382,9 @@
   const detail = document.getElementById('detail');
 
   
-  function resizeIframe() {
-    try {
-      if (window.parent && window.parent.document) {
-        const iframes = window.parent.document.querySelectorAll('iframe');
-        iframes.forEach(f => {
-          if (f.contentWindow === window) {
-            f.style.height = document.documentElement.scrollHeight + 10 + 'px';
-          }
-        });
-      }
-    } catch(e) {}
-  }
-  window.addEventListener('load', resizeIframe);
-  window.addEventListener('resize', resizeIframe);
+  
+  
+  
 
   function pick(id) {
     const p = PORTS[id];
@@ -425,6 +413,30 @@
 
   // 뤄후(luohu) 통상구를 기본 선택 상태로 로드
   pick('luohu');
+
+  let lastWidth = window.innerWidth;
+  function resizeIframe() {
+    try {
+      if (window.parent && window.parent.document) {
+        const iframes = window.parent.document.querySelectorAll('iframe');
+        iframes.forEach(f => {
+          if (f.contentWindow === window) {
+            const newHeight = document.documentElement.scrollHeight + 4;
+            if (Math.abs(f.offsetHeight - newHeight) > 4) {
+              f.style.height = newHeight + 'px';
+            }
+          }
+        });
+      }
+    } catch(e) {}
+  }
+  window.addEventListener('load', resizeIframe);
+  window.addEventListener('resize', function() {
+    if (window.innerWidth !== lastWidth) {
+      lastWidth = window.innerWidth;
+      resizeIframe();
+    }
+  });
 </script>
 </body>
 </html>
